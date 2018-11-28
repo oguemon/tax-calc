@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>手取り計算機</title>
+</head>
+<body>
+給料：月<input type="number" id="input-income" value="234500">円<br>
+ボーナス：<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分<br>
+残業：月<input type="number" id="input-overwork-hours"value="20">時間<br>
+<button type="submit" id="btn-calc-tax">計算！</button>
+<hr>
+ボーナス：年間<span id="val-bonus-income"></span>円（半年<span id="val-bonus-income-half"></span>円）<br>
+残業手当：月<span id="val-overwork-monthly-income"></span>円（ひと月当たり20日労働と仮定）<br>
+年収：<span id="val-annual-income"></span>円（深夜・休日手当ゼロの場合）<br>
+<hr>
+課税標準額：<span id="val-taxiable-standard"></span>円<br>
+所得税額：<span id="val-income-tax"></span>円<br>
+住民税額：<span id="val-residents-tax"></span>円<br>
+ー道府県民税額：<span id="val-prefectural-tax"></span>円<br>
+ー市町村民税額：<span id="val-municipal-tax"></span>円<br>
+<hr>
+手取り年収：<span id="val-substantial-annual-income"></span>円<br>
+
+<script src="./js/jquery-3.3.1.min.js"></script>
+<script async src="./js/Chart.min.js"></script>
+<script async src="./js/main.js"></script>
+</body>
+</html>
