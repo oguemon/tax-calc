@@ -59,12 +59,14 @@ $(function () {
     var unemployment_insurance_premium = calcUnemplymentInsurancePremium(income, 0);
     var unemployment_insurance_premium_bonus_once = calcUnemplymentInsurancePremium(bonus_income_once, 0);
     var unemployment_insurance_premium_bonus = unemployment_insurance_premium_bonus_once.you * bonus_number;
+    // 社会保険料の天引き月額
+    var monthly_pension_you = health_insurance_premium_half
+                          + employee_pension_premium_half
+                          + unemployment_insurance_premium.you;
     // 社会保険料の天引き年額
-    var total_pension_you = health_insurance_premium_half * 12
+    var total_pension_you = monthly_pension_you * 12
                           + health_insurance_premium_half_bonus
-                          + employee_pension_premium_half * 12
                           + employee_pension_premium_half_bonus
-                          + unemployment_insurance_premium.you * 12
                           + unemployment_insurance_premium_bonus;
 
     // 結果を出力（社会保険料）
@@ -94,10 +96,12 @@ $(function () {
 
     // 源泉徴収額（月収：甲種）
     var taxable_income_withholding = income
-                                    - calcTaxableIncomeDeductionsWithholding(income)
+                                    - monthly_pension_you
+                                    - calcTaxableIncomeDeductionsWithholding(income - monthly_pension_you)
                                     - calcBasicDeductionsWithholding()
                                     - calcSpouseDeductionsWithholding (false)
                                     - calcDependentsDeductionsWithholding(0);
+                                    console.log(taxable_income_withholding);
     var income_tax_withholding = calcTaxValueWithholding(taxable_income_withholding);
     // 源泉徴収額（ボーナス）
     var income_tax_rate_bonus_withholding = calcTaxRate(income, true, 0);
