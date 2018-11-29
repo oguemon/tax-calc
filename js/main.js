@@ -38,9 +38,21 @@ $(function () {
     $('#val-overwork-monthly-income').text(addThousandSeparator(overwork_monthly_income));
     $('#val-annual-income').text(addThousandSeparator(annual_income));
 
+    // 健康保険料
+    var health_insurance_premium = calcHealthInsurancePremium(income); // 暫定的に残業代を抜く
+    var health_insurance_premium_half = roundRev(health_insurance_premium / 2); // 天引き額は.5「以下」を切捨
+    var health_insurance_premium_half_bonus = roundRev(calcHealthInsurancePremiumBonus(bonus_income_total, income) / 2);
+    var health_insurance_premium_half_bonus_once = roundRev(calcHealthInsurancePremiumBonus(bonus_income_once, income) / 2);
+
+    // 結果を出力（社会保険料）
+    $('#val-health-insurance-premium-half').text(addThousandSeparator(health_insurance_premium_half));
+    $('#val-health-insurance-premium-half-bonus').text(addThousandSeparator(health_insurance_premium_half_bonus));
+    $('#val-health-insurance-premium-half-bonus-once').text(addThousandSeparator(health_insurance_premium_half_bonus_once));
+
     // 所得税
-    var taxable_income = Math.max(annual_income - calcTaxableIncomeDeductions(income), 0);
-    var income_tax = calcTaxValue(taxable_income - 380000);　// 暫定的に基本控除を入れる
+    var taxable_standard_income = Math.max(annual_income - calcTaxableIncomeDeductions(income), 0);
+    var taxable_income = Math.floor(Math.max(taxable_standard_income - 380000 - (health_insurance_premium_half * 12 + health_insurance_premium_half_bonus), 0) / 1000) * 1000;　// 暫定的に基本控除と健康保険料を入れる｜課税所得は千円未満の端数切捨
+    var income_tax = calcTaxValue(taxable_income);
     // 住民税
     var prefectural_tax = calcPrefecturalTax(income_tax, 0)
     var municipal_tax = calcMunicipalTax(income_tax, 0);
@@ -56,13 +68,17 @@ $(function () {
     // 源泉徴収額（ボーナス）
     var income_tax_rate_bonus_withholding = calcTaxRate(income, true, 0);
     var income_tax_bonus_withholding = Math.floor(bonus_income_once * income_tax_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
+    // 実質毎月振り込まれる月給
+    var substantial_income = income - income_tax_withholding - health_insurance_premium_half;
 
     // 結果を出力（税金）
-    $('#val-taxiable-standard').text(addThousandSeparator(taxable_income));
+    $('#val-taxiable-standard').text(addThousandSeparator(taxable_standard_income));
+    $('#val-taxiable-income').text(addThousandSeparator(taxable_income));
     $('#val-income-tax').text(addThousandSeparator(income_tax));
     $('#val-prefectural-tax').text(addThousandSeparator(prefectural_tax));
     $('#val-municipal-tax').text(addThousandSeparator(municipal_tax));
     $('#val-residents-tax').text(addThousandSeparator(residents_tax));
+    $('#val-substantial-income').text(addThousandSeparator(substantial_income));
     $('#val-substantial-annual-income').text(addThousandSeparator(substantial_annual_income));
     $('#val-income-tax-withholding').text(addThousandSeparator(income_tax_withholding));
     $('#val-income-tax-bonus-withholding').text(addThousandSeparator(income_tax_bonus_withholding));
@@ -76,6 +92,13 @@ $(function () {
   {
     // 3桁おきにカンマを置く
     return String(value).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  }
+
+  // 四捨五入の五も捨てる版
+  function roundRev (value = 0)
+  {
+    var floor = Math.floor(value);
+    return (value - floor > 0.5)? Math.ceil(value) : floor;
   }
 
   /* --------------------------------------------------
@@ -254,6 +277,48 @@ $(function () {
     return capitation + income_part;
   }
 
+  /* --------------------------------------------------
+   * 社会保険料
+   * --------------------------------------------------*/
+  // 月収に対する健康保険料を求める
+  function calcHealthInsurancePremium (income = 0, over_40_age = false) {
+    var rank = getInsuranceRank(income);
+
+    // 健康保険料の割合を求める
+    var health_insurance_rate = insurance_rate_list[26]; // 暫定で大阪府
+    if (over_40_age) {
+      // 介護保険料の割合（全国一律）を加える
+      health_insurance_rate += 1.57;
+    }
+
+    // 健康保険料を求める
+    var health_insurance_premium = rank.monthly_price * health_insurance_rate / 100;
+
+    // 返す
+    return health_insurance_premium;
+  }
+
+  // ボーナスに対する健康保険料を求める
+  function calcHealthInsurancePremiumBonus (bonus = 0, income = 0, over_40_age = false) {
+    var rank = getInsuranceRank(income);
+
+    // 健康保険料の割合を求める
+    var health_insurance_rate = insurance_rate_list[26]; // 暫定で大阪府
+    if (over_40_age) {
+      // 介護保険料の割合（全国一律）を加える
+      health_insurance_rate += 1.57;
+    }
+
+    // 計算対象のボーナス額を求める（千円未満の端数切捨）
+    var target_bonus = Math.floor(bonus / 1000) * 1000;
+
+    // 健康保険料を求める
+    var health_insurance_premium_bonus = target_bonus * health_insurance_rate / 100;
+
+    // 返す
+    return health_insurance_premium_bonus;
+  }
+
   // 墓場
   if (0) {
     $s.toggleClass('open');
@@ -288,55 +353,173 @@ $(function () {
     return re.test(location.pathname);
   }
 
+  // 社会保険料の等級を求める
+  function getInsuranceRank (income = 0) {
+    // 等級などを格納する配列（順に健康保険等級・厚生年金等級・月額）
+    var rank = new Array();
+
+    // 怒涛の条件文
+    if (income < 63000) { rank = [1, 1, 58000]; }
+    else if (income < 73000) { rank = [2, 1, 68000]; }
+    else if (income < 83000) { rank = [3, 1, 78000]; }
+    else if (income < 93000) { rank = [4, 1, 88000]; }
+    else if (income < 101000) { rank = [5, 2, 98000]; }
+    else if (income < 107000) { rank = [6, 3, 104000]; }
+    else if (income < 114000) { rank = [7, 4, 110000]; }
+    else if (income < 122000) { rank = [8, 5, 118000]; }
+    else if (income < 130000) { rank = [9, 6, 126000]; }
+    else if (income < 138000) { rank = [10, 7, 134000]; }
+    else if (income < 146000) { rank = [11, 8, 142000]; }
+    else if (income < 155000) { rank = [12, 9, 150000]; }
+    else if (income < 165000) { rank = [13, 10, 160000]; }
+    else if (income < 175000) { rank = [14, 11, 170000]; }
+    else if (income < 185000) { rank = [15, 12, 180000]; }
+    else if (income < 195000) { rank = [16, 13, 190000]; }
+    else if (income < 210000) { rank = [17, 14, 200000]; }
+    else if (income < 230000) { rank = [18, 15, 220000]; }
+    else if (income < 250000) { rank = [19, 16, 240000]; }
+    else if (income < 270000) { rank = [20, 17, 260000]; }
+    else if (income < 290000) { rank = [21, 18, 280000]; }
+    else if (income < 310000) { rank = [22, 19, 300000]; }
+    else if (income < 330000) { rank = [23, 20, 320000]; }
+    else if (income < 350000) { rank = [24, 21, 340000]; }
+    else if (income < 370000) { rank = [25, 22, 360000]; }
+    else if (income < 395000) { rank = [26, 23, 380000]; }
+    else if (income < 425000) { rank = [27, 24, 410000]; }
+    else if (income < 455000) { rank = [28, 25, 440000]; }
+    else if (income < 485000) { rank = [29, 26, 470000]; }
+    else if (income < 515000) { rank = [30, 27, 500000]; }
+    else if (income < 545000) { rank = [31, 28, 530000]; }
+    else if (income < 575000) { rank = [32, 29, 560000]; }
+    else if (income < 605000) { rank = [33, 30, 590000]; }
+    else if (income < 635000) { rank = [34, 31, 620000]; }
+    else if (income < 665000) { rank = [35, 31, 650000]; }
+    else if (income < 695000) { rank = [36, 31, 680000]; }
+    else if (income < 730000) { rank = [37, 31, 710000]; }
+    else if (income < 770000) { rank = [38, 31, 750000]; }
+    else if (income < 810000) { rank = [39, 31, 790000]; }
+    else if (income < 855000) { rank = [40, 31, 830000]; }
+    else if (income < 905000) { rank = [41, 31, 880000]; }
+    else if (income < 955000) { rank = [42, 31, 930000]; }
+    else if (income < 1005000) { rank = [43, 31, 980000]; }
+    else if (income < 1055000) { rank = [44, 31, 1030000]; }
+    else if (income < 1115000) { rank = [45, 31, 1090000]; }
+    else if (income < 1175000) { rank = [46, 31, 1150000]; }
+    else if (income < 1235000) { rank = [47, 31, 1210000]; }
+    else if (income < 1295000) { rank = [48, 31, 1270000]; }
+    else if (income < 1355000) { rank = [49, 31, 1330000]; }
+    else { rank = [50, 30, 1390000]; }
+
+    // 要素番号では分からないのでDictionaryにする
+    var rank_dict = {
+      health_insurance: rank[0],
+      employee_pension: rank[1],
+      monthly_price: rank[2]
+    }
+
+    // 返す
+    return rank_dict;
+  }
   // 都道府県のJIS的並び
   var pref_list = new Array(
-    '北海道', // 1
-    '青森県', // 2
-    '岩手県', // 3
-    '宮城県', // 4
-    '秋田県', // 5
-    '山形県', // 6
-    '福島県', // 7
-    '茨城県', // 8
-    '栃木県', // 9
-    '群馬県', // 10
-    '埼玉県', // 11
-    '千葉県', // 12
-    '東京都', // 13
-    '神奈川県', // 14
-    '新潟県', // 15
-    '富山県', // 16
-    '石川県', // 17
-    '福井県', // 18
-    '山梨県', // 19
-    '長野県', // 20
-    '岐阜県', // 21
-    '静岡県', // 22
-    '愛知県', // 23
-    '三重県', // 24
-    '滋賀県', // 25
-    '京都府', // 26
-    '大阪府', // 27
-    '兵庫県', // 28
-    '奈良県', // 29
-    '和歌山県', // 30
-    '鳥取県', // 31
-    '島根県', // 32
-    '岡山県', // 33
-    '広島県', // 34
-    '山口県', // 35
-    '徳島県', // 36
-    '香川県', // 37
-    '愛媛県', // 38
-    '高知県', // 39
-    '福岡県', // 40
-    '佐賀県', // 41
-    '長崎県', // 42
-    '熊本県', // 43
-    '大分県', // 44
-    '宮崎県', // 45
-    '鹿児島県', // 46
-    '沖縄県'  // 47
+    '北海道', // 0
+    '青森県', // 1
+    '岩手県', // 2
+    '宮城県', // 3
+    '秋田県', // 4
+    '山形県', // 5
+    '福島県', // 6
+    '茨城県', // 7
+    '栃木県', // 8
+    '群馬県', // 9
+    '埼玉県', // 10
+    '千葉県', // 11
+    '東京都', // 12
+    '神奈川県', // 13
+    '新潟県', // 14
+    '富山県', // 15
+    '石川県', // 16
+    '福井県', // 17
+    '山梨県', // 18
+    '長野県', // 19
+    '岐阜県', // 20
+    '静岡県', // 21
+    '愛知県', // 22
+    '三重県', // 23
+    '滋賀県', // 24
+    '京都府', // 25
+    '大阪府', // 26
+    '兵庫県', // 27
+    '奈良県', // 28
+    '和歌山県', // 29
+    '鳥取県', // 30
+    '島根県', // 31
+    '岡山県', // 32
+    '広島県', // 33
+    '山口県', // 34
+    '徳島県', // 35
+    '香川県', // 36
+    '愛媛県', // 37
+    '高知県', // 38
+    '福岡県', // 39
+    '佐賀県', // 40
+    '長崎県', // 41
+    '熊本県', // 42
+    '大分県', // 43
+    '宮崎県', // 44
+    '鹿児島県', // 45
+    '沖縄県'  // 46
+  );
+
+  // 保険料率（平成30年度）
+  var insurance_rate_list = new Array(
+    10.25, // 北海道
+    9.96, // 青森県
+    9.84, // 岩手県
+    10.05, // 宮城県
+    10.13, // 秋田県
+    10.04, // 山形県
+    9.79, // 福島県
+    9.90, // 茨城県
+    9.92, // 栃木県
+    9.91, // 群馬県
+    9.85, // 埼玉県
+    9.89, // 千葉県
+    9.90, // 東京都
+    9.93, // 神奈川県
+    9.63, // 新潟県
+    9.81, // 富山県
+    10.04, // 石川県
+    9.98, // 福井県
+    9.96, // 山梨県
+    9.71, // 長野県
+    9.91, // 岐阜県
+    9.77, // 静岡県
+    9.90, // 愛知県
+    9.90, // 三重県
+    9.84, // 滋賀県
+    10.02, // 京都府
+    10.17, // 大阪府
+    10.10, // 兵庫県
+    10.03, // 奈良県
+    10.08, // 和歌山県
+    9.96, // 鳥取県
+    10.13, // 島根県
+    10.15, // 岡山県
+    10.00, // 広島県
+    10.18, // 山口県
+    10.28, // 徳島県
+    10.23, // 香川県
+    10.10, // 愛媛県
+    10.14, // 高知県
+    10.23, // 福岡県
+    10.61, // 佐賀県
+    10.20, // 長崎県
+    10.13, // 熊本県
+    10.26, // 大分県
+    9.97, // 宮崎県
+    10.11, // 鹿児島県
+    9.93  // 沖縄県
   );
 
   // CSVファイル読み込み
