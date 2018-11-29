@@ -23,16 +23,18 @@ $(function () {
     // 入力された情報を取得
     var income = Number($('#input-income').val());
     var bonus_mounths = Number($('#input-bonus-mounths').val());
+    var bonus_number = Number($('#input-bonus-number').val());
     var overwork_hours = Number($('#input-overwork-hours').val());
 
     //給料の元になる支給額の計算
-    var bonus_income = Math.floor(income * bonus_mounths);
+    var bonus_income_total = Math.floor(income * bonus_mounths);
+    var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
     var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8));
-    var annual_income = Math.floor((income + overwork_monthly_income) * 12) + bonus_income;
+    var annual_income = Math.floor((income + overwork_monthly_income) * 12) + bonus_income_total;
 
     // 結果を出力（給料）
-    $('#val-bonus-income').text(addThousandSeparator(bonus_income));
-    $('#val-bonus-income-half').text(addThousandSeparator(Math.floor(bonus_income / 2)));
+    $('#val-bonus-income').text(addThousandSeparator(bonus_income_total));
+    $('#val-bonus-income-half').text(addThousandSeparator(bonus_income_once));
     $('#val-overwork-monthly-income').text(addThousandSeparator(overwork_monthly_income));
     $('#val-annual-income').text(addThousandSeparator(annual_income));
 
@@ -44,13 +46,16 @@ $(function () {
     var municipal_tax = calcMunicipalTax(income_tax, 0);
     var residents_tax = prefectural_tax + municipal_tax;
     var substantial_annual_income = annual_income - income_tax; // - residents_tax;は2年目以降
-    // 源泉徴収額（甲種）
+    // 源泉徴収額（月収：甲種）
     var taxable_income_withholding = income
                                     - calcTaxableIncomeDeductionsWithholding(income)
                                     - calcBasicDeductionsWithholding()
                                     - calcSpouseDeductionsWithholding (false)
                                     - calcDependentsDeductionsWithholding(0);
     var income_tax_withholding = calcTaxValueWithholding(taxable_income_withholding);
+    // 源泉徴収額（ボーナス）
+    var income_tax_rate_bonus_withholding = calcTaxRate(income, true, 0);
+    var income_tax_bonus_withholding = Math.floor(bonus_income_once * income_tax_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
     // 結果を出力（税金）
     $('#val-taxiable-standard').text(addThousandSeparator(taxable_income));
@@ -60,6 +65,7 @@ $(function () {
     $('#val-residents-tax').text(addThousandSeparator(residents_tax));
     $('#val-substantial-annual-income').text(addThousandSeparator(substantial_annual_income));
     $('#val-income-tax-withholding').text(addThousandSeparator(income_tax_withholding));
+    $('#val-income-tax-bonus-withholding').text(addThousandSeparator(income_tax_bonus_withholding));
   });
 
   /* --------------------------------------------------
@@ -198,6 +204,34 @@ $(function () {
   }
 
   /* --------------------------------------------------
+   * 源泉徴収（ボーナス）
+   * --------------------------------------------------*/
+  function calcTaxRate (income = 0, kou = true, dependents_count = 0) {
+    var arr = csvToArray('./csv/withholding-bonus-2018.csv');
+    var tax_rate = 0;
+
+    if (kou) { // 甲欄のとき
+      // 税額表の各行を走査
+      for (var i = 0; i < arr.length; i++) {
+        // 税額表の最下行以外のポジションで見つけた
+        if (income <  Number(arr[i][Math.min(dependents_count, 7) + 1]) * 1000 && i > 0) {
+          tax_rate = Number(arr[i - 1][0]);
+          break;
+        }
+        // 税額表の最下行まできたのに上の条件にヒットしなかった
+        if (i == arr.length) {
+          tax_rate = Number(arr[i][0]);
+          break;
+        }
+      }
+    } else { // 乙欄のとき
+      // 未実装
+    }
+
+    return tax_rate;
+  }
+
+  /* --------------------------------------------------
    * 住民税（個人）
    * --------------------------------------------------*/
   // 道府県民税
@@ -304,4 +338,21 @@ $(function () {
     '鹿児島県', // 46
     '沖縄県'  // 47
   );
+
+  // CSVファイル読み込み
+  function csvToArray(path) {
+    var csvData = new Array();
+    var data = new XMLHttpRequest();
+    data.open("GET", path, false);
+    data.send(null);
+    var LF = String.fromCharCode(10);
+    var lines = data.responseText.split(LF);
+    for (var i = 0; i < lines.length;++i) {
+      var cells = lines[i].split(",");
+      if(cells.length > 1) {
+        csvData.push(cells);
+      }
+    }
+    return csvData;
+  }
 });
