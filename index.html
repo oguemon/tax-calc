@@ -8,6 +8,7 @@
 給料：月<input type="number" id="input-income" value="234500">円<br>
 ボーナス：年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回<br>
 残業：月<input type="number" id="input-overwork-hours"value="20">時間<br>
+都道府県：<select id="select-residence-pref"></select><br>
 <button type="submit" id="btn-calc-tax">計算！</button>
 <hr>
 ボーナス：年間<span id="val-bonus-income"></span>円（1回あたり<span id="val-bonus-income-half"></span>円）<br>
@@ -16,8 +17,12 @@
 <hr>
 天引き健康保険料（月額）：<span id="val-health-insurance-premium-half"></span>円<br>
 天引き健康保険料（ボーナス）：年あたり<span id="val-health-insurance-premium-half-bonus"></span>円（1回あたり<span id="val-health-insurance-premium-half-bonus-once"></span>円）<br>
+天引き厚生年金保険料（月額）：<span id="val-employee-pension-premium-half"></span>円<br>
+天引き厚生年金保険料（ボーナス）：年あたり<span id="val-employee-pension-premium-half-bonus"></span>円（1回あたり<span id="val-employee-pension-premium-half-bonus-once"></span>円）<br>
+天引き雇用保険料（月額）：<span id="val-unemployment-insurance-premium-you"></span>円<br>
+天引き雇用保険料（ボーナス）：年あたり<span id="val-unemployment-insurance-premium-you-bonus"></span>円（1回あたり<span id="val-unemployment-insurance-premium-you-bonus-once"></span>円）<br>
 <hr>
-課税標準額：<span id="val-taxiable-standard"></span>円<br>
+課税標準額：<span id="val-taxiable-standard"></span>円（うち控除額<span id="val-total-deduction"></span>円）<br>
 課税所得額：<span id="val-taxiable-income"></span>円<br>
 所得税額：<span id="val-income-tax"></span>円<br>
 住民税額：<span id="val-residents-tax"></span>円<br>
@@ -32,6 +37,7 @@
 
 <script src="./js/jquery-3.3.1.min.js"></script>
 <script async src="./js/Chart.min.js"></script>
+<script async src="./js/data.js"></script>
 <script async src="./js/main.js"></script>
 </body>
 </html>
