@@ -1,5 +1,14 @@
+/*
+用語解説
+hi: 国民健康保険（health insurance）
+ep: 厚生年金（employee pension）
+ui: 雇用保険（unemployment insurance）
+li: 介護保険（long-term care insurance）
+
+it: 所得税（income tax）
+*/
 // 都道府県のJIS的並び
-var pref_list = new Array(
+const PREF_LIST = new Array(
   '北海道', // 0
   '青森県', // 1
   '岩手県', // 2
@@ -49,8 +58,8 @@ var pref_list = new Array(
   '沖縄県'  // 46
 );
 
-// 保険料率（平成30年度）
-var insurance_rate_list = new Array(
+// 健康保険料率（平成30年度）
+var HI_GENERAL_RATE_LIST = new Array(
   10.25, // 北海道
   9.96, // 青森県
   9.84, // 岩手県
@@ -99,3 +108,26 @@ var insurance_rate_list = new Array(
   10.11, // 鹿児島県
   9.93  // 沖縄県
 );
+
+// 介護保険料率（平成30年度）
+const LI_RATE = 1.57;
+
+// 厚生年金保険料率（平成30年度）
+const EP_RATE = 18.3;
+
+// 雇用保険料（平成30年度）
+const UI_RATE_LIST = new Array(
+  { // 一般の事業
+    you:     3 / 1000,
+    company: 6 / 1000
+  },
+  { // 農林水産・清酒製造の事業
+    you:     4 / 1000,
+    company: 7 / 1000
+  },
+  { // 建設の事業
+    you:     4 / 1000,
+    company: 8 / 1000
+  }
+);
+
