@@ -130,4 +130,3 @@ const UI_RATE_LIST = new Array(
     company: 8 / 1000
   }
 );
-

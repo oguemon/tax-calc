@@ -517,7 +517,7 @@ $(function () {
   }
 
   // 墓場
-  if (0) {
+  /*if (0) {
     $s.toggleClass('open');
     $s.hasClass('open');
     $b.css('transform', 'rotate(180deg)');
@@ -548,7 +548,7 @@ $(function () {
     var re = new RegExp(re_str);
     // 文字列を検索
     return re.test(location.pathname);
-  }
+  }*/
 
   // 社会保険料の等級を求める
   function getInsuranceRank (income = 0) {

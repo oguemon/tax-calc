@@ -3,8 +3,13 @@
 <head>
 	<meta charset="UTF-8">
   <title>手取り計算機</title>
+  <link rel='stylesheet' href='./assets/css/main.css' type='text/css' media='all' />
 </head>
 <body>
+<header>
+簡単！手取り給料計算機
+</header>
+<main>
 給料：月<input type="number" id="input-income" value="234500">円<br>
 ボーナス：年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回<br>
 残業：月<input type="number" id="input-overwork-hours"value="20">時間<br>
@@ -34,10 +39,12 @@
 <hr>
 手取り月収：<span id="val-substantial-income"></span>円<br>
 手取り年収：<span id="val-substantial-annual-income"></span>円<br>
-
-<script src="./js/jquery-3.3.1.min.js"></script>
-<script async src="./js/Chart.min.js"></script>
-<script async src="./js/data.js"></script>
-<script async src="./js/main.js"></script>
+</main>
+<footer>
+Copyright ©️ 2018 おぐえもん All Rights Reserved.
+</footer>
+<script src="./assets/js/jquery-3.3.1.min.js"></script>
+<script src="./assets/js/Chart.min.js"></script>
+<script src="./assets/js/output.min.js"></script>
 </body>
 </html>

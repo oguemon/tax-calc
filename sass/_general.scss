@@ -1,0 +1,79 @@
+/*
+ * 全般的なレイアウト
+ */
+ * {
+	margin: 0;
+	padding: 0;
+
+	-webkit-appearance: none;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	line-height: 1.6em;
+	font-size: 14px;
+    font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	color: $text-base-color;
+
+	@include mq() {
+		font-size: 13px;
+		background: $white-color;
+    }
+}
+
+a {
+	color: $text-base-color;
+	text-decoration: none;
+}
+
+img {
+	max-width: 100%;
+}
+
+li {
+	list-style-type: none;
+}
+
+.wrapper {
+	width: 1080px;
+	margin: 0 auto;
+
+	@include mq() {
+		width: 100%;
+    }
+}
+
+.wrapper-main {
+	padding: 20px $margin-site-side;
+	background: $white-color;
+	box-shadow: 1px 0px 5px rgba(0,0,0,0.05);
+
+	@include mq() {
+		padding: 0;
+    }
+}
+
+.clearfix {
+	&:before, &:after {
+		clear: both;
+		content: "";
+		display: block;
+	}
+}
+
+#site-main {
+	background: #f6fcff;
+}
+
+#site-content {
+	width: 660px;
+	float: left;
+
+	@include mq() {
+		width: 100%;
+		float: none;
+	}
+}
