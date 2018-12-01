@@ -46,49 +46,52 @@ $(function () {
     $('#val-annual-income').text(add1000Separator(annual_income));
 
     // 健康保険料
-    var hi = calcHealthInsurancePremium(income, residence_pref); // 暫定的に残業代を抜く
-    var hi_half = roundRev(hi / 2); // 天引き額は.5「以下」を切捨
-    var hi_half_bonus = roundRev(calcHealthInsurancePremiumBonus(bonus_income_total, residence_pref) / 2);
-    var hi_half_bonus_once = roundRev(calcHealthInsurancePremiumBonus(bonus_income_once, residence_pref) / 2);
+    var hi       = calcHealthInsurancePremium(residence_pref, income); // 暫定的に残業代を抜く
+    var hi_bonus = calcHealthInsurancePremium(residence_pref, bonus_income_total, bonus_number);
+
     // 厚生年金保険料
-    var ep = calcEmployeePensionPremium(income);
-    var ep_half = roundRev(ep / 2); // 天引き額は.5「以下」を切捨
-    var ep_half_bonus = roundRev(calcEmployeePensionPremiumBonus(bonus_income_total) / 2);
-    var ep_half_bonus_once = roundRev(calcEmployeePensionPremiumBonus(bonus_income_once) / 2);
+    var ep       = calcEmployeePensionPremium(income);
+    var ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
+
     // 雇用保険料
-    var ui = calcUnemplymentInsurancePremium(income, 0);
-    var ui_bonus_once = calcUnemplymentInsurancePremium(bonus_income_once, 0);
-    var ui_bonus = ui_bonus_once.you * bonus_number;
+    var ui = calcUnemplymentInsurancePremium(0, income);
+    var ui_bonus = calcUnemplymentInsurancePremium(0, bonus_income_once);
+
     // 社会保険料の天引き月額
-    var monthly_pension_you = hi_half
-                          + ep_half
-                          + ui.you;
+    var premium_monthly = {
+      you:     hi.you + ep.you + ui.you,
+      company: hi.company + ep.company + ui.company,
+      total:   hi.total + ep.total + ui.total,
+    }
+
     // 社会保険料の天引き年額
-    var total_pension_you = monthly_pension_you * 12
-                          + hi_half_bonus
-                          + ep_half_bonus
-                          + ui_bonus;
+    var premium_annually = {
+      you:     premium_monthly.you * 12 + (hi_bonus.you + ep_bonus.you + ui_bonus.you) * bonus_number,
+      company: premium_monthly.company * 12 + (hi_bonus.company + ep_bonus.company + ui_bonus.company) * bonus_number,
+      total:   premium_monthly.total * 12 + (hi_bonus.total + ep_bonus.total + ui_bonus.total) * bonus_number,
+    }
 
     // 結果を出力（社会保険料）
-    $('#val-hi-half').text(add1000Separator(hi_half));
-    $('#val-hi-half-bonus').text(add1000Separator(hi_half_bonus));
-    $('#val-hi-half-bonus-once').text(add1000Separator(hi_half_bonus_once));
+    $('#val-hi-half').text(add1000Separator(hi.you));
+    $('#val-hi-half-bonus').text(add1000Separator(hi.you * bonus_number));
+    $('#val-hi-half-bonus-once').text(add1000Separator(hi.you));
 
-    $('#val-ep-half').text(add1000Separator(ep_half));
-    $('#val-ep-half-bonus').text(add1000Separator(ep_half_bonus));
-    $('#val-ep-half-bonus-once').text(add1000Separator(ep_half_bonus_once));
+    $('#val-ep-half').text(add1000Separator(ep.you));
+    $('#val-ep-half-bonus').text(add1000Separator(ep_bonus.you * bonus_number));
+    $('#val-ep-half-bonus-once').text(add1000Separator(ep_bonus.you));
 
     $('#val-ui-you').text(add1000Separator(ui.you));
-    $('#val-ui-you-bonus').text(add1000Separator(ui_bonus));
-    $('#val-ui-you-bonus-once').text(add1000Separator(ui_bonus_once.you));
+    $('#val-ui-you-bonus').text(add1000Separator(ui_bonus.you * bonus_number));
+    $('#val-ui-you-bonus-once').text(add1000Separator(ui_bonus.you));
 
     // 所得税
-    var taxable_standard_income = Math.max(annual_income - calcTaxableIncomeDeductions(annual_income), 0);
+    var taxable_standard_income = calcTaxableIncome(annual_income);
     var total_deduction = 380000 // 基礎控除
-                        + total_pension_you;
+                        + premium_annually.you;
 
     var taxable_income = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
     var it = calcTaxValue(taxable_income);
+
     // 住民税
     var prefectural_tax = calcPrefecturalTax(it, 0)
     var municipal_tax = calcMunicipalTax(it, 0);
@@ -96,33 +99,32 @@ $(function () {
 
     // 源泉徴収額（月収：甲種）
     var taxable_income_withholding = income
-                                    - monthly_pension_you
-                                    - calcTaxableIncomeDeductionsWithholding(income - monthly_pension_you)
+                                    - premium_monthly.you
+                                    - calcTaxableIncomeDeductionsWithholding(income - premium_monthly.you)
                                     - calcBasicDeductionsWithholding()
                                     - calcSpouseDeductionsWithholding (false)
                                     - calcDependentsDeductionsWithholding(0);
-                                    console.log(taxable_income_withholding);
+
     var it_withholding = calcTaxValueWithholding(taxable_income_withholding);
+
     // 源泉徴収額（ボーナス）
     var it_rate_bonus_withholding = calcTaxRate(income, true, 0);
     var it_taxiable_bonus_withholding = bonus_income_once
-                                      - hi_half_bonus_once
-                                      - ep_half_bonus_once
-                                      - ui_bonus_once.you;
+                                      - hi_bonus.you
+                                      - ep_bonus.you
+                                      - ui_bonus.you;
     var it_bonus_withholding = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
     // 実質の年収
     var substantial_annual_income = annual_income
-                                  - total_pension_you
+                                  - premium_annually.you
                                   - it;
                                   // - residents_tax;は2年目以降
 
     // 実質毎月振り込まれる月給
     var substantial_income = income
-                            - it_withholding
-                            - hi_half
-                            - ep_half
-                            - ui.you;
+                           - premium_monthly.you
+                           - it_withholding;
 
     // 結果を出力（税金）
     $('#val-taxiable-standard').text(add1000Separator(taxable_standard_income));
@@ -193,13 +195,45 @@ $(function () {
       return income * 0.2 + 540000;
     }
     if (income <= 10000000) {
-      //return income * 0.1 + 1200000;
-      return income * 0.9 - 1200000; // 速算表に基づく。実際はこれ使う
+      return income * 0.1 + 1200000;
     }
     if (income > 10000000) {
       return 2200000;
     }
   }
+
+  // 課税所得金額を求める（給与所得控除額の計算がいらない）
+  function calcTaxableIncome (income = 0)
+  {
+    var taxable_income = 0;
+
+    if (income < 651000) {
+      taxable_income = 0;
+    } else if (income < 1619000) {
+      taxable_income = income - 650000;
+    } else if (income < 6600000) {
+      // 怒涛の「別表第五」を参照
+      var arr = csvToArray('./csv/table5-2018.csv');
+
+      // 各行を走査
+      for (var i = 0; i < arr.length; i++) {
+        // 税額表の最下行以外のポジションで見つけた
+        if (income < Number(arr[i][0])) {
+          taxable_income = Number(arr[i][1]);
+          break;
+        }
+      }
+    } else if (income < 10000000) {
+      taxable_income = income * 0.9 - 1200000;
+    } else if (income < 20000000) {
+      taxable_income = income - 2200000;
+    } else {
+      taxable_income = 17800000;
+    }
+
+    return Math.floor(taxable_income);
+  }
+
 
   // 課税所得金額から税額を計算（100円単位は切り捨て）
   function calcTaxValue (taxable_income = 0)
@@ -353,78 +387,115 @@ $(function () {
   }
 
   /* --------------------------------------------------
-   * 社会保険料
+   * 健康保険料
    * --------------------------------------------------*/
-  // 月収に対する健康保険料を求める
-  function calcHealthInsurancePremium (income = 0, residence_pref = 0, over_40_age = false) {
-    var rank = getInsuranceRank(income);
+  function calcHealthInsurancePremium (residence_pref = 0, income = 0, bonus_number = 0, over_40_age = false) {
+    // 健康保険料を格納
+    var premium = {
+      you: 0,
+      company: 0,
+      total: 0,
+    };
 
-    // 健康保険料の割合を求める
+    // 税率を掛ける収入額
+    var target_income = 0;
+
+    // 健康保険料率を求める
     var hi_rate = HI_GENERAL_RATE_LIST[residence_pref];
+
+    // 介護保険料が必要かチェック
     if (over_40_age) {
-      // 介護保険料の割合（全国一律）を加える
       hi_rate += LI_RATE;
     }
 
-    // 健康保険料を求める
-    var hi = rank.monthly_price * hi_rate / 100;
+    // 月給かボーナスかチェック
+    if (bonus_number == 0) // ボーナスでない
+    {
+      // 等級情報を取得
+      var rank = getInsuranceRank(income);
 
-    // 返す
-    return hi;
-  }
+      // 等級情報に基づく月額決定
+      target_income = rank.monthly_price;
+    }
+    else if (bonus_number > 0) // ボーナスである
+    {
+      // 標準賞与額の上限は、健康保険は年間573万円（毎年4月1日から翌年3月31日までの累計額）
+      var standard = Math.min(income, 5730000);
 
-  // ボーナスに対する健康保険料を求める
-  function calcHealthInsurancePremiumBonus (bonus = 0, residence_pref = 0, over_40_age = false) {
-    // 健康保険料の割合を求める
-    var hi_rate = HI_GENERAL_RATE_LIST[residence_pref];
-    if (over_40_age) {
-      // 介護保険料の割合（全国一律）を加える
-      hi_rate += LI_RATE;
+      // 計算対象のボーナス額（1回あたりの対象額）を求める（千円未満の端数切捨）
+      target_income = round(standard / bonus_number, 1000, 'floor');
+    }
+    else // 不正な値
+    {
+      return premium;
     }
 
-    // 標準賞与額の上限は、健康保険は年間573万円（毎年4月1日から翌年3月31日までの累計額）
-
-    // 計算対象のボーナス額を求める（千円未満の端数切捨）
-    var target_bonus = round(bonus, 1000, 'floor');
-
     // 健康保険料を求める
-    var hi_bonus = target_bonus * hi_rate / 100;
+    var premium_basic = target_income * hi_rate / 100;
+    premium.you     = round(premium_basic / 2, 1, 'roundhd');
+    premium.company = round(premium_basic / 2);
+    premium.total   = round(premium_basic);
 
     // 返す
-    return hi_bonus;
+    return premium;
   }
 
-  // 月収に対する厚生年金保険料を求める
-  function calcEmployeePensionPremium (income = 0) {
-    var rank = getInsuranceRank(income);
+  /* --------------------------------------------------
+   * 厚生年金保険料
+   * --------------------------------------------------*/
+  function calcEmployeePensionPremium (income = 0, bonus_number = 0) {
+    // 厚生年金保険料を格納
+    var premium = {
+      you: 0,
+      company: 0,
+      total: 0,
+    };
+
+    // 税率を掛ける収入額
+    var target_income = 0;
+
+    // 月給かボーナスかチェック
+    if (bonus_number == 0) // ボーナスでない
+    {
+      // 等級情報を取得
+      var rank = getInsuranceRank(income);
+
+      // 等級情報に基づく月額決定
+      target_income = rank.monthly_price;
+    }
+    else if (bonus_number > 0) // ボーナスである
+    {
+      // 賞与標準は千円未満の端数切捨で月額150万円が上限
+      var standard = Math.min(income / bonus_number, 1500000);
+
+      // 計算対象のボーナス額を求める
+      target_income = round(standard, 1000, 'floor')
+    }
+    else // 不正な値
+    {
+      return premium;
+    }
 
     // 厚生年金保険料を求める
-    var employee_premium = rank.monthly_price * EP_RATE / 100;
+    var premium_basic = target_income * EP_RATE / 100;
+    premium.you     = round(premium_basic / 2, 1, 'roundhd');
+    premium.company = round(premium_basic / 2);
+    premium.total   = round(premium_basic);
 
     // 返す
-    return employee_premium;
+    return premium;
   }
 
-  // 賞与に対する厚生年金保険料を求める
-  function calcEmployeePensionPremiumBonus (bonus = 0) {
-    // 計算対象のボーナス額を求める（賞与標準は千円未満の端数切捨で月額150万円が上限）
-    var bonus_standard = Math.min(round(bonus, 1000, 'floor'), 1500000);
-
-    // 厚生年金保険料を求める
-    var employee_premium = bonus_standard * EP_RATE / 100;
-
-    // 返す
-    return employee_premium;
-  }
-
-  // 雇用保険料を求める
-  function calcUnemplymentInsurancePremium (income = 0, business_type = 0) {
+  /* --------------------------------------------------
+   * 雇用保険料
+   * --------------------------------------------------*/
+  function calcUnemplymentInsurancePremium (business_type = 0, income = 0) {
     // 保険料を格納する
     var premium = {
-                  you: 0,
-                  company: 0,
-                  total: 0
-                };
+      you: 0,
+      company: 0,
+      total: 0
+    };
 
     // 事業のタイプにより税率が異なる
     if (business_type == 0) { // 一般の事業
@@ -437,6 +508,7 @@ $(function () {
       premium.you     = round(income * UI_RATE_LIST[2].you, 1, 'roundhd');
       premium.company = round(income * UI_RATE_LIST[2].company);
     }
+
     // トータルの保険料を格納
     premium.total   = premium.you + premium.company
 
