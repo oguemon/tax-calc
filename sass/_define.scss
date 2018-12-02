@@ -14,8 +14,13 @@ $base-url: "https://oguemon.com/wordpress/wp-content/themes/oguemon";
 $splite-url: "#{$base-url}/img/splite.svg";
 
 // 色関係
-$main-color: #00A5DE;
+$theme-color: #83c426;
 $white-color: #fff;
+$black-color: #333;
+
+$header-color: $theme-color;
+$main-color: $white-color;
+$footer-color: $black-color;
 
 $text-base-color: #333;
 $text-sub-color: #888;
