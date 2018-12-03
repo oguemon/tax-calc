@@ -11,6 +11,7 @@ header {
   }
 }
 main {
+  padding: 5px 0;
   background: #f9ffeb;
 }
 
@@ -133,5 +134,9 @@ main {
 }
 
 footer {
+  padding: 5px;
+  color: $white-color;
+  font-size: 80%;
   background: $footer-color;
+  text-align: center;
 }

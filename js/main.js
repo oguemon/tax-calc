@@ -54,33 +54,33 @@ $(function () {
       industry_type = 2;
     }
 
-    console.log($('input[name="industry"]'));
     //給料の元になる支給額の計算
     var bonus_income_total = Math.floor(income * bonus_mounths);
     var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
-    var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8));
-    var annual_income = Math.floor((income + overwork_monthly_income) * 12) + bonus_income_total;
+    var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8)); // ひと月あたり8時間×20日間換算
+    var monthly_income = income + overwork_monthly_income;
+    var annual_income = Math.floor(monthly_income * 12) + bonus_income_total;
 
     // 結果を包むid要素を取得
     var r = $('#result');
 
     // 結果を出力（給料）
     r.find('[basic-income]').text(add1000Separator(income));
-    r.find('[bonus-income-half]').text(add1000Separator(bonus_income_once));
+    r.find('[bonus-income-once]').text(add1000Separator(bonus_income_once));
     r.find('[overwork-monthly-income]').text(add1000Separator(overwork_monthly_income));
-    r.find('[monthly-income]').text(add1000Separator(income + overwork_monthly_income));
+    r.find('[monthly-income]').text(add1000Separator(monthly_income));
     r.find('[annual-income]').text(add1000Separator(annual_income));
 
     // 健康保険料
-    var hi       = calcHealthInsurancePremium(residence_pref, income); // 暫定的に残業代を抜く
+    var hi       = calcHealthInsurancePremium(residence_pref, monthly_income);
     var hi_bonus = calcHealthInsurancePremium(residence_pref, bonus_income_total, bonus_number);
 
     // 厚生年金保険料
-    var ep       = calcEmployeePensionPremium(income);
+    var ep       = calcEmployeePensionPremium(monthly_income);
     var ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
 
     // 雇用保険料
-    var ui = calcUnemplymentInsurancePremium(industry_type, income);
+    var ui       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
     var ui_bonus = calcUnemplymentInsurancePremium(industry_type, bonus_income_once);
 
     // 社会保険料の天引き月額
@@ -134,9 +134,9 @@ $(function () {
     var residents_tax = prefectural_tax + municipal_tax;
 
     // 源泉徴収額（月収：甲種）
-    var taxable_income_withholding = income
+    var taxable_income_withholding = monthly_income
                                     - premium_monthly.you
-                                    - calcTaxableIncomeDeductionsWithholding(income - premium_monthly.you)
+                                    - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
                                     - calcBasicDeductionsWithholding()
                                     - calcSpouseDeductionsWithholding (false)
                                     - calcDependentsDeductionsWithholding(0);
@@ -144,7 +144,7 @@ $(function () {
     var it_withholding = calcTaxValueWithholding(taxable_income_withholding);
 
     // 源泉徴収額（ボーナス）
-    var it_rate_bonus_withholding = calcTaxRate(income, true, 0);
+    var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you, true, 0);
     var it_taxiable_bonus_withholding = bonus_income_once
                                       - hi_bonus.you
                                       - ep_bonus.you
@@ -163,7 +163,7 @@ $(function () {
                               - it_bonus_withholding;
 
     // 実質毎月振り込まれる月給
-    var substantial_income = income
+    var substantial_income = monthly_income
                            - premium_monthly.you
                            - it_withholding;
 
@@ -194,12 +194,6 @@ $(function () {
   {
     // 3桁おきにカンマを置く
     return String(value).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-  }
-
-  // 五捨五超入
-  function roundRev (value = 0)
-  {
-    return Math.ceil(value - 0.5);
   }
 
   // 指定した桁数を指定した形で丸める
