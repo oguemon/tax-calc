@@ -75,10 +75,6 @@ main {
       .line-value {
         &.plus {
           color: $theme-color;
-
-          &:before {
-            content: '+';
-          }
         }
 
         &.minus {

@@ -44,12 +44,15 @@ $(function () {
     var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8));
     var annual_income = Math.floor((income + overwork_monthly_income) * 12) + bonus_income_total;
 
+    // 結果を包むid要素を取得
+    var r = $('#result');
+
     // 結果を出力（給料）
-    $('#val-monthly-income').text(add1000Separator(income));
-    $('#val-bonus-income').text(add1000Separator(bonus_income_total));
-    $('#val-bonus-income-half').text(add1000Separator(bonus_income_once));
-    $('#val-overwork-monthly-income').text(add1000Separator(overwork_monthly_income));
-    $('#val-annual-income').text(add1000Separator(annual_income));
+    r.find('[basic-income]').text(add1000Separator(income));
+    r.find('[bonus-income-half]').text(add1000Separator(bonus_income_once));
+    r.find('[overwork-monthly-income]').text(add1000Separator(overwork_monthly_income));
+    r.find('[monthly-income]').text(add1000Separator(income + overwork_monthly_income));
+    r.find('[annual-income]').text(add1000Separator(annual_income));
 
     // 健康保険料
     var hi       = calcHealthInsurancePremium(residence_pref, income); // 暫定的に残業代を抜く
@@ -85,20 +88,20 @@ $(function () {
     }
 
     // 結果を出力（社会保険料）
-    $('#val-hi-half').text(add1000Separator(hi.you));
-    $('#val-hi-half-bonus').text(add1000Separator(hi_bonus.you * bonus_number));
-    $('#val-hi-half-bonus-once').text(add1000Separator(hi_bonus.you));
-    $('#val-hi-annual').text(add1000Separator(hi.you * 12 + hi_bonus.you * bonus_number));
+    r.find('[hi-half]').text(add1000Separator(hi.you));
+    r.find('[hi-half-bonus]').text(add1000Separator(hi_bonus.you * bonus_number));
+    r.find('[hi-half-bonus-once]').text(add1000Separator(hi_bonus.you));
+    r.find('[hi-annual]').text(add1000Separator(hi.you * 12 + hi_bonus.you * bonus_number));
 
-    $('#val-ep-half').text(add1000Separator(ep.you));
-    $('#val-ep-half-bonus').text(add1000Separator(ep_bonus.you * bonus_number));
-    $('#val-ep-half-bonus-once').text(add1000Separator(ep_bonus.you));
-    $('#val-ep-annual').text(add1000Separator(ep.you * 12 + ep_bonus.you * bonus_number));
+    r.find('[ep-half]').text(add1000Separator(ep.you));
+    r.find('[ep-half-bonus]').text(add1000Separator(ep_bonus.you * bonus_number));
+    r.find('[ep-half-bonus-once]').text(add1000Separator(ep_bonus.you));
+    r.find('[ep-annual]').text(add1000Separator(ep.you * 12 + ep_bonus.you * bonus_number));
 
-    $('#val-ui-you').text(add1000Separator(ui.you));
-    $('#val-ui-you-bonus').text(add1000Separator(ui_bonus.you * bonus_number));
-    $('#val-ui-you-bonus-once').text(add1000Separator(ui_bonus.you));
-    $('#val-ui-annual').text(add1000Separator(ui.you * 12 + ui_bonus.you * bonus_number));
+    r.find('[ui-you]').text(add1000Separator(ui.you));
+    r.find('[ui-you-bonus]').text(add1000Separator(ui_bonus.you * bonus_number));
+    r.find('[ui-you-bonus-once]').text(add1000Separator(ui_bonus.you));
+    r.find('[ui-annual]').text(add1000Separator(ui.you * 12 + ui_bonus.you * bonus_number));
 
     // 所得税
     var taxable_standard_income = calcTaxableIncome(annual_income);
@@ -148,22 +151,22 @@ $(function () {
                            - it_withholding;
 
     // 結果を出力（税金）
-    $('#val-taxiable-standard').text(add1000Separator(taxable_standard_income));
-    $('#val-taxiable-income').text(add1000Separator(taxable_income));
-    $('#val-it').text(add1000Separator(it));
+    r.find('[taxiable-standard]').text(add1000Separator(taxable_standard_income));
+    r.find('[taxiable-income]').text(add1000Separator(taxable_income));
+    r.find('[it]').text(add1000Separator(it));
 
-    $('#val-total-deduction').text(add1000Separator(total_deduction));
+    r.find('[total-deduction]').text(add1000Separator(total_deduction));
 
-    $('#val-prefectural-tax').text(add1000Separator(prefectural_tax));
-    $('#val-municipal-tax').text(add1000Separator(municipal_tax));
-    $('#val-residents-tax').text(add1000Separator(residents_tax));
+    r.find('[prefectural-tax]').text(add1000Separator(prefectural_tax));
+    r.find('[municipal-tax]').text(add1000Separator(municipal_tax));
+    r.find('[residents-tax]').text(add1000Separator(residents_tax));
 
-    $('#val-substantial-income').text(add1000Separator(substantial_income));
-    $('#val-substantial-bonus').text(add1000Separator(substantial_bonus));
-    $('#val-substantial-annual-income').text(add1000Separator(substantial_annual_income));
+    r.find('[substantial-income]').text(add1000Separator(substantial_income));
+    r.find('[substantial-bonus]').text(add1000Separator(substantial_bonus));
+    r.find('[substantial-annual-income]').text(add1000Separator(substantial_annual_income));
 
-    $('#val-it-withholding').text(add1000Separator(it_withholding));
-    $('#val-it-bonus-withholding').text(add1000Separator(it_bonus_withholding));
+    r.find('[it-withholding]').text(add1000Separator(it_withholding));
+    r.find('[it-bonus-withholding]').text(add1000Separator(it_bonus_withholding));
   });
 
   /* --------------------------------------------------
