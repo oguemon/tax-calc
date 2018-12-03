@@ -10,6 +10,11 @@ $(function () {
   $(window).on('scroll', function () {
   });
 
+  // ボタンを押すと
+  $('.btn-detail-toggle').on('click', function () {
+    $(this).parent().children('.detail-box').slideToggle(300);
+  });
+
   $('a[href^="#"]').on('click', function () {
     var speed = 400; // ミリ秒
     var href = $(this).attr("href");
@@ -40,6 +45,7 @@ $(function () {
     var annual_income = Math.floor((income + overwork_monthly_income) * 12) + bonus_income_total;
 
     // 結果を出力（給料）
+    $('#val-monthly-income').text(add1000Separator(income));
     $('#val-bonus-income').text(add1000Separator(bonus_income_total));
     $('#val-bonus-income-half').text(add1000Separator(bonus_income_once));
     $('#val-overwork-monthly-income').text(add1000Separator(overwork_monthly_income));
@@ -64,6 +70,13 @@ $(function () {
       total:   hi.total + ep.total + ui.total,
     }
 
+    // 社会保険料の天引きボーナス額（1回あたり）
+    var premium_bonus = {
+      you:     hi_bonus.you + ep_bonus.you + ui_bonus.you,
+      company: hi_bonus.company + ep_bonus.company + ui_bonus.company,
+      total:   hi_bonus.total + ep_bonus.total + ui_bonus.total,
+    }
+
     // 社会保険料の天引き年額
     var premium_annually = {
       you:     premium_monthly.you * 12 + (hi_bonus.you + ep_bonus.you + ui_bonus.you) * bonus_number,
@@ -73,16 +86,19 @@ $(function () {
 
     // 結果を出力（社会保険料）
     $('#val-hi-half').text(add1000Separator(hi.you));
-    $('#val-hi-half-bonus').text(add1000Separator(hi.you * bonus_number));
-    $('#val-hi-half-bonus-once').text(add1000Separator(hi.you));
+    $('#val-hi-half-bonus').text(add1000Separator(hi_bonus.you * bonus_number));
+    $('#val-hi-half-bonus-once').text(add1000Separator(hi_bonus.you));
+    $('#val-hi-annual').text(add1000Separator(hi.you * 12 + hi_bonus.you * bonus_number));
 
     $('#val-ep-half').text(add1000Separator(ep.you));
     $('#val-ep-half-bonus').text(add1000Separator(ep_bonus.you * bonus_number));
     $('#val-ep-half-bonus-once').text(add1000Separator(ep_bonus.you));
+    $('#val-ep-annual').text(add1000Separator(ep.you * 12 + ep_bonus.you * bonus_number));
 
     $('#val-ui-you').text(add1000Separator(ui.you));
     $('#val-ui-you-bonus').text(add1000Separator(ui_bonus.you * bonus_number));
     $('#val-ui-you-bonus-once').text(add1000Separator(ui_bonus.you));
+    $('#val-ui-annual').text(add1000Separator(ui.you * 12 + ui_bonus.you * bonus_number));
 
     // 所得税
     var taxable_standard_income = calcTaxableIncome(annual_income);
@@ -121,6 +137,11 @@ $(function () {
                                   - it;
                                   // - residents_tax;は2年目以降
 
+    // 実質のボーナス（1回あたり）
+    var substantial_bonus = bonus_income_once
+                              - premium_bonus.you
+                              - it_bonus_withholding;
+
     // 実質毎月振り込まれる月給
     var substantial_income = income
                            - premium_monthly.you
@@ -138,6 +159,7 @@ $(function () {
     $('#val-residents-tax').text(add1000Separator(residents_tax));
 
     $('#val-substantial-income').text(add1000Separator(substantial_income));
+    $('#val-substantial-bonus').text(add1000Separator(substantial_bonus));
     $('#val-substantial-annual-income').text(add1000Separator(substantial_annual_income));
 
     $('#val-it-withholding').text(add1000Separator(it_withholding));
