@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <title>手取り計算機</title>
   <link rel='stylesheet' href='./assets/css/main.css' type='text/css' media='all' />
 </head>
@@ -11,11 +12,16 @@
 </header>
 <main>
   <div class="wrapper">
-    給料：月<input type="number" id="input-income" value="234500">円<br>
-    ボーナス：年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回<br>
-    残業：月<input type="number" id="input-overwork-hours"value="20">時間<br>
-    都道府県：<select id="select-residence-pref"></select><br>
-    <button type="submit" id="btn-calc-tax">計算！</button>
+    <div class="form-box">
+        給料：月<input type="number" id="input-income" value="234500">円<br>
+        ボーナス：年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回<br>
+        残業：月<input type="number" id="input-overwork-hours" value="20">時間<br>
+        都道府県：<select id="select-residence-pref"></select><br>
+        <label><input type="radio" id="select-industry" name="industry"><span>一般</span></label>
+        <label><input type="radio" id="select-industry" name="industry"><span>農林水産・清酒製造の事業</span></label>
+        <label><input type="radio" id="select-industry" name="industry"><span>建設の事業</span></label>
+        <button type="submit" id="btn-calc-tax" class="main wide">手取り金額を計算</button>
+    </div>
     <hr>
     ボーナス：年間<span id="val-bonus-income"></span>円（1回あたり<span id="val-bonus-income-half"></span>円）<br>
     残業手当：月<span id="val-overwork-monthly-income"></span>円（ひと月当たり20日労働と仮定）<br>
