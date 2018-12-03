@@ -1,0 +1,27 @@
+
+/*
+ *  モーダルパネル
+ */
+ .modal-dialog{
+	.content{
+    min-height: 240px;
+		background: $white-color;
+		border-radius: 5px;
+		box-shadow: 1px 1px 1px rgba(85,85,85,0.1);
+
+		.header{
+      margin: 0 20px;
+      padding: 20px 0 10px;
+			border-bottom: 5px solid $border-base-color;
+
+			.title{
+        color: $theme-color;
+				font-size: 200%;
+				font-weight: bold;
+			}
+		}
+		.body{
+      padding: 10px 20px 20px;
+    }
+  }
+}

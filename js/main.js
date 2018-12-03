@@ -10,7 +10,7 @@ $(function () {
   $(window).on('scroll', function () {
   });
 
-  // ボタンを押すと
+  // 詳細ボタンを押すと
   $('.btn-detail-toggle').on('click', function () {
     $(this).parent().children('.detail-box').slideToggle(300);
   });
@@ -31,6 +31,9 @@ $(function () {
 
   // 計算ボタンをクリックしたら
   $('#btn-calc-tax').on('click', function () {
+    // モーダルテスト
+    //$('#moveModal').modal('show');
+
     // 入力された情報を取得
     var income = Number($('#input-income').val());
     var bonus_mounths = Number($('#input-bonus-mounths').val());
