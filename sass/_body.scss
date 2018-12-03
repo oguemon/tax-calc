@@ -2,9 +2,47 @@ header {
   height: 50px;
   color: $white-color;
   background: $header-color;
+
+  .logo {
+    width: 320px;
+    height: 40px;
+    margin: 0 auto;
+    padding: 5px 0;
+  }
 }
 main {
   background: #f9ffeb;
+}
+
+#income-input {
+  padding: 10px;
+
+  #input-income { width: 200px; font-size: 240%; font-weight: bold; text-align: right; }
+  #input-bonus-mounths { width: 60px; font-size: 150%; text-align: center; }
+  #input-bonus-number { width: 40px; font-size: 150%; text-align: center; }
+  #input-overwork-hours { width: 80px; font-size: 150%; text-align: center; }
+  #select-residence-pref { width: 160px; text-align: center; }
+
+  .line-box {
+    padding: 5px;
+    border-bottom: 1px dashed $theme-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .line-label {
+      color: $theme-color;
+      font-weight: bold;
+    }
+
+    .line-value {
+      text-align: right;
+    }
+  }
 }
 
 .result-box {

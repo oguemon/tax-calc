@@ -34,6 +34,10 @@ $(function () {
     // モーダルテスト
     //$('#moveModal').modal('show');
 
+    // 結果画面へスクロール
+    var position = $('#result').offset().top - 10; //ゆとりを持たせる
+    $('body,html').animate({ scrollTop: position }, 400, 'swing');
+
     // 入力された情報を取得
     var income = Number($('#input-income').val());
     var bonus_mounths = Number($('#input-bonus-mounths').val());
@@ -41,6 +45,16 @@ $(function () {
     var overwork_hours = Number($('#input-overwork-hours').val());
     var residence_pref = Number($('#select-residence-pref').val());
 
+    var industry_type = 0; // 業種
+    if ($('input[name="industry"]:eq(0)').prop('checked')) {
+      industry_type = 0;
+    } else if ($('input[name="industry"]:eq(1)').prop('checked')) {
+      industry_type = 1;
+    } else if ($('input[name="industry"]:eq(2)').prop('checked')) {
+      industry_type = 2;
+    }
+
+    console.log($('input[name="industry"]'));
     //給料の元になる支給額の計算
     var bonus_income_total = Math.floor(income * bonus_mounths);
     var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
@@ -66,8 +80,8 @@ $(function () {
     var ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
 
     // 雇用保険料
-    var ui = calcUnemplymentInsurancePremium(0, income);
-    var ui_bonus = calcUnemplymentInsurancePremium(0, bonus_income_once);
+    var ui = calcUnemplymentInsurancePremium(industry_type, income);
+    var ui_bonus = calcUnemplymentInsurancePremium(industry_type, bonus_income_once);
 
     // 社会保険料の天引き月額
     var premium_monthly = {
@@ -517,7 +531,7 @@ $(function () {
   /* --------------------------------------------------
    * 雇用保険料
    * --------------------------------------------------*/
-  function calcUnemplymentInsurancePremium (business_type = 0, income = 0) {
+  function calcUnemplymentInsurancePremium (industry_type = 0, income = 0) {
     // 保険料を格納する
     var premium = {
       you: 0,
@@ -526,13 +540,13 @@ $(function () {
     };
 
     // 事業のタイプにより税率が異なる
-    if (business_type == 0) { // 一般の事業
+    if (industry_type == 0) { // 一般の事業
       premium.you     = round(income * UI_RATE_LIST[0].you, 1, 'roundhd');
       premium.company = round(income * UI_RATE_LIST[0].company);
-    } else if (business_type == 1) { // 農林水産・清酒製造の事業
+    } else if (industry_type == 1) { // 農林水産・清酒製造の事業
       premium.you     = round(income * UI_RATE_LIST[1].you, 1, 'roundhd');
       premium.company = round(income * UI_RATE_LIST[1].company);
-    } else if (business_type == 2) { // 建設の事業
+    } else if (industry_type == 2) { // 建設の事業
       premium.you     = round(income * UI_RATE_LIST[2].you, 1, 'roundhd');
       premium.company = round(income * UI_RATE_LIST[2].company);
     }

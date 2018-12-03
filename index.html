@@ -8,21 +8,45 @@
 </head>
 <body>
 <header>
-  <div class="wrapper">簡単！手取り給料計算機</div>
+  <div class="wrapper">
+    <div class="logo">
+      <img src="assets/img/logo.svg">
+    </div>
+  </div>
 </header>
 <main>
   <div class="wrapper">
-    <div class="form-box">
-        給料：月<input type="number" id="input-income" value="234500">円<br>
-        ボーナス：年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回<br>
-        残業：月<input type="number" id="input-overwork-hours" value="20">時間<br>
-        都道府県：<select id="select-residence-pref"></select><br>
-        <label><input type="radio" id="select-industry" name="industry"><span>一般</span></label>
-        <label><input type="radio" id="select-industry" name="industry"><span>農林水産・清酒製造の事業</span></label>
-        <label><input type="radio" id="select-industry" name="industry"><span>建設の事業</span></label>
-        <button type="submit" id="btn-calc-tax" class="main wide">手取り金額を計算</button>
+    <div id="income-input">
+      <div class="form-box">
+        <div class="line-box">
+          <div class="line-label">月々の基本給</div>
+          <div class="line-value"><input type="number" id="input-income" value="234500">円</div>
+        </div>
+        <div class="line-box">
+          <div class="line-label">ボーナス</div>
+          <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
+        </div>
+        <div class="line-box">
+          <div class="line-label">残業</div>
+          <div class="line-value">月<input type="number" id="input-overwork-hours" value="20">時間</div>
+        </div>
+        <div class="line-box">
+          <div class="line-label">都道府県</div>
+          <div class="line-value"><select id="select-residence-pref"></select></div>
+        </div>
+        <div class="line-box">
+          <div class="line-label">業種</div>
+          <div class="line-value" style="text-align: left;">
+            <label><input type="radio" name="industry" value="0" checked><span>一般</span></label>
+            <label><input type="radio" name="industry" value="1"><span>建設</span></label>
+            <label><input type="radio" name="industry" value="2"><span>農林水産・清酒製造</span></label>
+          </div>
+        </div>
+        <div class="line-box">
+          <button type="submit" id="btn-calc-tax" class="main wide">手取り金額を計算</button>
+        </div>
+      </div>
     </div>
-
     <div id="result">
       <div class="result-box">
           <div class="main-value-line">

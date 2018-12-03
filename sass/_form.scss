@@ -4,7 +4,6 @@
  */
  .form-box {
   max-width: 480px;
-  margin: 30px auto;
   border-bottom: 1px solid $border-sub-color;
 
   &:last-child {
@@ -75,7 +74,7 @@
 }
 
 label {
-  margin: 0 25px 10px 0;
+  margin: 5px 0 5px 10px;
   display: inline-block;
 }
 
@@ -86,16 +85,19 @@ input, select, textarea {
 }
 
 input[type=text], input[type=number], input[type=password], textarea {
-  width: 100%;
-  margin: 1px 0; // フォーカス時の線幅変動に向けて
-  padding: 8px 15px;
+  margin: 1px 3px;
+  padding: 8px 10px;
   font-size: 110%;
   border: 1px solid $border-base-color;
   border-radius: 3px;
   resize: vertical;
 
+  &.wide {
+    width: 100%;
+  }
+
   &:focus {
-      margin: 0;
+      margin: 0 3px;
       border: 2px solid $theme-color;
   }
 }
@@ -266,10 +268,11 @@ select {
   width: 100%;
   height: 40px;
   text-indent: 5px;
-  margin: 10px 0;
+  padding: 0 10px;
   font-size: 100%;
   background: $white-color;
   border: 1px solid $border-base-color;
+  border-radius: 3px;
   display: block;
 
   &:focus {
