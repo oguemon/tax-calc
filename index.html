@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <title>手取り計算機</title>
-  <link rel='stylesheet' href='./assets/css/main.css' type='text/css' media='all' />
+  <link rel='stylesheet' href='./assets/css/main.css?20181204v1' type='text/css' media='all' />
 </head>
 <body>
 <header>
@@ -49,54 +49,56 @@
     </div>
     <div id="result">
       <div class="result-box">
-          <div class="main-value-line">
-            <div class="line-box">
-              <div class="line-cell">
-                <div class="line-label">年収</div>
-                <div class="line-value"><span annual-income></span>円</div>
-              </div>
-              <div class="line-cell">
-                <div class="line-label">手取り年収</div>
-                <div class="line-value"><span substantial-annual-income></span>円</div>
-              </div>
+        <div class="header">年収の比較</div>
+        <div class="main-value-line">
+          <div class="line-box">
+            <div class="line-cell">
+              <div class="line-label">年収</div>
+              <div class="line-value"><span annual-income></span>円</div>
+            </div>
+            <div class="line-cell">
+              <div class="line-label">手取り年収</div>
+              <div class="line-value"><span substantial-annual-income></span>円</div>
             </div>
           </div>
-          <div class="detail-box">
-            <h3>内訳グラフ</h3>
-            <canvas id="graph-annual-income-detail"></canvas>
-
-            <h3>内訳</h3>
-            <div class="sub-value-line">
-              <div class="line-box">
-                <div class="line-label">年収</div>
-                <div class="line-value plus"><span annual-income></span>円</div>
-              </div>
-              <div class="line-box">
-                <div class="line-label">健康保険料</div>
-                <div class="line-value minus"><span hi-annual></span>円</div>
-              </div>
-              <div class="line-box">
-                <div class="line-label">厚生年金保険料</div>
-                <div class="line-value minus"><span ep-annual></span>円</div>
-              </div>
-              <div class="line-box">
-                <div class="line-label">雇用保険料</div>
-                <div class="line-value minus"><span ui-annual></span>円</div>
-              </div>
-              <div class="line-box">
-                <div class="line-label">所得税額</div>
-                <div class="line-value minus"><span it></span>円</div>
-              </div>
-              <div class="line-box sum">
-                <div class="line-label">手取り年収</div>
-                <div class="line-value"><span substantial-annual-income></span>円</div>
-              </div>
-            </div>
-          </div>
-          <div class="btn-detail-toggle">詳細を開閉する</div>
         </div>
+        <div class="detail-box">
+          <h3>内訳グラフ</h3>
+          <canvas id="graph-annual-income-detail"></canvas>
+
+          <h3>内訳</h3>
+          <div class="sub-value-line">
+            <div class="line-box">
+              <div class="line-label">年収</div>
+              <div class="line-value plus"><span annual-income></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">健康保険料</div>
+              <div class="line-value minus"><span hi-annual></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">厚生年金保険料</div>
+              <div class="line-value minus"><span ep-annual></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">雇用保険料</div>
+              <div class="line-value minus"><span ui-annual></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">所得税額</div>
+              <div class="line-value minus"><span it></span>円</div>
+            </div>
+            <div class="line-box sum">
+              <div class="line-label">手取り年収</div>
+              <div class="line-value"><span substantial-annual-income></span>円</div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-detail-toggle">詳細を開閉する</div>
+      </div>
 
       <div class="result-box">
+        <div class="header">月収の比較</div>
         <div class="main-value-line">
           <div class="line-box">
             <div class="line-cell">
@@ -149,6 +151,7 @@
       </div>
 
       <div class="result-box">
+        <div class="header">ボーナスの比較</div>
         <div class="main-value-line">
           <div class="line-box">
             <div class="line-cell">
@@ -197,6 +200,8 @@
       </div>
 
       <div class="result-box">
+        <div class="header">残業時間 vs. 年収</div>
+        <p>月平均残業時間に対する年収の変化をグラフに表しています。</p>
         <canvas id="graph-overwork-income-transition"></canvas>
       </div>
 <!--
@@ -285,6 +290,6 @@
 <script src="./assets/js/Chart.min.js"></script>
 <script src="./assets/js/plugin.js"></script>
 <script src="./assets/js/modal.js"></script>
-<script src="./assets/js/output.min.js"></script>
+<script src="./assets/js/output.min.js?20181204v1"></script>
 </body>
 </html>
