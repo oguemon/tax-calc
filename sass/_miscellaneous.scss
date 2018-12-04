@@ -18,10 +18,73 @@
         color: $theme-color;
 				font-size: 200%;
 				font-weight: bold;
+				line-height: 1.2;
 			}
 		}
 		.body{
-      padding: 10px 20px 20px;
+			padding: 10px 20px 20px;
+
+			strong {
+				color: $attention-color;
+				font-weight: bold;
+			}
+
+			p {
+				margin: 0 0 10px;
+				line-height: 1.8;
+			}
+
+			h3 {
+				margin: 15px 0 10px;
+				color: $theme-color;
+				font-size: 150%;
+			}
+
+			table {
+				margin: 10px 0;
+				border-collapse: collapse;
+
+				tr {
+					border-bottom: 1px solid $border-base-color;
+					text-align: left;
+
+					th, td {
+						padding: 5px 10px;
+
+						&.center {
+							text-align: center;
+						}
+
+						&.right {
+							text-align: right;
+						}
+					}
+
+					&:nth-child(2n+1) {
+						background-color: $white-color;
+					}
+
+					&:nth-child(2n) {
+						background-color: #f3f3f3;
+					}
+
+					th {
+						color: $white-color;
+						background: $theme-color;
+					}
+				}
+			}
     }
   }
+}
+
+/*
+ *  詳細ボタン
+ */
+.detail-info {
+	width: 18px;
+	height: 18px;
+	background: url(../img/question.svg) no-repeat;
+	display: inline-block;
+	margin: 0 0 -4px 6px;
 }

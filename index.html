@@ -19,23 +19,23 @@
     <div id="income-input">
       <div class="form-box">
         <div class="line-box">
-          <div class="line-label">月々の基本給</div>
+          <div class="line-label">月々の基本給<div class="detail-info" name="basic-income"></div></div>
           <div class="line-value"><input type="number" id="input-income" value="234500">円</div>
         </div>
         <div class="line-box">
-          <div class="line-label">ボーナス</div>
+          <div class="line-label">ボーナス<div class="detail-info" name="bonus-income"></div></div>
           <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
         </div>
         <div class="line-box">
-          <div class="line-label">残業</div>
+          <div class="line-label">残業時間<div class="detail-info" name="overwork-hours"></div></div>
           <div class="line-value">月<input type="number" id="input-overwork-hours" value="20">時間</div>
         </div>
         <div class="line-box">
-          <div class="line-label">都道府県</div>
-          <div class="line-value"><select id="select-residence-pref"></select></div>
+          <div class="line-label">勤務先の都道府県<div class="detail-info" name="company-pref"></div></div>
+          <div class="line-value"><select id="select-company-pref"></select></div>
         </div>
         <div class="line-box">
-          <div class="line-label">業種</div>
+          <div class="line-label">事業<div class="detail-info" name="industry-type"></div></div>
           <div class="line-value" style="text-align: left;">
             <label><input type="radio" name="industry" value="0" checked><span>一般</span></label>
             <label><input type="radio" name="industry" value="1"><span>建設</span></label>
@@ -204,9 +204,9 @@
   <div class="modal-dialog">
     <div class="content">
       <div class="header">
-        <div class="title">こんにちは</div>
+        <div class="title"></div>
       </div>
-      <div class="body">こんにちは</div>
+      <div class="body"></div>
     </div>
   </div>
 </div>
@@ -215,6 +215,59 @@
     Copyright ©️ 2018 おぐえもん All Rights Reserved.
   </div>
 </footer>
+<div id="modal-parts" style="display: none;">
+  <div basic-income>
+    <div title>月々の基本給</div>
+    <div body>
+      <p>給料計算の元となる基本的な月額賃金です。</p>
+      <p>求人情報の月給欄などに記載されています。</p>
+    </div>
+  </div>
+  <div bonus-income>
+    <div title>賞与（ボーナス）</div>
+    <div body>
+      <p>年に数回、月給とは別に支給されるお金です。</p>
+      <p><strong>月々の基本給を倍数した「〇〇ヶ月分」という計算方法が主流</strong>です。</p>
+      <p>よって、基本給が安く、残業手当などの各種手当で月収を稼ぐタイプの企業では、ボーナスの計算面で不利になります。</p>
+      <p>年あたり基本給約4ヶ月分の賞与を年2回に分けて支給する場合が多いですが、会社や業績、個人評価などによって大きく変わります。そもそも賞与制度がない場合もあるので求人情報に注目しましょう。</p>
+    </div>
+  </div>
+  <div overwork-hours>
+    <div title>残業時間</div>
+    <div body>
+      <p>残業（法定外労働）とは、1日8時間、1週40時間の法定労働時間を超える労働のことです。</p>
+      <p>残業は、基本給を時給換算した額の<strong>1.25倍以上</strong>の時給が残業手当として支払われなければなりません（一部例外あり）。</p>
+      <p>本計算機では、ひと月あたり20日労働、1日8時間労働と仮定して時給を換算しています。</p>
+      <p>他にも、休日労働は<strong>1.35倍</strong>、深夜労働（22時〜翌5時）は<strong>1.25倍</strong>の割増賃金が支払われます。しかし、本計算機では単純さを保つため両者を考慮してません。</p>
+      <h3>残業時間の目安</h3>
+      月の残業時間には次のような目安があります。
+      <table>
+        <tr><th>時間</th><th>内容</th></tr>
+        <tr><td>15時間</td><td>パートタイム労働者以外の労働者の平均的な残業時間です。（平均14.6時間：<a href="https://www.mhlw.go.jp/toukei/itiran/roudou/monthly/29/29r/dl/pdf29cr.pdf" target="_blank">厚生労働省2017年度調査</a>より）</td></tr>
+        <tr><td>45時間</td><td>経営者&労働者間の協定（36協定）で残業を認めた場合でも、残業できるのは原則この時間までです。日常的にこの時間を超えると違法。</td></tr>
+        <tr><td>80時間</td><td>常態化していたら健康障害のリスクが懸念されます（違法）。</td></tr>
+        <tr><td>100時間</td><td>ひと月だけであっても健康障害のリスクが懸念されます（違法）。</td></tr>
+      </table>
+    </div>
+  </div>
+  <div company-pref>
+    <div title>勤務先の都道府県</div>
+    <div body>
+      <p>健康保険の保険料率が都道府県ごとに異なるために設けられた項目です。</p>
+      <p>基本的に本社の都道府県を選択しましょう。ただし各事業所の所在地が適用される会社もあります。</p>
+      <p>また、この保険料率は「<strong>全国健康保険協会</strong>」に加入している会社（日本の会社の大半）に適用されますが、700人以上が働く<strong>大企業では健康保険組合を独自に作ることができ、保険料率を独自に設定できます</strong>（大抵ちょっと低い）。</p>
+      <p>よって、大企業の場合は必ずしも本計算機を適用できない点にご注意ください（気になる企業に独自の健康保険協会があるか調べてみましょう）。</p>
+    </div>
+  </div>
+  <div industry-type>
+    <div title>事業</div>
+    <div body>
+      <p>雇用保険の保険料率が事業ごとに異なるために設けられた項目です。</p>
+      <p>一般的に、建築・農林水産・清酒製造周りの事業では保険料率が若干高く設定されています。</p>
+      <p>農林水産業について、<strong>園芸サービス、牛馬の育成、酪農、養鶏、養豚、内水面養殖および特定の船員を雇用する事業</strong>は一般の事業として扱われるので注意してください。</p>
+    </div>
+  </div>
+</div>
 <script src="./assets/js/jquery-3.3.1.min.js"></script>
 <script src="./assets/js/Chart.min.js"></script>
 <script src="./assets/js/modal.js"></script>

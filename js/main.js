@@ -26,14 +26,11 @@ $(function () {
   // 都道府県選択の選択肢を用意
   for (var i = 0; i < PREF_LIST.length; i++) {
     var selected = (PREF_LIST[i] == '神奈川県')? 'selected' : '';
-    $('#select-residence-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
+    $('#select-company-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
   }
 
   // 計算ボタンをクリックしたら
   $('#btn-calc-tax').on('click', function () {
-    // モーダルテスト
-    //$('#moveModal').modal('show');
-
     // 結果画面へスクロール
     var position = $('#result').offset().top - 10; //ゆとりを持たせる
     $('body,html').animate({ scrollTop: position }, 400, 'swing');
@@ -43,9 +40,9 @@ $(function () {
     var bonus_mounths = Number($('#input-bonus-mounths').val());
     var bonus_number = Number($('#input-bonus-number').val());
     var overwork_hours = Number($('#input-overwork-hours').val());
-    var residence_pref = Number($('#select-residence-pref').val());
+    var company_pref = Number($('#select-company-pref').val());
 
-    var industry_type = 0; // 業種
+    var industry_type = 0; // 事業
     if ($('input[name="industry"]:eq(0)').prop('checked')) {
       industry_type = 0;
     } else if ($('input[name="industry"]:eq(1)').prop('checked')) {
@@ -72,8 +69,8 @@ $(function () {
     r.find('[annual-income]').text(add1000Separator(annual_income));
 
     // 健康保険料
-    var hi       = calcHealthInsurancePremium(residence_pref, monthly_income);
-    var hi_bonus = calcHealthInsurancePremium(residence_pref, bonus_income_total, bonus_number);
+    var hi       = calcHealthInsurancePremium(company_pref, monthly_income);
+    var hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
 
     // 厚生年金保険料
     var ep       = calcEmployeePensionPremium(monthly_income);
@@ -185,6 +182,20 @@ $(function () {
     r.find('[it-withholding]').text(add1000Separator(it_withholding));
     r.find('[it-bonus-withholding]').text(add1000Separator(it_bonus_withholding));
   });
+
+  /* --------------------------------------------------
+   * モーダル
+   * --------------------------------------------------*/
+  $('.detail-info').on('click', function () {
+    var name = $(this).attr('name');
+    showModal(name);
+  });
+  function showModal (id='') {
+    var msg = $('#modal-parts').find('[' + id + ']');
+    $('#moveModal').find('.title').text(msg.find('[title]').text());
+    $('#moveModal').find('.body').html(msg.find('[body]').html());
+    $('#moveModal').modal('show');
+  }
 
   /* --------------------------------------------------
    * 整形
@@ -425,7 +436,7 @@ $(function () {
   /* --------------------------------------------------
    * 健康保険料
    * --------------------------------------------------*/
-  function calcHealthInsurancePremium (residence_pref = 0, income = 0, bonus_number = 0, over_40_age = false) {
+  function calcHealthInsurancePremium (company_pref = 0, income = 0, bonus_number = 0, over_40_age = false) {
     // 健康保険料を格納
     var premium = {
       you: 0,
@@ -437,7 +448,7 @@ $(function () {
     var target_income = 0;
 
     // 健康保険料率を求める
-    var hi_rate = HI_GENERAL_RATE_LIST[residence_pref];
+    var hi_rate = HI_GENERAL_RATE_LIST[company_pref];
 
     // 介護保険料が必要かチェック
     if (over_40_age) {
