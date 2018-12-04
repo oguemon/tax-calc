@@ -6,6 +6,7 @@ $(function () {
   var chart_detail_income;
   var chart_detail_bonus;
   var chart_detail_annual_income;
+  var chart_overwork_transition;
 
 	// 画像を含めて読み込みが完了したら
 	$(window).on('load', function () {
@@ -61,7 +62,7 @@ $(function () {
     var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
     var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8)); // ひと月あたり8時間×20日間換算
     var monthly_income = income + overwork_monthly_income;
-    var annual_income = Math.floor(monthly_income * 12) + bonus_income_total;
+    var annual_income = monthly_income * 12 + bonus_income_total;
 
     // 結果を包むid要素を取得
     var r = $('#result');
@@ -194,6 +195,7 @@ $(function () {
     if (chart_detail_income) { chart_detail_income.destroy(); }
     if (chart_detail_bonus) { chart_detail_bonus.destroy(); }
     if (chart_detail_annual_income) { chart_detail_annual_income.destroy(); }
+    if (chart_overwork_transition) { chart_overwork_transition.destroy(); }
 
     // グラフ描画に用いる色を割り当て
     var bar_color = {
@@ -245,6 +247,70 @@ $(function () {
     var ctx_annual = document.getElementById('graph-annual-income-detail').getContext('2d');
     ctx_annual.canvas.height = 80;
     chart_detail_annual_income = plotHorizontalBar(ctx_annual, datasets_annual_income);
+
+    /*
+     * 残業時間に対する変化
+     */
+    var graph_overwork = {
+      labels: [],
+      total: [],
+      substantial: []
+    }
+    for (var i = 0; i <= 100; i += 20) {
+      graph_overwork.labels.push((i == 0)? '残業なし' : i + '時間');
+      // 額面年収
+      var additional_income = Math.floor(i * 1.25 * income / (20 * 8)); // ひと月あたり8時間×20日間換算
+      var monthly_income  = income + additional_income;
+      var annual_income  = monthly_income * 12 + bonus_income_total;
+      graph_overwork.total.push(annual_income);
+      // 社会保険料
+      var hi_over       = calcHealthInsurancePremium(company_pref, monthly_income);
+      var ep_over       = calcEmployeePensionPremium(monthly_income);
+      var ui_over       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
+      var total_premium = (hi_over.you + ep_over.you + ui_over.you) * 12 + premium_bonus.you * bonus_number;
+      // 所得税
+      var taxable_standard_income = calcTaxableIncome(annual_income - total_premium);
+      var total_deduction = 380000 // 基礎控除
+                          + total_premium;
+      var taxable_income = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
+      var it = calcTaxValue(taxable_income);
+
+      // 実質的な手取り
+      var substantial_income = annual_income - total_premium - it;
+      graph_overwork.substantial.push(substantial_income);
+    }
+    // グラフを描画（残業時間）
+    chart_overwork_transition = new Chart($('#graph-overwork-income-transition'), {
+      type: 'line',
+      data: {
+        labels: graph_overwork.labels,
+        datasets: [{
+          label: '手取り年収',
+          data: graph_overwork.substantial,
+          backgroundColor: '#f9808f',
+          borderWidth: 0,
+          pointRadius: 0
+        }, {
+          label: '額面年収',
+          data: graph_overwork.total,
+          backgroundColor: '#29abe2',
+          borderWidth: 0,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    // Include a dollar sign in the ticks
+                    callback: function(value, index, values) {
+                        return Math.floor(value / 10000) + '万円';
+                    }
+                }
+            }]
+        }
+      }
+    });
   });
 
   /* --------------------------------------------------
