@@ -2,6 +2,11 @@
 $(function () {
   'use strict';
 
+  // グラフのインスタンス
+  var chart_detail_income;
+  var chart_detail_bonus;
+  var chart_detail_annual_income;
+
 	// 画像を含めて読み込みが完了したら
 	$(window).on('load', function () {
   });
@@ -141,7 +146,7 @@ $(function () {
     var it_withholding = calcTaxValueWithholding(taxable_income_withholding);
 
     // 源泉徴収額（ボーナス）
-    var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you, true, 0);
+    var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you);
     var it_taxiable_bonus_withholding = bonus_income_once
                                       - hi_bonus.you
                                       - ep_bonus.you
@@ -185,6 +190,11 @@ $(function () {
     /* --------------------------------------------------
      * グラフ描画
      * --------------------------------------------------*/
+    // 過去にグラフ描画をしていたらそれを破棄
+    if (chart_detail_income) { chart_detail_income.destroy(); }
+    if (chart_detail_bonus) { chart_detail_bonus.destroy(); }
+    if (chart_detail_annual_income) { chart_detail_annual_income.destroy(); }
+
     // グラフ描画に用いる色を割り当て
     var bar_color = {
       income: '#f9808f',
@@ -206,7 +216,7 @@ $(function () {
     };
     var ctx_income = document.getElementById('graph-income-detail').getContext('2d');
     ctx_income.canvas.height = 80;
-    plotHorizontalBar(ctx_income, datasets_income);
+    chart_detail_income = plotHorizontalBar(ctx_income, datasets_income);
 
     // グラフを描画（ボーナス）
     var datasets_bonus_income = {
@@ -220,7 +230,7 @@ $(function () {
     };
     var ctx_bonus = document.getElementById('graph-bonus-income-detail').getContext('2d');
     ctx_bonus.canvas.height = 80;
-    plotHorizontalBar(ctx_bonus, datasets_bonus_income);
+    chart_detail_bonus = plotHorizontalBar(ctx_bonus, datasets_bonus_income);
 
     // グラフを描画（年収）
     var datasets_annual_income = {
@@ -234,7 +244,7 @@ $(function () {
     };
     var ctx_annual = document.getElementById('graph-annual-income-detail').getContext('2d');
     ctx_annual.canvas.height = 80;
-    plotHorizontalBar(ctx_annual, datasets_annual_income);
+    chart_detail_annual_income = plotHorizontalBar(ctx_annual, datasets_annual_income);
   });
 
   /* --------------------------------------------------
@@ -326,10 +336,8 @@ $(function () {
       }
     } else if (income < 10000000) {
       taxable_income = income * 0.9 - 1200000;
-    } else if (income < 20000000) {
+    } else { // 1千万円以上
       taxable_income = income - 2200000;
-    } else {
-      taxable_income = 17800000;
     }
 
     return Math.floor(taxable_income);
@@ -447,20 +455,20 @@ $(function () {
       // 税額表の各行を走査
       for (var i = 0; i < arr.length; i++) {
         // 税額表の最下行以外のポジションで見つけた
-        if (income <  Number(arr[i][Math.min(dependents_count, 7) + 1]) * 1000 && i > 0) {
-          tax_rate = Number(arr[i - 1][0]);
+        if (income < Number(arr[i][Math.min(dependents_count, 7) + 1]) * 1000) {
+          tax_rate = Number(arr[i][0]);
           break;
         }
         // 税額表の最下行まできたのに上の条件にヒットしなかった
-        if (i == arr.length) {
-          tax_rate = Number(arr[i][0]);
+        if (i == arr.length - 1) {
+          tax_rate = Number(arr[arr.length - 1][0]);
           break;
         }
       }
     } else { // 乙欄のとき
       // 未実装
     }
-
+    console.log(income+'と'+tax_rate);
     return tax_rate;
   }
 
@@ -738,7 +746,7 @@ $(function () {
 
   // 水平バーを作る
   function plotHorizontalBar(plotarea , datasets) {
-    new Chart(plotarea, {
+    return new Chart(plotarea, {
       type: "horizontalBar",
       data: datasets,
       options: {
