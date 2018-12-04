@@ -37,6 +37,9 @@ $(function () {
 
   // 計算ボタンをクリックしたら
   $('#btn-calc-tax').on('click', function () {
+    // 結果画面を表示
+    $('#result').slideDown(400);
+
     // 結果画面へスクロール
     var position = $('#result').offset().top - 10; //ゆとりを持たせる
     $('body,html').animate({ scrollTop: position }, 400, 'swing');
@@ -534,7 +537,6 @@ $(function () {
     } else { // 乙欄のとき
       // 未実装
     }
-    console.log(income+'と'+tax_rate);
     return tax_rate;
   }
 
