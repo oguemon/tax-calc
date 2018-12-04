@@ -181,6 +181,60 @@ $(function () {
 
     r.find('[it-withholding]').text(add1000Separator(it_withholding));
     r.find('[it-bonus-withholding]').text(add1000Separator(it_bonus_withholding));
+
+    /* --------------------------------------------------
+     * グラフ描画
+     * --------------------------------------------------*/
+    // グラフ描画に用いる色を割り当て
+    var bar_color = {
+      income: '#f9808f',
+      hi: '#39b54a',
+      ep: '#009245',
+      ui: '#006837',
+      it: '#29abe2',
+    }
+
+    // グラフを描画（月収）
+    var datasets_income = {
+      datasets:[
+        {label: '手取り月収', data: [substantial_income], backgroundColor: bar_color.income},
+        {label: '健康保険料', data: [hi.you], backgroundColor: bar_color.hi},
+        {label: '厚生年金保険料', data: [ep.you], backgroundColor: bar_color.ep},
+        {label: '雇用保険料', data: [ui.you], backgroundColor: bar_color.ui},
+        {label: '源泉徴収額', data: [it_withholding], backgroundColor: bar_color.it},
+      ]
+    };
+    var ctx_income = document.getElementById('graph-income-detail').getContext('2d');
+    ctx_income.canvas.height = 80;
+    plotHorizontalBar(ctx_income, datasets_income);
+
+    // グラフを描画（ボーナス）
+    var datasets_bonus_income = {
+      datasets:[
+        {label: '1回の手取りボーナス', data: [substantial_bonus], backgroundColor: bar_color.income},
+        {label: '健康保険料', data: [hi_bonus.you], backgroundColor: bar_color.hi},
+        {label: '厚生年金保険料', data: [ep_bonus.you], backgroundColor: bar_color.ep},
+        {label: '雇用保険料', data: [ui_bonus.you], backgroundColor: bar_color.ui},
+        {label: '源泉徴収額', data: [it_bonus_withholding], backgroundColor: bar_color.it},
+      ]
+    };
+    var ctx_bonus = document.getElementById('graph-bonus-income-detail').getContext('2d');
+    ctx_bonus.canvas.height = 80;
+    plotHorizontalBar(ctx_bonus, datasets_bonus_income);
+
+    // グラフを描画（年収）
+    var datasets_annual_income = {
+      datasets:[
+        {label: '手取り年収', data: [substantial_annual_income], backgroundColor: bar_color.income},
+        {label: '健康保険料', data: [hi.you * 12 + hi_bonus.you * bonus_number], backgroundColor: bar_color.hi},
+        {label: '厚生年金保険料', data: [ep.you * 12 + ep_bonus.you * bonus_number], backgroundColor: bar_color.ep},
+        {label: '雇用保険料', data: [ui.you * 12 + ui_bonus.you * bonus_number], backgroundColor: bar_color.ui},
+        {label: '所得税額', data: [it] , backgroundColor: bar_color.it},
+      ]
+    };
+    var ctx_annual = document.getElementById('graph-annual-income-detail').getContext('2d');
+    ctx_annual.canvas.height = 80;
+    plotHorizontalBar(ctx_annual, datasets_annual_income);
   });
 
   /* --------------------------------------------------
@@ -680,5 +734,41 @@ $(function () {
       }
     }
     return csvData;
+  }
+
+  // 水平バーを作る
+  function plotHorizontalBar(plotarea , datasets) {
+    new Chart(plotarea, {
+      type: "horizontalBar",
+      data: datasets,
+      options: {
+        legend: {
+          display: false
+        },
+        tooltips: {
+          mode: 'nearest'
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            stacked: false,
+            ticks: {
+              stepSize: 10
+            },
+            gridLines: {
+              display: false
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              drawBorder: false
+            }
+          }]
+        },
+        plugins: {
+          stacked100: { enable: true }
+        }
+      }
+    });
   }
 });
