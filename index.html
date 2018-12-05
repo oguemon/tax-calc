@@ -204,15 +204,55 @@
         <p>月平均残業時間に対する年収の変化をグラフに表しています。</p>
         <canvas id="graph-overwork-income-transition"></canvas>
       </div>
+
+      <div class="result-box">
+        <div class="header">翌年度の住民税額</div>
+        <div class="main-value-line">
+          <div class="line-box">
+            <div class="line-cell">
+              <div class="line-label">道府県民税</div>
+              <div class="line-value"><span pref-tax></span>円</div>
+            </div>
+            <div class="line-cell">
+              <div class="line-label">市町村民税</div>
+              <div class="line-value"><span city-tax></span>円</div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-box">
+          <h3>内訳</h3>
+          <div class="sub-value-line">
+            <div class="line-box">
+              <div class="line-label">道府県民税（均等割）</div>
+              <div class="line-value minus"><span pref-capitation></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">道府県民税（所得割）</div>
+              <div class="line-value minus"><span pref-income-tax></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">市町村民税（均等割）</div>
+              <div class="line-value minus"><span city-capitation></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">市町村民税（所得割）</div>
+              <div class="line-value minus"><span city-income-tax></span>円</div>
+            </div>
+            <div class="line-box sum">
+              <div class="line-label">住民税総額</div>
+              <div class="line-value"><span rt></span>円</div>
+            </div>
+            <div class="line-box sum">
+              <div class="line-label">住民税月額</div>
+              <div class="line-value"><span rt-monthly></span>円</div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-detail-toggle">詳細を開閉する</div>
+      </div>
 <!--
-      <hr>
       課税標準額：<span taxiable-standard></span>円（うち控除額<span total-deduction></span>円）<br>
       課税所得額：<span taxiable-income></span>円
-      <hr>
-      住民税額：<span residents-tax></span>円<br>
-      ー道府県民税額：<span prefectural-tax></span>円<br>
-      ー市町村民税額：<span municipal-tax></span>円
-      <hr>
 -->
     </div>
   </div>

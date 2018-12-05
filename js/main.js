@@ -147,6 +147,12 @@ $(function () {
     // 所得税額を求める
     var it = calcTaxValue(it_taxable_income);
 
+    // 結果を出力
+    r.find('[total-deduction]').text(add1000Separator(total_deduction));
+    r.find('[taxiable-standard]').text(add1000Separator(taxable_standard_income));
+    r.find('[taxiable-income]').text(add1000Separator(taxable_income));
+    r.find('[it]').text(add1000Separator(it));
+
     /* --------------------------------------------------
      * 住民税計算
      * --------------------------------------------------*/
@@ -169,6 +175,16 @@ $(function () {
     // 住民税総額
     var rt = pref_tax + city_tax;
 
+    // 結果を出力
+    r.find('[pref-tax]').text(add1000Separator(pref_tax));
+    r.find('[city-tax]').text(add1000Separator(city_tax));
+    r.find('[pref-capitation]').text(add1000Separator(pref_capitation));
+    r.find('[pref-income-tax]').text(add1000Separator(pref_income_tax));
+    r.find('[city-capitation]').text(add1000Separator(city_capitation));
+    r.find('[city-income-tax]').text(add1000Separator(city_income_tax));
+    r.find('[rt]').text(add1000Separator(rt));
+    r.find('[rt-monthly]').text(add1000Separator(Math.round(rt / 12)));
+
     /* --------------------------------------------------
      * 源泉徴収額
      * --------------------------------------------------*/
@@ -190,6 +206,9 @@ $(function () {
                                       - ui_bonus.you;
     var it_bonus_withholding = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
+    // 結果を出力
+    r.find('[it-withholding]').text(add1000Separator(it_withholding));
+    r.find('[it-bonus-withholding]').text(add1000Separator(it_bonus_withholding));
 
     /* --------------------------------------------------
      * 手取り給料
@@ -210,23 +229,10 @@ $(function () {
                            - premium_monthly.you
                            - it_withholding;
 
-    // 結果を出力（税金）
-    r.find('[taxiable-standard]').text(add1000Separator(taxable_standard_income));
-    r.find('[taxiable-income]').text(add1000Separator(taxable_income));
-    r.find('[it]').text(add1000Separator(it));
-
-    r.find('[total-deduction]').text(add1000Separator(total_deduction));
-
-    r.find('[prefectural-tax]').text(add1000Separator(prefectural_tax));
-    r.find('[municipal-tax]').text(add1000Separator(municipal_tax));
-    r.find('[residents-tax]').text(add1000Separator(residents_tax));
-
+    // 結果を出力
     r.find('[substantial-income]').text(add1000Separator(substantial_income));
     r.find('[substantial-bonus]').text(add1000Separator(substantial_bonus));
     r.find('[substantial-annual-income]').text(add1000Separator(substantial_annual_income));
-
-    r.find('[it-withholding]').text(add1000Separator(it_withholding));
-    r.find('[it-bonus-withholding]').text(add1000Separator(it_bonus_withholding));
 
     /* --------------------------------------------------
      * グラフ描画
