@@ -282,6 +282,38 @@ $(function () {
     r.find('[substantial-annual-income-minus-rt]').text(add1000Separator(substantial_annual_income - rt));
 
     /* --------------------------------------------------
+     * シェアリンク生成
+     * --------------------------------------------------*/
+    // Twitterとテキストボックス
+    var message_body = 'あなたの年収は「' + add1000Separator(annual_income) + '円」です。' + "\n"
+                     + 'が、社会保険料と所得税が引かれて「' + add1000Separator(substantial_annual_income) + '円」ぐらいになります。' + "\n"
+                     + '去年と同じ年収なら、住民税も引いた手取り年収は「' + add1000Separator(substantial_annual_income - rt) + '円」ぐらいです。';
+    var site_url = 'https://oguemon.com/tax-calc/'
+    var hashtag  = 'ザックリ手取り給料計算機';
+    var user_id  = 'oguemon_com';
+    var textarea_body = message_body + "\n" + site_url + " #" + hashtag;
+    var twitter_parms = 'url=' + encodeURI(site_url) + '&text=' + encodeURI(message_body) + '&hashtags=' + encodeURI(hashtag) + '&related=' + user_id;
+
+    $('#copy-area-text').text(textarea_body);
+    $('#share-twitter').attr('href', 'https://twitter.com/intent/tweet?' + twitter_parms);
+
+    // メール
+    var mail_subject = '私の手取り年収がわかりました';
+    var mail_body = '親戚各位' + '%0D%0A' + '%0D%0A'
+                  + 'お世話になっております、〇〇です。' + '%0D%0A'
+                  + 'ところでなのですが、ついに私の年収がわかりました。' + '%0D%0A'
+                  + '額面年収が「' + add1000Separator(annual_income) + '円」なのに対して、'
+                  + '所得税や社会保険料を引かれた後に残る金額は「' + add1000Separator(substantial_annual_income) + '円」くらいだそうです。' + '%0D%0A'
+                  + 'さらに、この年収だと住民税が大体「' + add1000Separator(rt) + '円」くらい課されるので、'
+                  + '昨年度と年収が変わらなかったら、手取り年収はおおよそ「' + add1000Separator(substantial_annual_income - rt) + '円」になります。'+ '%0D%0A'
+                  + '質問などがございましたら、是非ともご返信願います。'
+                  + '取り急ぎご報告まで。' + '%0D%0A' + '%0D%0A'
+                  + '簡単！ザックリ手取り計算機' + '%0D%0A'
+                  + 'https://oguemon.com/tax-calc/';
+
+                  $('#share-mail').attr('href', 'mailto:contact@oguemon.com?subject=' + mail_subject + '&body=' + mail_body);
+
+    /* --------------------------------------------------
      * グラフ描画
      * --------------------------------------------------*/
     // 過去にグラフ描画をしていたらそれを破棄

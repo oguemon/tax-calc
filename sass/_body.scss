@@ -4,10 +4,10 @@ header {
   background: $header-color;
 
   .logo {
-    width: 320px;
-    height: 40px;
+    width: 100%;
+    height: 50px;
     margin: 0 auto;
-    padding: 5px 0;
+    background: url(../img/logo.svg) center center no-repeat;
   }
 }
 main {
@@ -60,6 +60,39 @@ main {
 
   p {
     margin: 5px 10px;
+  }
+
+  .copy-area {
+    padding: 10px 10px 5px;
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin: 0;
+      font-size: 120%;
+      resize: vertical;
+    }
+  }
+
+  .share-area {
+    width: 100%;
+    padding: 0 10px 10px;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 5px 0;
+
+    .share-button {
+      height: 30px;
+      display: table-cell;
+      border-radius: 5px;
+
+      &#share-twitter {
+        background: url(../img/share-tweet.svg) center center no-repeat, #1da1f2;
+      }
+      &#share-mail {
+        background: url(../img/share-mail.svg) center center no-repeat, #ff7d55;
+      }
+    }
   }
 
   .header {
