@@ -81,24 +81,32 @@
               <div class="line-value plus"><span annual-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料</div>
+              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
               <div class="line-value minus"><span hi-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料</div>
+              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
               <div class="line-value minus"><span ep-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料</div>
+              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
               <div class="line-value minus"><span ui-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">所得税額</div>
+              <div class="line-label">所得税額<div class="detail-info" name="it"></div></div>
               <div class="line-value minus"><span it></span>円</div>
             </div>
             <div class="line-box sum">
               <div class="line-label">手取り年収</div>
               <div class="line-value"><span substantial-annual-income></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">住民税額<div class="detail-info" name="rt-annual"></div></div>
+              <div class="line-value minus"><span rt></span>円</div>
+            </div>
+            <div class="line-box sum">
+              <div class="line-label">住民税を引いた年収<div class="detail-info" name="rt-minus-annual"></div></div>
+              <div class="line-value"><span substantial-annual-income-minus-rt></span>円</div>
             </div>
           </div>
         </div>
@@ -134,24 +142,32 @@
               <div class="line-value plus"><span overwork-monthly-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料</div>
+              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
               <div class="line-value minus"><span hi-half></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料</div>
+              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
               <div class="line-value minus"><span ep-half></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料</div>
+              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
               <div class="line-value minus"><span ui-you></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">源泉徴収額</div>
+              <div class="line-label">源泉徴収額<div class="detail-info" name="withholding"></div></div>
               <div class="line-value minus"><span it-withholding></span>円</div>
             </div>
             <div class="line-box sum">
               <div class="line-label">手取り月収</div>
               <div class="line-value"><span substantial-income></span>円</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">住民税額<div class="detail-info" name="rt-monthly"></div></div>
+              <div class="line-value minus"><span rt-monthly></span>円</div>
+            </div>
+            <div class="line-box sum">
+              <div class="line-label">住民税を引いた月収<div class="detail-info" name="rt-minus-monthly"></div></div>
+              <div class="line-value"><span substantial-income-minus-rt></span>円</div>
             </div>
           </div>
         </div>
@@ -183,19 +199,19 @@
               <div class="line-value"><span bonus-income-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料</div>
+              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
               <div class="line-value minus"><span hi-half-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料</div>
+              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
               <div class="line-value minus"><span ep-half-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料</div>
+              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
               <div class="line-value minus"><span ui-you-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">源泉徴収額</div>
+              <div class="line-label">源泉徴収額<div class="detail-info" name="withholding"></div></div>
               <div class="line-value minus"><span it-bonus-withholding></span>円</div>
             </div>
             <div class="line-box sum">
@@ -231,19 +247,19 @@
           <h3>内訳</h3>
           <div class="sub-value-line">
             <div class="line-box">
-              <div class="line-label">道府県民税（均等割）</div>
+              <div class="line-label">道府県民税（均等割）<div class="detail-info" name="rt-capitation"></div></div>
               <div class="line-value"><span pref-capitation></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">道府県民税（所得割）</div>
+              <div class="line-label">道府県民税（所得割）<div class="detail-info" name="rt-income"></div></div>
               <div class="line-value"><span pref-income-tax></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">市町村民税（均等割）</div>
+              <div class="line-label">市町村民税（均等割）<div class="detail-info" name="rt-capitation"></div></div>
               <div class="line-value"><span city-capitation></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">市町村民税（所得割）</div>
+              <div class="line-label">市町村民税（所得割）<div class="detail-info" name="rt-income"></div></div>
               <div class="line-value"><span city-income-tax></span>円</div>
             </div>
             <div class="line-box sum">
@@ -251,7 +267,7 @@
               <div class="line-value"><span rt></span>円</div>
             </div>
             <div class="line-box sum">
-              <div class="line-label">住民税月額</div>
+              <div class="line-label">住民税月額<div class="detail-info" name="rt-monthly"></div></div>
               <div class="line-value"><span rt-monthly></span>円</div>
             </div>
           </div>
@@ -282,6 +298,9 @@
   </div>
 </footer>
 <div id="modal-parts" style="display: none;">
+  <!----------------------------------------------------
+  ----入力項目について
+  ---------------------------------------------------->
   <div basic-income>
     <div title>月々の基本給</div>
     <div body>
@@ -353,6 +372,128 @@
       <p>雇用保険の保険料率が事業ごとに異なるために設けられた項目です。</p>
       <p>一般的に、建築・農林水産・清酒製造周りの事業では保険料率が若干高く設定されています。</p>
       <p>農林水産業について、<strong>園芸サービス、牛馬の育成、酪農、養鶏、養豚、内水面養殖および特定の船員を雇用する事業</strong>は一般の事業として扱われるので注意してください。</p>
+    </div>
+  </div>
+  <!----------------------------------------------------
+  ----所得税について
+  ---------------------------------------------------->
+  <div it>
+    <div title>所得税額</div>
+    <div body>
+      <p>所得税は、1月から12月までの所得に基づいて税額を決定、国に申告（確定申告）し、翌3月ごろの期限日までにそれを納めることになっています。</strong></p>
+      <p>所得税額は、ざっくりと次のようなプロセスで決定します。</p>
+      <h3>給与収入から給与"所得"を得る</h3>
+      <p>所得税法で定められた方法により、<strong>給与所得額</strong>というものを求めます。例えば、年収400万円の人の給与所得額は約265万です。実際の収入に対してだいぶ安くなるのは国の優しさです（多分）</p>
+      <p>給与以外の所得がある人は、それぞれの所得に対して様々な計算をしなければなりませんが、本計算機は給与所得のみの方を対象にしているので説明を割愛します。</p>
+      <h3>給与所得から様々な控除を引く</h3>
+      <p>控除とは「引く」ことです。この国では個人の境遇によって税が安くなるようになっていて、様々な境遇に対応するため14種類の控除項目が用意されています（例えば勤労学生控除とか障害者控除とか）。</p>
+      <p>本計算機では、障害や被災等がない独身の新卒社員を想定して、誰もが適用できる「<strong>基礎控除（38万円）</strong>」と、「<strong>社会保険料控除（納めた額全て）</strong>」のみを適用しています。</p>
+      <p>他にも家族を養っている場合は「配偶者控除／扶養控除」などが適用されますが、ここでは簡単のために非対応としています。</p>
+      <h3>残った額に税率をかける</h3>
+      <p>所得から様々な控除を引いた額を課税所得額と呼びます。これに対して、所得税法で定められた税率をかけていきます。</p>
+      <p>税率は、<strong>累進課税</strong>と呼ばれる手法を採用しています。これは、課税所得が多いほど高い税率が適用される方法です。</p>
+      <p>例えば、195万円以下の収入に対しては5%の税率しかかかりませんが、4000万円を超える額については、4000万円を超える分に対して45%もの税率がかけられます。</p>
+    </div>
+  </div>
+  <!----------------------------------------------------
+  ----源泉徴収について
+  ---------------------------------------------------->
+  <div withholding>
+    <div title>源泉徴収額</div>
+    <div body>
+      <p>所得税は、1月から12月までの所得に基づいて税額を計算し、それを翌3月に納めるのが原則です。</p>
+      <p>しかし、サラリーマンなどに対しては、「所得税の分割払い」みたいなノリでその月の所得に応じたざっくりした額を毎月集める決まりになっています。これを<strong>源泉徴収</strong>と言います。</p>
+      <p>月収に対して課される源泉徴収額は、おおよそ月収と扶養人数（養ってる家族の人数）の2要素に基づいて定められ、給与から天引きされます。</p>
+      <p>ボーナスに対する源泉徴収額も、同様にして定められ、同じく天引きされます。</p>
+      <p>源泉徴収額は、前述した通りざっくりとした額（しかも若干高額）なので、1年間に天引きされた源泉徴収額の合計が必ずしもその年の所得税額と一致しません。</p>
+      <p>両者のズレを12月にまとめて調整することを<strong>年末調整</strong>と呼び、12月の給料では源泉徴収として天引きされすぎた額が返ってきます。</p>
+      <p>源泉徴収額は、複数の職場に勤めている場合、メインの職場（<strong>給与所得者の扶養控除等申告書</strong>って書類を年始に提出した会社）とそれ以外の職場で異なるのですが、大体の人は職場が1つなので、本計算機では複数企業に勤めている場合を考慮していません。</p>
+    </div>
+  </div>
+  <!----------------------------------------------------
+  ----住民税について
+  ---------------------------------------------------->
+  <div rt-annual>
+    <div title>年間の住民税額</div>
+    <div body>
+      <p>住民税は、前年1月から12月までの所得に基づいて決定されるため、<strong>前年に十分な所得がない新卒1年目には課されません。</strong></p>
+      <p>また、新卒2年目以降は住民税が課されますが、1年目の1月〜3月までの収入は計算対象外なので、新卒2年目の税額は3年目のそれより若干安くなります。</p>
+      <p>当計算機が導出する住民税は、給与改定が4月に行われることを考慮して簡単のために「4月〜翌3月」の収入（つまり年収）に基づいていますので、実際の額と多少異なります。</p>
+      <p>住民税は、6月〜翌5月の期間に毎月納める形となるため、4月〜翌3月までの給与収入を表す「年収」の額と容易に比較することができない点にご注意ください。</p>
+    </div>
+  </div>
+  <div rt-minus-annual>
+    <div title>住民税を引いた手取り年収</div>
+    <div body>
+      <p>まず、住民税は、前年1月から12月までの所得に基づいて決定されるため、<strong>前年に十分な所得がない新卒1年目には課されません。</strong></p>
+      <p>また、本計算機は、入力された収入額に基づいて住民税額が計算されています。入力された収入額が前年度の収入額と異なる場合、実際の住民税額は異なる額になるのでご注意ください。</p>
+    </div>
+  </div>
+  <div rt-monthly>
+    <div title>月間の住民税額</div>
+    <div body>
+      <p>住民税は、前年1月から12月までの所得に基づいて決定されるため、<strong>前年に十分な所得がない新卒1年目には課されません。</strong></p>
+      <p>多くの企業では、住民税の特別徴収制度に従って月給から住民税を毎月天引きしています。</p>
+      <p>天引き額は6月〜翌5月の住民税総額を12で割った金額なのですが、7月から翌5月の金額は割った金額の100円未満の端数を切り捨てた金額なのに対して、6月の金額は切り捨てた端数を全て盛り込んだ額になります。</p>
+      <p>このように、天引きされる住民税額は6月かそれ以外かで異なるのでご注意ください。</p>
+      <p>本計算機では、7月から翌5月の額を表示しています。</p>
+    </div>
+  </div>
+  <div rt-minus-monthly>
+    <div title>住民税を引いた手取り月収</div>
+    <div body>
+      <p>住民税は、前年1月から12月までの所得に基づいて税額が決定されるため、<strong>前年に十分な所得がない新卒1年目には課されません。</strong></p>
+      <p>さらに、住民税は決定した税額を6月〜翌5月の期間に納めるため、2年目の4月と5月にも課されません。</p>
+    </div>
+  </div>
+  <div rt-capitation>
+    <div title>住民税の均等割</div>
+    <div body>
+      <p>住民税の定額部分で、収入によらず一定の税額です。道府県民税の均等割は<strong>1500円</strong>、市町村民税は<strong>3500円</strong>が基本ですが、多くの都道府県では環境保全税として道府県民税を1000円前後上乗せしています。</p>
+      <p>住民税の均等割には免税条件（収入が少ないとか）があるのですが、これは都道府県や市町村により異なるので、本計算機では簡単のため考慮に入れていません（月収0円と入力しても均等割が課されていることと思います）。</p>
+      <p>ちなみに、本来は道府県民税1000円、市町村民税3000円なのですが、東日本大震災を踏まえた防災事業のために、2012年〜2023年の間は臨時で500円ずつ引き上げられています。</p>
+    </div>
+  </div>
+  <div rt-income>
+    <div title>住民税の所得割</div>
+    <div body>
+      <p>住民税の中でも1年間の収入に基づいて税額が決定される部分です。</p>
+      <p>住民税は、所得税とは異なり<strong>6月〜翌5月の税額が前年の1月〜12月の収入に基づいて決定されます</strong>。（前年に十分な収入がない新卒1年目は住民税がありません）</p>
+      <p>道府県民税の所得割は課税所得の<strong>4%</strong>、市町村民税は<strong>6%</strong>が基本ですが、ごく一部の都道府県では環境保全税として道府県民税をわずかに上乗せしています。</p>
+      <p>所得割の求め方は、ざっくり言うと所得税と変わりませんが、所得税と異なり累進課税ではありません。つまり、どれだけ稼ごうが税率は道府県民税と市町村民税を合わせて10%程度です。</p>
+    </div>
+  </div>
+  <!----------------------------------------------------
+  ----社会保険料について
+  ---------------------------------------------------->
+  <div hi>
+    <div title>健康保険料</div>
+    <div body>
+      <p>健康保険は、<strong>4月から6月までの賃金の平均額</strong>により、9月から翌8月までの健康保険料が決まります。</p>
+      <p>具体的には、賃金の平均額から「標準報酬月額」という額が定められ、これに対して各都道府県（一部の大企業は健康保険組合）毎に設定されている保険料率を掛け合わせた金額になります。</p>
+      <p>ボーナスの場合は、ボーナスに対して直接保険料率を掛け合わせたものが保険料になります（ただし上限あり）。</p>
+      <p>健康保険料における「賃金」には、<strong>基本給や残業手当のみならず、会社が支給する定期券代なども含みます</strong>（定期券代は本計算機では非対応です…）。</p>
+      <p>本計算機では、毎月同じ賃金であることを仮定していますが、<strong>残業を頑張って4月〜6月の期間において特に稼いだ場合は、1年間の健康保険料が高くなる</strong>点にご注意ください。（その分保険のリターンも大きくなるんですけどね笑）</p>
+      <p>ちなみに、健康保険料は会社が折半するルールなので、この額と同じだけ会社が別に支払っています。</p>
+    </div>
+  </div>
+  <div ep>
+    <div title>厚生年金保険料</div>
+    <div body>
+      <p>厚生年金保険は、<strong>4月から6月までの賃金の平均額</strong>により、9月から翌8月までの厚生年金保険料が決まります。</p>
+      <p>具体的には、月収の平均額から「標準報酬月額」という額が定められ、これに対して厚生年金保険料率（平成30年度は18.3%）を掛け合わせた金額です。</p>
+      <p>ボーナスの場合は、ボーナスに対して直接保険料率を掛け合わせたものが保険料になります（ただし上限あり）。</p>
+      <p>厚生年金保険料における「月収」には、<strong>基本給や残業手当のみならず、会社が支給する定期券代なども含みます</strong>（定期券代は本計算機では非対応です…）。</p>
+      <p>本計算機では、毎月同じ月収であることを仮定していますが、<strong>残業を頑張って4月〜6月の期間において特に稼いだ場合は、1年間の健康保険料が高くなる</strong>点にご注意ください。（その分保険のリターンも大きくなるんですけどね笑）</p>
+      <p>ちなみに、厚生年金保険料は会社が折半するルールなので、この額と同じだけ会社が別に支払っています。</p>
+    </div>
+  </div>
+  <div ui>
+    <div title>雇用保険料</div>
+    <div body>
+      <p>雇用保険料は、その月の賃金に対して雇用保険料率（平成30年度は一般の事業において0.3%）を掛け合わせた金額です。ボーナスの場合も同様です。</p>
+      <p>雇用保険料における「賃金」には、<strong>基本給や残業手当のみならず、会社が支給する定期券代なども含みます</strong>（定期券代は本計算機では非対応です…）。</p>
+      <p>ちなみに、雇用保険料はこれとは別に会社がちょっと多めの額（平成30年度は一般の事業において賃金の0.6%）を支払っています。</p>
     </div>
   </div>
 </div>

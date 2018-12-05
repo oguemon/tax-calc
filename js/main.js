@@ -211,6 +211,9 @@ $(function () {
     var city_tax = city_capitation + rt_income.city;
     // 住民税総額
     var rt = pref_tax + city_tax;
+    // 月あたりの住民税額
+    var rt_monthly = round(rt / 12, 100, 'floor');
+    var rt_monthly_june = rt - 11 * rt_monthly; // 6月分は端数の切捨額を含むため少し多い
 
     // 結果を出力
     r.find('[pref-tax]').text(add1000Separator(pref_tax));
@@ -220,7 +223,8 @@ $(function () {
     r.find('[city-capitation]').text(add1000Separator(city_capitation));
     r.find('[city-income-tax]').text(add1000Separator(rt_income.city));
     r.find('[rt]').text(add1000Separator(rt));
-    r.find('[rt-monthly]').text(add1000Separator(Math.round(rt / 12)));
+    r.find('[rt-monthly]').text(add1000Separator(rt_monthly));
+    r.find('[rt-monthly-june]').text(add1000Separator(rt_monthly_june));
 
     /* --------------------------------------------------
      * 源泉徴収額
@@ -270,8 +274,10 @@ $(function () {
 
     // 結果を出力
     r.find('[substantial-income]').text(add1000Separator(substantial_income));
+    r.find('[substantial-income-minus-rt]').text(add1000Separator(substantial_income - rt_monthly));
     r.find('[substantial-bonus]').text(add1000Separator(substantial_bonus));
     r.find('[substantial-annual-income]').text(add1000Separator(substantial_annual_income));
+    r.find('[substantial-annual-income-minus-rt]').text(add1000Separator(substantial_annual_income - rt));
 
     /* --------------------------------------------------
      * グラフ描画
