@@ -107,10 +107,12 @@ $(function () {
     /* --------------------------------------------------
      * 額面給料計算
      * --------------------------------------------------*/
-    //給料の元になる支給額の計算
+    //給料の元になる支給額の計算（ボーナス）
     var bonus_income_total = Math.floor(income * bonus_mounths);
     var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
-    var overwork_monthly_income = Math.floor(overwork_hours * 1.25 * income / (20 * 8)); // ひと月あたり8時間×20日間換算
+    //給料の元になる支給額の計算（時間外労働手当）
+    var overwork_monthly_income = calcOverworkIncome(overwork_hours, income);
+    //給料の元になる支給額の計算（月収と年収）
     var monthly_income = income + overwork_monthly_income;
     var annual_income = monthly_income * 12 + bonus_income_total;
 
@@ -350,7 +352,7 @@ $(function () {
     for (var i = 0; i <= 100; i += 20) {
       graph_overwork.labels.push((i == 0)? '残業なし' : i + '時間');
       // 額面年収
-      var additional_income = Math.floor(i * 1.25 * income / (20 * 8)); // ひと月あたり8時間×20日間換算
+      var additional_income = calcOverworkIncome(i, income); // ひと月あたり8時間×20日間換算
       var monthly_income  = income + additional_income;
       var annual_income  = monthly_income * 12 + bonus_income_total;
       graph_overwork.total.push(annual_income);
@@ -473,6 +475,20 @@ $(function () {
       select.append('<option value="0">全ての市町村</option>');
       box.slideUp(300);
     }
+  }
+
+  /* --------------------------------------------------
+   * 時間外労働手当
+   * --------------------------------------------------*/
+  // 時間外労働手当を計算（ひと月あたり8時間×20日間換算）
+  function calcOverworkIncome(overwork_hours = 0, income = 0) {
+    var overwork_monthly_income = 0;
+    if (overwork_hours < 60) {
+      overwork_monthly_income = overwork_hours * 1.25 * income / (20 * 8);
+    } else {
+      overwork_monthly_income = (60 * 1.25 + (overwork_hours - 60) * 1.5) * income / (20 * 8);
+    }
+    return Math.floor(overwork_monthly_income);
   }
 
   /* --------------------------------------------------
