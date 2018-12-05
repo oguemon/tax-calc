@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <!-- Googleアナリティクス -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89114839-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-89114839-3');
+  </script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <title>手取り計算機</title>
-  <link rel='stylesheet' href='./assets/css/main.css?20181205v1' type='text/css' media='all' />
+  <title>簡単！ザックリ手取り給料計算機</title>
+  <link rel='stylesheet' href='./assets/css/main.css?20181205v3' type='text/css' media='all' />
+  <!-- OGP設定 -->
+	<meta property="og:title" content="簡単！ザックリ手取り給料計算機〜年収だけじゃ分からない実際に貰える給与額を試算しよう〜">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://oguemon.com/tax-calc/">
+	<meta property="og:image" content="http://oguemon.com/tax-calc/assets/img/ogp.png">
+  <meta property="og:description" content="年収額だけじゃ分からない、あなたが「実際に」貰える給与額を試算しよう">
+	<!--<meta property="fb:app_id" content="">-->
+	<meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@oguemon_com">
+	<!-- Googleアドセンス -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-<body>
+<body ontouchstart="">
 <header>
   <div class="wrapper">
     <div class="logo"></div>
@@ -18,15 +37,15 @@
       <div class="form-box">
         <div class="line-box">
           <div class="line-label">月々の基本給<div class="detail-info" name="basic-income"></div></div>
-          <div class="line-value"><input type="number" id="input-income" value="234500">円</div>
+          <div class="line-value"><input type="number" id="input-income" value="200000">円</div>
         </div>
         <div class="line-box">
           <div class="line-label">ボーナス<div class="detail-info" name="bonus-income"></div></div>
-          <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="6.13">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
+          <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="4">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
         </div>
         <div class="line-box">
           <div class="line-label">残業時間<div class="detail-info" name="overwork-hours"></div></div>
-          <div class="line-value">月<input type="number" id="input-overwork-hours" value="20">時間</div>
+          <div class="line-value">月<input type="number" id="input-overwork-hours" value="10">時間</div>
         </div>
         <div class="line-box">
           <div class="line-label">勤務先の都道府県<div class="detail-info" name="company-pref"></div></div>
@@ -53,6 +72,18 @@
         </div>
       </div>
     </div>
+
+    <!-- Googleアドセンス -->
+    <ins class="adsbygoogle"
+        style="display:block; text-align:center;"
+        data-ad-client="ca-pub-6941251424797111"
+        data-ad-slot="8614069616"
+        data-ad-format="fluid"
+        data-full-width-responsive="true"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
     <div id="result" style="display: none;">
       <div class="result-box">
         <div class="copy-area">
@@ -521,6 +552,6 @@
 <script src="./assets/js/Chart.min.js"></script>
 <script src="./assets/js/plugin.js"></script>
 <script src="./assets/js/modal.js"></script>
-<script src="./assets/js/output.min.js?20181205v1"></script>
+<script src="./assets/js/output.min.js?20181205v3"></script>
 </body>
 </html>

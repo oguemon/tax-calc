@@ -31,7 +31,7 @@ $(function () {
 
   // 都道府県選択の選択肢を用意
   for (var i = 0; i < PREF_LIST.length; i++) {
-    var selected = (PREF_LIST[i] == '神奈川県')? 'selected' : '';
+    var selected = (PREF_LIST[i] == '大阪府')? 'selected' : '';
     $('#select-company-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
     $('#select-resident-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
   }
