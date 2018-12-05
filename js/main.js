@@ -137,19 +137,37 @@ $(function () {
     /* --------------------------------------------------
      * 所得税計算
      * --------------------------------------------------*/
+    // 給与収入から、給与所得を求める
     var taxable_standard_income = calcTaxableIncome(annual_income);
-    var total_deduction = 380000 // 基礎控除
-                        + premium_annually.you;
-
-    var taxable_income = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
-    var it = calcTaxValue(taxable_income);
+    // 控除額を求める
+    var it_deduction = 380000 // 基礎控除
+                     + premium_annually.you; // 社会保険料控除
+    // 課税所得金額を求める
+    var it_taxable_income = round(Math.max(taxable_standard_income - it_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
+    // 所得税額を求める
+    var it = calcTaxValue(it_taxable_income);
 
     /* --------------------------------------------------
      * 住民税計算
      * --------------------------------------------------*/
-    var prefectural_tax = calcPrefecturalTax(it, 0)
-    var municipal_tax = calcMunicipalTax(it, 0);
-    var residents_tax = prefectural_tax + municipal_tax;
+    // 控除額を求める
+    var rt_deduction = 330000 // 基礎控除（所得税と多少異なるのに注意）
+                     + premium_annually.you; // 社会保険料控除
+    // 課税所得金額を求める
+    var rt_taxable_income = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
+    // 調整控除を行う
+    var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income);
+    // 均等割
+    var pref_capitation = calcPrefCapitation(0);
+    var city_capitation = calcCityCapitation(0);
+    //所得割
+    var pref_income_tax = calcPrefIncomeTax(rt_taxable_income,0) - rt_adjust_deduction.pref;
+    var city_income_tax = calcCityIncomeTax(rt_taxable_income,0) - rt_adjust_deduction.city;
+    // 住民税
+    var pref_tax = pref_capitation + pref_income_tax;
+    var city_tax = city_capitation + city_income_tax;
+    // 住民税総額
+    var rt = pref_tax + city_tax;
 
     /* --------------------------------------------------
      * 源泉徴収額
@@ -560,27 +578,68 @@ $(function () {
   }
 
   /* --------------------------------------------------
-   * 住民税（個人）
+   * 住民税（均等割）
    * --------------------------------------------------*/
   // 道府県民税
-  function calcPrefecturalTax (income_tax = 0, pref_code = 0) {
+  function calcPrefCapitation (pref_code = 0) {
     // 均等割(2023年まで500円増し)
     var capitation = 1500;
-    // 所得割
-    var income_part = income_tax * 0.04;
 
-    return capitation + income_part;
+    return capitation;
   }
 
   // 市町村民税
-  function calcMunicipalTax (income_tax = 0, city_code = 0) {
+  function calcCityCapitation (city_code = 0) {
     // 均等割(2023年まで500円増し)
     var capitation = 3500;
-    // 所得割
-    var income_part = income_tax * 0.06;
 
-    return capitation + income_part;
+    return capitation;
   }
+
+  /* --------------------------------------------------
+   * 住民税（所得割）
+   * --------------------------------------------------*/
+  // 道府県民税
+  function calcPrefIncomeTax (income = 0, pref_code = 0) {
+    // 所得割
+    var income_part = income * 0.04;
+
+    return income_part;
+  }
+
+  // 市町村民税
+  function calcCityIncomeTax (income = 0, city_code = 0) {
+    // 所得割
+    var income_part = income * 0.06;
+
+    return income_part;
+  }
+
+  /* --------------------------------------------------
+   * 住民税の調整控除を計算
+   * --------------------------------------------------*/
+  function calcAdjustDeduction (income = 0) {
+    // 調整控除額
+    var deduction = 0;
+    // 人的控除差の合計額
+    var diff_personal_deduction = 50000; // 基礎控除の人的控除差のみを比較
+
+    if (income > 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
+      // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税3％、県民税2％）を控除
+      deduction = Math.min(income, diff_personal_deduction) * 0.05;
+    } else { // 住民税の合計課税所得金額が200万円以下の場合
+      //｛人的控除差の合計－（住民税の合計課税所得金額－200万円）｝×5％（市民税3％、県民税2％）を控除
+      deduction = (diff_personal_deduction - (income - 2000000)) * 0.05;
+      // 2500円未満の場合は2500円とする
+      deduction = Math.max(deduction, 2500);
+    }
+    return {
+      pref: deduction * 0.4,
+      city: deduction * 0.6,
+      total: deduction
+    };
+  }
+
 
   /* --------------------------------------------------
    * 健康保険料
