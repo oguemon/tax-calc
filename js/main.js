@@ -136,12 +136,22 @@ $(function () {
      * 社会保険料計算
      * --------------------------------------------------*/
     // 健康保険料
-    var hi       = calcHealthInsurancePremium(company_pref, monthly_income);
-    var hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
+    var hi       = { you: 0, company: 0, total: 0 };
+    var hi_bonus = { you: 0, company: 0, total: 0 };
+
+    if (88000 <= income) { // 月の基本給が8万8千円以上なら
+      hi       = calcHealthInsurancePremium(company_pref, monthly_income);
+      hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
+    }
 
     // 厚生年金保険料
-    var ep       = calcEmployeePensionPremium(monthly_income);
-    var ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
+    var ep       = { you: 0, company: 0, total: 0 };
+    var ep_bonus = { you: 0, company: 0, total: 0 };
+
+    if (88000 <= income) { // 月の基本給が8万8千円以上なら
+      ep       = calcEmployeePensionPremium(monthly_income);
+      ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
+    }
 
     // 雇用保険料
     var ui       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
