@@ -381,12 +381,14 @@ $(function () {
           label: '手取り年収',
           data: graph_overwork.substantial,
           backgroundColor: '#f9808f',
+          lineTension: 0,
           borderWidth: 0,
           pointRadius: 0
         }, {
           label: '額面年収',
           data: graph_overwork.total,
           backgroundColor: '#29abe2',
+          lineTension: 0,
           borderWidth: 0,
           pointRadius: 0
         }]
