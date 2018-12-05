@@ -44,7 +44,9 @@ $(function () {
     var position = $('#result').offset().top - 10; //ゆとりを持たせる
     $('body,html').animate({ scrollTop: position }, 400, 'swing');
 
-    // 入力された情報を取得
+    /* --------------------------------------------------
+     * 入力
+     * --------------------------------------------------*/
     var income = Number($('#input-income').val());
     var bonus_mounths = Number($('#input-bonus-mounths').val());
     var bonus_number = Number($('#input-bonus-number').val());
@@ -60,6 +62,9 @@ $(function () {
       industry_type = 2;
     }
 
+    /* --------------------------------------------------
+     * 額面給料計算
+     * --------------------------------------------------*/
     //給料の元になる支給額の計算
     var bonus_income_total = Math.floor(income * bonus_mounths);
     var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
@@ -77,6 +82,9 @@ $(function () {
     r.find('[monthly-income]').text(add1000Separator(monthly_income));
     r.find('[annual-income]').text(add1000Separator(annual_income));
 
+    /* --------------------------------------------------
+     * 社会保険料計算
+     * --------------------------------------------------*/
     // 健康保険料
     var hi       = calcHealthInsurancePremium(company_pref, monthly_income);
     var hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
@@ -126,7 +134,9 @@ $(function () {
     r.find('[ui-you-bonus-once]').text(add1000Separator(ui_bonus.you));
     r.find('[ui-annual]').text(add1000Separator(ui.you * 12 + ui_bonus.you * bonus_number));
 
-    // 所得税
+    /* --------------------------------------------------
+     * 所得税計算
+     * --------------------------------------------------*/
     var taxable_standard_income = calcTaxableIncome(annual_income);
     var total_deduction = 380000 // 基礎控除
                         + premium_annually.you;
@@ -134,12 +144,17 @@ $(function () {
     var taxable_income = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
     var it = calcTaxValue(taxable_income);
 
-    // 住民税
+    /* --------------------------------------------------
+     * 住民税計算
+     * --------------------------------------------------*/
     var prefectural_tax = calcPrefecturalTax(it, 0)
     var municipal_tax = calcMunicipalTax(it, 0);
     var residents_tax = prefectural_tax + municipal_tax;
 
-    // 源泉徴収額（月収：甲種）
+    /* --------------------------------------------------
+     * 源泉徴収額
+     * --------------------------------------------------*/
+    // 月収：甲種
     var taxable_income_withholding = monthly_income
                                     - premium_monthly.you
                                     - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
@@ -149,7 +164,7 @@ $(function () {
 
     var it_withholding = calcTaxValueWithholding(taxable_income_withholding);
 
-    // 源泉徴収額（ボーナス）
+    // ボーナス
     var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you);
     var it_taxiable_bonus_withholding = bonus_income_once
                                       - hi_bonus.you
@@ -157,6 +172,10 @@ $(function () {
                                       - ui_bonus.you;
     var it_bonus_withholding = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
+
+    /* --------------------------------------------------
+     * 手取り給料
+     * --------------------------------------------------*/
     // 実質の年収
     var substantial_annual_income = annual_income
                                   - premium_annually.you
