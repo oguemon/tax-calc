@@ -325,11 +325,11 @@ input[type=button], input[type=submit], button {
   &.main {
       color: $white-color;
       font-weight: bold;
-      background: $theme-color;
+      background: $accent-color;
       border: none;
 
       &:hover {
-          background: $theme-color + #333;
+          background: $accent-color + #111;
       }
   }
 
@@ -342,7 +342,8 @@ input[type=button], input[type=submit], button {
 
   &.wide {
       width: 100%;
-      margin: 0 0 15px;
+      margin: 0;
+      font-size: 140%;
       display: block;
   }
 }

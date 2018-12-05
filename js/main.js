@@ -21,6 +21,12 @@ $(function () {
     $(this).parent().children('.detail-box').slideToggle(300);
   });
 
+  // リトライボタンを押すと
+  $('#retry').on('click', function () {
+    // トップへスクロール
+    $('body,html').animate({ scrollTop: 0 }, 400, 'swing');
+  });
+
   $('a[href^="#"]').on('click', function () {
     var speed = 400; // ミリ秒
     var href = $(this).attr("href");

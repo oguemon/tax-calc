@@ -16,7 +16,8 @@ main {
 }
 
 #income-input {
-  padding: 10px;
+  padding: 10px 10px 20px ;
+  border-bottom: 1px solid $border-base-color;
 
   #input-income { width: 200px; font-size: 240%; font-weight: bold; text-align: right; }
   #input-bonus-mounths { width: 60px; font-size: 150%; text-align: center; }
@@ -44,6 +45,47 @@ main {
       text-align: right;
     }
   }
+
+  #input-attention {
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    border: 3px solid $border-base-color;
+    border-radius: 5px;
+
+    #input-attention-header {
+      margin: 0 0 10px;
+      color: $attention-color;
+      font-weight: bold;
+      text-align: center;
+      display: block;
+    }
+
+    ul {
+      margin: 0 0 0 20px;
+      font-size: 80%;
+      text-align: justify;
+    }
+
+    li {
+      margin: 0 0 10px;
+      list-style-type: disc;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    .detail-box {
+      display: none;
+    }
+
+    .btn-detail-toggle {
+      padding: 10px 0 0;
+      color: $theme-color;
+      text-align: center;
+    }
+  }
 }
 
 .result-box {
@@ -63,7 +105,7 @@ main {
   }
 
   .copy-area {
-    padding: 10px 10px 5px;
+    padding: 0 10px 5px;
 
     textarea {
       width: 100%;
@@ -76,13 +118,13 @@ main {
 
   .share-area {
     width: 100%;
-    padding: 0 10px 10px;
+    padding: 0 10px 5px;
     display: table;
     border-collapse: separate;
     border-spacing: 5px 0;
 
     .share-button {
-      height: 30px;
+      height: 35px;
       display: table-cell;
       border-radius: 5px;
 
@@ -95,8 +137,15 @@ main {
     }
   }
 
+  #retry {
+    height: 35px;
+    margin: 0 15px 10px;
+    background: url(../img/retry.svg) center center no-repeat, #888;
+    border-radius: 5px;
+  }
+
   .header {
-    margin: 10px;
+    margin: 15px;
     color: #83c426;
     font-size: 180%;
     font-weight: normal;
@@ -178,6 +227,7 @@ main {
 
   .btn-detail-toggle {
     padding: 8px 0;
+    color: $theme-color;
     text-align: center;
   }
 }

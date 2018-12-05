@@ -10,9 +10,11 @@
     gtag('config', 'UA-89114839-3');
   </script>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>簡単！ザックリ手取り給料計算機</title>
-  <link rel='stylesheet' href='./assets/css/main.css?20181205v3' type='text/css' media='all' />
+  <link rel='stylesheet' href='./assets/css/main.css?20181205v6' type='text/css' media='all' />
+  <!-- Favicon設定 -->
+  <link href="./assets/img/favicon.ico" rel="shortcut icon">
   <!-- OGP設定 -->
 	<meta property="og:title" content="簡単！ザックリ手取り給料計算機〜年収だけじゃ分からない実際に貰える給与額を試算しよう〜">
 	<meta property="og:type" content="website">
@@ -67,6 +69,30 @@
             <label><input type="radio" name="industry" value="2"><span>農林水産・清酒製造</span></label>
           </div>
         </div>
+
+        <div id="input-attention">
+          <div id="input-attention-header">ご利用前に次の注意事項をご熟読・ご理解願います</div>
+          <ul>
+            <li>本計算機は、入力された情報に基づき手取り給料を概算します。主な目的は、就活生や新卒社会人が額面給料と手取り給料の差異を直感的に捉えていただくことです。</li>
+            <li>本計算機の出力結果は実際の値と異なる場合があります。給与管理や確定申告等、正確性が要求される用途に使用しないでください。</li>
+          </ul>
+          <div class="detail-box">
+            <ul>
+              <li>本計算機は、上述する目的から、40歳以上の方が加入する介護保険を考慮に入れていません。</li>
+              <li>本計算機は、簡単のため、所得税および住民税の計算において基礎控除と社会保険料控除以外の控除を考慮に入れていません。例えば、配偶者や扶養者がいる場合、自身が障害を有する場合等において出力結果が異なります。</li>
+              <li>本計算機は、簡単のため、所得を給与所得に限定し、給与は月々の基本給、賞与、時間外労働手当のみに限定しています。ここに掲げた以外の所得または給与がある場合、出力結果が異なります。</li>
+              <li>本計算機は、簡単のため、社会保険料の報酬を月々の基本給、時間外労働手当飲みに限定しています。ここに掲げた以外の報酬（通勤手当等）がある場合、出力結果が異なります。</li>
+              <li>本計算機は、簡単のため、所得税、住民税および社会保険料の間にある年度開始月の違いを考慮に入れていません。全て、給与更改年度に合わせて計算しています。</li>
+              <li>本計算機は、その他実際の計算方法とは異なる部分があるため、実際の計算結果とは異なる場合があります。</li>
+              <li>本計算機の出力結果は、給与の良し悪しを評価するものではありません。また、時間外労働を奨励するものではありません。</li>
+              <li>本計算機は、バグ等の理由により不正な出力を行う場合があります。</li>
+              <li>本計算機は、予告なく内容を変更または削除する場合があります。</li>
+              <li>本計算機を利用して生じた一切の損害およびトラブル等につきまして、運営者（おぐえもん）は一切の責任を負いません。</li>
+              <li>不具合やご要望等がございましたら、おぐえもん（<a href="https://twitter.com/oguemon_com" target="_blenk">@oguemon_com</a>）までご連絡ください。</li>
+            </ul>
+          </div>
+          <div class="btn-detail-toggle">注意事項の続きを開閉する</div>
+        </div>
         <div class="line-box">
           <button type="submit" id="btn-calc-tax" class="main wide">手取り金額を計算</button>
         </div>
@@ -86,6 +112,7 @@
 
     <div id="result" style="display: none;">
       <div class="result-box">
+        <div class="header">結果概要</div>
         <div class="copy-area">
           <textarea id="copy-area-text"></textarea>
         </div>
@@ -93,6 +120,7 @@
           <a class="share-button" id="share-twitter"></a>
           <a class="share-button" id="share-mail"></a>
         </div>
+        <div id="retry"></div>
       </div>
 
       <div class="result-box">
@@ -552,6 +580,6 @@
 <script src="./assets/js/Chart.min.js"></script>
 <script src="./assets/js/plugin.js"></script>
 <script src="./assets/js/modal.js"></script>
-<script src="./assets/js/output.min.js?20181205v3"></script>
+<script src="./assets/js/output.min.js?20181205v6"></script>
 </body>
 </html>
