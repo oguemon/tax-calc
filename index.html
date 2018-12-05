@@ -32,7 +32,15 @@
         </div>
         <div class="line-box">
           <div class="line-label">勤務先の都道府県<div class="detail-info" name="company-pref"></div></div>
-          <div class="line-value"><select id="select-company-pref"></select></div>
+          <div class="line-value"><select class="select-area" id="select-company-pref"></select></div>
+        </div>
+        <div class="line-box">
+          <div class="line-label">自宅の都道府県<div class="detail-info" name="resident-pref"></div></div>
+          <div class="line-value"><select class="select-area" id="select-resident-pref"></select></div>
+        </div>
+        <div class="line-box" id="line-box-select-city" style="display: none;">
+          <div class="line-label">自宅の市町村<div class="detail-info" name="resident-city"></div></div>
+          <div class="line-value"><select class="select-area" id="select-resident-city"></select></div>
         </div>
         <div class="line-box">
           <div class="line-label">事業<div class="detail-info" name="industry-type"></div></div>
@@ -224,19 +232,19 @@
           <div class="sub-value-line">
             <div class="line-box">
               <div class="line-label">道府県民税（均等割）</div>
-              <div class="line-value minus"><span pref-capitation></span>円</div>
+              <div class="line-value"><span pref-capitation></span>円</div>
             </div>
             <div class="line-box">
               <div class="line-label">道府県民税（所得割）</div>
-              <div class="line-value minus"><span pref-income-tax></span>円</div>
+              <div class="line-value"><span pref-income-tax></span>円</div>
             </div>
             <div class="line-box">
               <div class="line-label">市町村民税（均等割）</div>
-              <div class="line-value minus"><span city-capitation></span>円</div>
+              <div class="line-value"><span city-capitation></span>円</div>
             </div>
             <div class="line-box">
               <div class="line-label">市町村民税（所得割）</div>
-              <div class="line-value minus"><span city-income-tax></span>円</div>
+              <div class="line-value"><span city-income-tax></span>円</div>
             </div>
             <div class="line-box sum">
               <div class="line-label">住民税総額</div>
@@ -315,6 +323,28 @@
       <p>基本的に本社の都道府県を選択しましょう。ただし各事業所の所在地が適用される会社もあります。</p>
       <p>また、この保険料率は「<strong>全国健康保険協会</strong>」に加入している会社（日本の会社の大半）に適用されますが、700人以上が働く<strong>大企業では健康保険組合を独自に作ることができ、保険料率を独自に設定できます</strong>（大抵ちょっと低い）。</p>
       <p>よって、大企業の場合は必ずしも本計算機を適用できない点にご注意ください（気になる企業に独自の健康保険協会があるか調べてみましょう）。</p>
+    </div>
+  </div>
+  <div resident-pref>
+    <div title>自宅の都道府県</div>
+    <div body>
+      <p>道府県民税の税額と税率が都道府県ごとに異なるために設けられた項目です。</p>
+      <p><strong>1月1日時点に住民票をおいていた都道府県の税額と税率が、翌年度の道府県民税の額に影響します</strong>。</p>
+      <p>ちなみに、個人が払う道府県民税には大きく「均等割（定額料金）」「所得割（所得額に応じて変わる料金）」の2つがあり、均等割の料金は<strong>1500円</strong>、所得割の税率は<strong>4%</strong>が原則です。しかし、2018年現在、37の都道府県が環境保全税として均等割の額を1000円前後上乗せしています。所得割は神奈川県のみ4.025%に設定中。</p>
+    </div>
+  </div>
+  <div resident-city>
+    <div title>自宅の市区町村</div>
+    <div body>
+      <p>市町村民税の税額と税率が市区町村ごとに異なるために設けられた項目です。</p>
+      <p><strong>1月1日時点に住民票をおいていた市区町村の税額と税率が、翌年度の市町村民税の額に影響します</strong>。</p>
+      <p>ちなみに、個人が払う市町村民税には大きく「均等割（定額料金）」「所得割（所得額に応じて変わる料金）」の2つがあり、均等割の料金は<strong>3500円</strong>、所得割の税率は<strong>6%</strong>が原則です。</p>
+      <p>ほとんどの市区町村は原則に従っているのですが、2018年現在、次の市のみ独自の税額・税率を設定しています。</p>
+      <ul>
+        <li>神奈川県横浜市…均等割が4400円です。</li>
+        <li>愛知県名古屋市…均等割が3300円で、所得割が5.7%です。</li>
+        <li>兵庫県豊岡市…所得割が6.1%です。</li>
+      </ul>
     </div>
   </div>
   <div industry-type>

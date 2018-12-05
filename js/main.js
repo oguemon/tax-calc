@@ -33,7 +33,33 @@ $(function () {
   for (var i = 0; i < PREF_LIST.length; i++) {
     var selected = (PREF_LIST[i] == '神奈川県')? 'selected' : '';
     $('#select-company-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
+    $('#select-resident-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
   }
+  // 自宅の都道府県を選択していない
+  var resident_pref_selected = false;
+
+  // 勤務先の都道府県を選択したら
+  $('#select-company-pref').on('change', function () {
+    // 初めての選択だったなら
+    if (!resident_pref_selected) {
+      var company_pref  = Number($('#select-company-pref').val());
+      company_pref = (company_pref)? company_pref : 0;
+
+      // 自宅の都道府県もそれに合わせる
+      $('#select-resident-pref').val(company_pref);
+      toggleSelectResidentCity(company_pref);
+    }
+  });
+
+  // 自宅の都道府県を選択したら
+  $('#select-resident-pref').on('change', function () {
+    var resident_pref  = Number($('#select-resident-pref').val());
+    resident_pref = (resident_pref)? resident_pref : 0;
+    toggleSelectResidentCity(resident_pref);
+
+    // 自宅の都道府県を選択したフラグをオン
+    resident_pref_selected = true;
+  });
 
   // 計算ボタンをクリックしたら
   $('#btn-calc-tax').on('click', function () {
@@ -47,11 +73,21 @@ $(function () {
     /* --------------------------------------------------
      * 入力
      * --------------------------------------------------*/
-    var income = Number($('#input-income').val());
-    var bonus_mounths = Number($('#input-bonus-mounths').val());
-    var bonus_number = Number($('#input-bonus-number').val());
+    var income         = Number($('#input-income').val());
+    var bonus_mounths  = Number($('#input-bonus-mounths').val());
+    var bonus_number   = Number($('#input-bonus-number').val());
     var overwork_hours = Number($('#input-overwork-hours').val());
-    var company_pref = Number($('#select-company-pref').val());
+    var company_pref   = Number($('#select-company-pref').val());
+    var resident_pref  = Number($('#select-resident-pref').val());
+    var resident_city  = Number($('#select-resident-city').val());
+
+    income         = (income)?         Math.abs(income) : 0;
+    bonus_mounths  = (bonus_mounths)?  Math.abs(bonus_mounths) : 0;
+    bonus_number   = (bonus_number)?   Math.abs(bonus_number) : 0;
+    overwork_hours = (overwork_hours)? Math.abs(overwork_hours) : 0;
+    company_pref   = (company_pref)?   Math.abs(company_pref) : 0;
+    resident_pref  = (resident_pref)?  Math.abs(resident_pref) : 0;
+    resident_city  = (resident_city)?  Math.abs(resident_city) : 0;
 
     var industry_type = 0; // 事業
     if ($('input[name="industry"]:eq(0)').prop('checked')) {
@@ -60,6 +96,12 @@ $(function () {
       industry_type = 1;
     } else if ($('input[name="industry"]:eq(2)').prop('checked')) {
       industry_type = 2;
+    }
+
+    // ボーナスの回数がゼロ（ボーナスがない）なら、ボーナス総額ゼロで支給回数1回ってことにする
+    if (bonus_number == 0) {
+      bonus_mounths = 0;
+      bonus_number = 1;
     }
 
     /* --------------------------------------------------
@@ -159,19 +201,14 @@ $(function () {
     // 控除額を求める
     var rt_deduction = 330000 // 基礎控除（所得税と多少異なるのに注意）
                      + premium_annually.you; // 社会保険料控除
-    // 課税所得金額を求める
-    var rt_taxable_income = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
-    // 調整控除を行う
-    var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income);
     // 均等割
-    var pref_capitation = calcPrefCapitation(0);
-    var city_capitation = calcCityCapitation(0);
+    var pref_capitation = calcPrefCapitation(resident_pref);
+    var city_capitation = calcCityCapitation(resident_city);
     //所得割
-    var pref_income_tax = calcPrefIncomeTax(rt_taxable_income,0) - rt_adjust_deduction.pref;
-    var city_income_tax = calcCityIncomeTax(rt_taxable_income,0) - rt_adjust_deduction.city;
+    var rt_income = calcResidentTaxIncome(resident_pref, resident_city, taxable_standard_income, rt_deduction);
     // 住民税
-    var pref_tax = pref_capitation + pref_income_tax;
-    var city_tax = city_capitation + city_income_tax;
+    var pref_tax = pref_capitation + rt_income.pref;
+    var city_tax = city_capitation + rt_income.city;
     // 住民税総額
     var rt = pref_tax + city_tax;
 
@@ -179,9 +216,9 @@ $(function () {
     r.find('[pref-tax]').text(add1000Separator(pref_tax));
     r.find('[city-tax]').text(add1000Separator(city_tax));
     r.find('[pref-capitation]').text(add1000Separator(pref_capitation));
-    r.find('[pref-income-tax]').text(add1000Separator(pref_income_tax));
+    r.find('[pref-income-tax]').text(add1000Separator(rt_income.pref));
     r.find('[city-capitation]').text(add1000Separator(city_capitation));
-    r.find('[city-income-tax]').text(add1000Separator(city_income_tax));
+    r.find('[city-income-tax]').text(add1000Separator(rt_income.city));
     r.find('[rt]').text(add1000Separator(rt));
     r.find('[rt-monthly]').text(add1000Separator(Math.round(rt / 12)));
 
@@ -189,14 +226,15 @@ $(function () {
      * 源泉徴収額
      * --------------------------------------------------*/
     // 月収：甲種
-    var taxable_income_withholding = monthly_income
-                                    - premium_monthly.you
-                                    - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
-                                    - calcBasicDeductionsWithholding()
-                                    - calcSpouseDeductionsWithholding (false)
-                                    - calcDependentsDeductionsWithholding(0);
+    var it_taxable_income_withholding = monthly_income
+                                      - premium_monthly.you
+                                      - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
+                                      - calcBasicDeductionsWithholding()
+                                      - calcSpouseDeductionsWithholding (false)
+                                      - calcDependentsDeductionsWithholding(0);
+    it_taxable_income_withholding = Math.max(it_taxable_income_withholding, 0);
 
-    var it_withholding = calcTaxValueWithholding(taxable_income_withholding);
+    var it_withholding = calcTaxValueWithholding(it_taxable_income_withholding);
 
     // ボーナス
     var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you);
@@ -204,6 +242,7 @@ $(function () {
                                       - hi_bonus.you
                                       - ep_bonus.you
                                       - ui_bonus.you;
+    it_taxiable_bonus_withholding = Math.max(it_taxiable_bonus_withholding, 0);
     var it_bonus_withholding = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
     // 結果を出力
@@ -402,6 +441,35 @@ $(function () {
   }
 
   /* --------------------------------------------------
+   * 入力
+   * --------------------------------------------------*/
+  // 市町村選択の表示非表示を判定して切り替える
+  function toggleSelectResidentCity (resident_pref = 0) {
+    // 市町村を選択する項目の行
+    var box = $('#line-box-select-city');
+    var select = $('#select-resident-city');
+    select.empty();
+
+    // 都道府県による条件分岐
+    if (resident_pref == 13) { // 神奈川県なら
+      select.append('<option value="1">横浜市</option>');
+      select.append('<option value="0">それ以外の市町村</option>');
+      box.slideDown(300);
+    } else if (resident_pref == 22) { // 愛知県なら
+      select.append('<option value="2">名古屋市</option>');
+      select.append('<option value="0">それ以外の市町村</option>');
+      box.slideDown(300);
+    } else if (resident_pref == 27) { // 兵庫県なら
+      select.append('<option value="0">豊岡市以外の市町村</option>');
+      select.append('<option value="3">豊岡市</option>');
+      box.slideDown(300);
+    } else {
+      select.append('<option value="0">全ての市町村</option>');
+      box.slideUp(300);
+    }
+  }
+
+  /* --------------------------------------------------
    * 所得税（給与所得）
    * --------------------------------------------------*/
   // 給与所得控除額を計算
@@ -591,6 +659,9 @@ $(function () {
     // 均等割(2023年まで500円増し)
     var capitation = 1500;
 
+    // 都道府県により設定
+    capitation = RT_RATE_LIST_PREF[pref_code][0];
+
     return capitation;
   }
 
@@ -599,6 +670,9 @@ $(function () {
     // 均等割(2023年まで500円増し)
     var capitation = 3500;
 
+    // 市町村により設定
+    capitation = RT_RATE_LIST_CITY[city_code][0];
+
     return capitation;
   }
 
@@ -606,17 +680,35 @@ $(function () {
    * 住民税（所得割）
    * --------------------------------------------------*/
   // 道府県民税
-  function calcPrefIncomeTax (income = 0, pref_code = 0) {
+  function calcResidentTaxIncome (pref_code = 0, city_code = 0, taxable_standard_income = 0, rt_deduction = 0, dependents_count = 0) {
     // 所得割
-    var income_part = income * 0.04;
+    var income_part = {
+      pref: 0,
+      city: 0
+    };
+    // 所得割の課税基準額
+    var tax_criteria = 0;
 
-    return income_part;
-  }
+    // 扶養者がいるか否かで課税基準が変わる
+    if (dependents_count > 0) {
+      tax_criteria = (dependents_count + 1) * 350000 + 320000;
+    } else {
+      tax_criteria = 350000;
+    }
 
-  // 市町村民税
-  function calcCityIncomeTax (income = 0, city_code = 0) {
-    // 所得割
-    var income_part = income * 0.06;
+    // 基準より大きな所得合計額ならば所得割を課す
+    if (taxable_standard_income > tax_criteria) {
+      // 課税所得金額を求める（千円未満の端数切捨）
+      var rt_taxable_income = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');
+      // 所得割
+      income_part.pref = rt_taxable_income * RT_RATE_LIST_PREF[pref_code][1];
+      income_part.city = rt_taxable_income * RT_RATE_LIST_CITY[city_code][1];
+
+      // 調整控除を行う
+      var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income);
+      income_part.pref = Math.max(round(income_part.pref - rt_adjust_deduction.pref, 100, 'floor'), 0);
+      income_part.city = Math.max(round(income_part.city - rt_adjust_deduction.city, 100, 'floor'), 0);
+    }
 
     return income_part;
   }
@@ -636,7 +728,7 @@ $(function () {
     } else { // 住民税の合計課税所得金額が200万円以下の場合
       //｛人的控除差の合計－（住民税の合計課税所得金額－200万円）｝×5％（市民税3％、県民税2％）を控除
       deduction = (diff_personal_deduction - (income - 2000000)) * 0.05;
-      // 2500円未満の場合は2500円とする
+      // 2500円未満の場合は2500円とする（元々は0.05を掛ける前の金額を最低5万にする）
       deduction = Math.max(deduction, 2500);
     }
     return {
@@ -645,7 +737,6 @@ $(function () {
       total: deduction
     };
   }
-
 
   /* --------------------------------------------------
    * 健康保険料
