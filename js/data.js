@@ -58,6 +58,9 @@ const PREF_LIST = new Array(
   '沖縄県'  // 46
 );
 
+// 健康保険と厚生年金保険の加入下限となる月あたり基本給額
+var INSURANCE_MIN_INCOME = 88000;
+
 // 健康保険料率（平成30年度）
 var HI_GENERAL_RATE_LIST = new Array(
   10.25, // 北海道

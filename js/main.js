@@ -139,7 +139,7 @@ $(function () {
     var hi       = { you: 0, company: 0, total: 0 };
     var hi_bonus = { you: 0, company: 0, total: 0 };
 
-    if (88000 <= income) { // 月の基本給が8万8千円以上なら
+    if (INSURANCE_MIN_INCOME <= income) { // 月の基本給が8万8千円以上なら
       hi       = calcHealthInsurancePremium(company_pref, monthly_income);
       hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
     }
@@ -148,7 +148,7 @@ $(function () {
     var ep       = { you: 0, company: 0, total: 0 };
     var ep_bonus = { you: 0, company: 0, total: 0 };
 
-    if (88000 <= income) { // 月の基本給が8万8千円以上なら
+    if (INSURANCE_MIN_INCOME <= income) { // 月の基本給が8万8千円以上なら
       ep       = calcEmployeePensionPremium(monthly_income);
       ep_bonus = calcEmployeePensionPremium(bonus_income_total, bonus_number);
     }
@@ -405,8 +405,14 @@ $(function () {
       var annual_income  = monthly_income * 12 + bonus_income_total;
       graph_overwork.total.push(annual_income);
       // 社会保険料
-      var hi_over       = calcHealthInsurancePremium(company_pref, monthly_income);
-      var ep_over       = calcEmployeePensionPremium(monthly_income);
+      var hi_over = { you: 0, company: 0, total: 0 };
+      var ep_over = { you: 0, company: 0, total: 0 };
+
+      if (INSURANCE_MIN_INCOME <= income) {
+        hi_over = calcHealthInsurancePremium(company_pref, monthly_income);
+        ep_over = calcEmployeePensionPremium(monthly_income);
+      }
+
       var ui_over       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
       var total_premium = (hi_over.you + ep_over.you + ui_over.you) * 12 + premium_bonus.you * bonus_number;
       // 所得税
