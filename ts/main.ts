@@ -1,4 +1,5 @@
 // DOMを読み終えたら
+/// <reference path="data.ts" />
 $(function () {
   'use strict';
 
