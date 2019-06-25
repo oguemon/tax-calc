@@ -358,7 +358,8 @@ $(function () {
         {label: '源泉徴収額', data: [it_withholding], backgroundColor: bar_color.it},
       ]
     };
-    var ctx_income = document.getElementById('graph-income-detail').getContext('2d');
+    const ctx_income_canvas = <HTMLCanvasElement> $('#graph-income-detail')[0];
+    const ctx_income = ctx_income_canvas.getContext('2d');
     ctx_income.canvas.height = 80;
     chart_detail_income = plotHorizontalBar(ctx_income, datasets_income);
 
@@ -372,7 +373,8 @@ $(function () {
         {label: '源泉徴収額', data: [it_bonus_withholding], backgroundColor: bar_color.it},
       ]
     };
-    var ctx_bonus = document.getElementById('graph-bonus-income-detail').getContext('2d');
+    const ctx_bonus_canvas = <HTMLCanvasElement> $('#graph-bonus-income-detail')[0];
+    const ctx_bonus = ctx_bonus_canvas.getContext('2d');
     ctx_bonus.canvas.height = 80;
     chart_detail_bonus = plotHorizontalBar(ctx_bonus, datasets_bonus_income);
 
@@ -386,7 +388,8 @@ $(function () {
         {label: '所得税額', data: [it] , backgroundColor: bar_color.it},
       ]
     };
-    var ctx_annual = document.getElementById('graph-annual-income-detail').getContext('2d');
+    const ctx_annual_canvas = <HTMLCanvasElement> $('#graph-annual-income-detail')[0];
+    const ctx_annual = ctx_annual_canvas.getContext('2d');
     ctx_annual.canvas.height = 80;
     chart_detail_annual_income = plotHorizontalBar(ctx_annual, datasets_annual_income);
 
@@ -428,7 +431,8 @@ $(function () {
       graph_overwork.substantial.push(substantial_income);
     }
     // グラフを描画（残業時間）
-    chart_overwork_transition = new Chart($('#graph-overwork-income-transition'), {
+    const chart_overwork_transition_canvas = <HTMLCanvasElement> $('#graph-overwork-income-transition')[0];
+    chart_overwork_transition = new Chart(chart_overwork_transition_canvas, {
       type: 'line',
       data: {
         labels: graph_overwork.labels,
@@ -472,9 +476,10 @@ $(function () {
   });
   function showModal (id='') {
     var msg = $('#modal-parts').find('[' + id + ']');
-    $('#moveModal').find('.title').text(msg.find('[title]').text());
-    $('#moveModal').find('.body').html(msg.find('[body]').html());
-    $('#moveModal').modal('show');
+    const move_modal: any = $('#moveModal'); //自作プラグインを使うためany型で定義…
+    move_modal.find('.title').text(msg.find('[title]').text());
+    move_modal.find('.body').html(msg.find('[body]').html());
+    move_modal.modal('show');
   }
 
   /* --------------------------------------------------
