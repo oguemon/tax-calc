@@ -38,7 +38,7 @@ $(function () {
 
   // 都道府県選択の選択肢を用意
   for (var i = 0; i < PREF_LIST.length; i++) {
-    var selected = (PREF_LIST[i] == '大阪府')? 'selected' : '';
+    var selected = (PREF_LIST[i] == '東京都')? 'selected' : '';
     $('#select-company-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
     $('#select-resident-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
   }
@@ -222,7 +222,7 @@ $(function () {
                      + premium_annually.you; // 社会保険料控除
     // 均等割
     var pref_capitation = calcPrefCapitation(resident_pref);
-    var city_capitation = calcCityCapitation(resident_city);
+    var city_capitation = calcCityCapitation(resident_pref, resident_city);
     //所得割
     var rt_income = calcResidentTaxIncome(resident_pref, resident_city, taxable_standard_income, rt_deduction);
     // 住民税
@@ -520,18 +520,19 @@ $(function () {
     var select = $('#select-resident-city');
     select.empty();
 
-    // 都道府県による条件分岐
-    if (resident_pref == 13) { // 神奈川県なら
-      select.append('<option value="1">横浜市</option>');
+    // 都道府県名を格納
+    const pref_name = PREF_LIST[resident_pref];
+
+    // 指定された都道府県か否かをチェック
+    if (pref_name in ORDINANCE_DESIGNATED_CITY_LIST) {
+      const oedinance_designated_sities_in_pref = ORDINANCE_DESIGNATED_CITY_LIST[pref_name];
+      for (let i = 0; i < oedinance_designated_sities_in_pref.length; i++) {
+        select.append('<option value="' + (i + 1) + '">' + oedinance_designated_sities_in_pref[i] + '</option>');
+      }
+      if (pref_name　== '兵庫県') {
+        select.append('<option value="' + (oedinance_designated_sities_in_pref.length + 1) + '">豊岡市</option>');
+      }
       select.append('<option value="0">それ以外の市町村</option>');
-      box.slideDown(300);
-    } else if (resident_pref == 22) { // 愛知県なら
-      select.append('<option value="2">名古屋市</option>');
-      select.append('<option value="0">それ以外の市町村</option>');
-      box.slideDown(300);
-    } else if (resident_pref == 27) { // 兵庫県なら
-      select.append('<option value="0">豊岡市以外の市町村</option>');
-      select.append('<option value="3">豊岡市</option>');
       box.slideDown(300);
     } else {
       select.append('<option value="0">全ての市町村</option>');
@@ -750,12 +751,16 @@ $(function () {
   }
 
   // 市町村民税
-  function calcCityCapitation (city_code = 0) {
+  function calcCityCapitation (pref_code = 0, city_code = 0) {
     // 均等割(2023年まで500円増し)
     var capitation = 3500;
 
-    // 市町村により設定
-    capitation = RT_RATE_LIST_CITY[city_code][0];
+    // 特殊な市町村なら再設定
+    if (pref_code == 13 && city_code == 1) { // 神奈川県横浜市
+      capitation = RT_RATE_LIST_CITY['神奈川県横浜市'][0];
+    } else if (pref_code == 22 && city_code == 1) { // 愛知県名古屋市
+      capitation = RT_RATE_LIST_CITY['愛知県名古屋市'][0];
+    }
 
     return capitation;
   }
@@ -784,12 +789,26 @@ $(function () {
     if (taxable_standard_income > tax_criteria) {
       // 課税所得金額を求める（千円未満の端数切捨）
       var rt_taxable_income = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');
-      // 所得割
-      income_part.pref = rt_taxable_income * RT_RATE_LIST_PREF[pref_code][1];
-      income_part.city = rt_taxable_income * RT_RATE_LIST_CITY[city_code][1];
+      // 所得割（都道府県・市町村による違いを条件判定）
+      let rt_rate_pref = RT_RATE_LIST_PREF[pref_code][1];
+      let rt_rate_city = RT_RATE_LIST_CITY['一般市町村'][1];
+      if (city_code > 0) { // 普通の市町村でない
+        if(pref_code == 22) { // 愛知県名古屋市
+          rt_rate_city = RT_RATE_LIST_CITY['愛知県名古屋市'][1];
+          rt_rate_pref -= 0.02;
+          rt_rate_city += 0.02;
+        } else if (pref_code == 27 && city_code == 2) { // 兵庫県豊岡市
+          rt_rate_city = RT_RATE_LIST_CITY['兵庫県豊岡市'][1];
+        } else { // ただの政令指定都市たち
+          rt_rate_pref -= 0.02;
+          rt_rate_city += 0.02;
+        }
+      }
+      income_part.pref = rt_taxable_income * rt_rate_pref;
+      income_part.city = rt_taxable_income * rt_rate_city;
 
       // 調整控除を行う
-      var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income);
+      var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income, rt_rate_pref, rt_rate_city);
       income_part.pref = Math.max(round(income_part.pref - rt_adjust_deduction.pref, 100, 'floor'), 0);
       income_part.city = Math.max(round(income_part.city - rt_adjust_deduction.city, 100, 'floor'), 0);
     }
@@ -800,24 +819,24 @@ $(function () {
   /* --------------------------------------------------
    * 住民税の調整控除を計算
    * --------------------------------------------------*/
-  function calcAdjustDeduction (income = 0) {
+  function calcAdjustDeduction (income = 0, rt_rate_pref = 0.04, rt_rate_city = 0.06) {
     // 調整控除額
     var deduction = 0;
     // 人的控除差の合計額
     var diff_personal_deduction = 50000; // 基礎控除の人的控除差のみを比較
 
     if (income > 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
-      // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税3％、県民税2％）を控除
+      // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税と県民税の％合計）を控除
       deduction = Math.min(income, diff_personal_deduction) * 0.05;
     } else { // 住民税の合計課税所得金額が200万円以下の場合
-      //｛人的控除差の合計－（住民税の合計課税所得金額－200万円）｝×5％（市民税3％、県民税2％）を控除
+      //｛人的控除差の合計－（住民税の合計課税所得金額－200万円）｝×5％（市民税と県民税の％合計）を控除
       deduction = (diff_personal_deduction - (income - 2000000)) * 0.05;
       // 2500円未満の場合は2500円とする（元々は0.05を掛ける前の金額を最低5万にする）
       deduction = Math.max(deduction, 2500);
     }
     return {
-      pref: deduction * 0.4,
-      city: deduction * 0.6,
+      pref: deduction * rt_rate_pref / (rt_rate_pref + rt_rate_city),
+      city: deduction * rt_rate_city / (rt_rate_pref + rt_rate_city),
       total: deduction
     };
   }
