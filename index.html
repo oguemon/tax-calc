@@ -47,7 +47,7 @@
         </div>
         <div class="line-box">
           <div class="line-label">残業時間<div class="detail-info" name="overwork-hours"></div></div>
-          <div class="line-value">月<input type="number" id="input-overwork-hours" value="10">時間</div>
+          <div class="line-value">月<input type="number" id="input-overwork-hours" value="0">時間</div>
         </div>
         <div class="line-box">
           <div class="line-label">勤務先の都道府県<div class="detail-info" name="company-pref"></div></div>
@@ -69,6 +69,18 @@
             <label><input type="radio" name="industry" value="2"><span>農林水産・清酒製造</span></label>
           </div>
         </div>
+
+        <div class="detail-box">
+            <div class="line-box">
+              <div class="line-label">ボーナス<div class="detail-info" name="hi-rate"></div></div>
+              <div class="line-value"><input type="number" id="input-bonus-amount" value="">円×<input type="number" id="input-bonus-amount-number" value="2">回</div>
+            </div>
+            <div class="line-box">
+              <div class="line-label">健康保険料率(自己負担分)<div class="detail-info" name="hi-rate"></div></div>
+              <div class="line-value"><input type="number" id="input-hi-rate-self" value="">%</div>
+            </div>
+        </div>
+        <div class="btn-detail-toggle">詳細設定を開閉する</div>
 
         <div id="input-attention">
           <div id="input-attention-header">ご利用前に次の注意事項をご熟読・ご理解願います</div>

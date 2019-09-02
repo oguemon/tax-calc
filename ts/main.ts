@@ -83,18 +83,24 @@ $(function () {
     var income         = Number($('#input-income').val());
     var bonus_mounths  = Number($('#input-bonus-mounths').val());
     var bonus_number   = Number($('#input-bonus-number').val());
+    var bonus_amount  = Number($('#input-bonus-amount').val());
+    var bonus_amount_number = Number($('#input-bonus-amount-number').val());
     var overwork_hours = Number($('#input-overwork-hours').val());
     var company_pref   = Number($('#select-company-pref').val());
     var resident_pref  = Number($('#select-resident-pref').val());
     var resident_city  = Number($('#select-resident-city').val());
+    var hi_rate_self   = Number($('#input-hi-rate-self').val());
 
     income         = (income)?         Math.abs(income) : 0;
     bonus_mounths  = (bonus_mounths)?  Math.abs(bonus_mounths) : 0;
     bonus_number   = (bonus_number)?   Math.abs(bonus_number) : 0;
+    bonus_amount   = (bonus_amount)?  Math.abs(bonus_amount) : 0;
+    bonus_amount_number = (bonus_amount_number)? Math.abs(bonus_amount_number) : 0;
     overwork_hours = (overwork_hours)? Math.abs(overwork_hours) : 0;
     company_pref   = (company_pref)?   Math.abs(company_pref) : 0;
     resident_pref  = (resident_pref)?  Math.abs(resident_pref) : 0;
     resident_city  = (resident_city)?  Math.abs(resident_city) : 0;
+    hi_rate_self   = (hi_rate_self)?   Math.abs(hi_rate_self) : 0;
 
     var industry_type = 0; // 事業
     if ($('input[name="industry"]:eq(0)').prop('checked')) {
@@ -115,8 +121,18 @@ $(function () {
      * 額面給料計算
      * --------------------------------------------------*/
     //給料の元になる支給額の計算（ボーナス）
-    var bonus_income_total = Math.floor(income * bonus_mounths);
-    var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
+    var bonus_income_total;
+    if (bonus_amount && bonus_amount_number) {
+      bonus_income_total = Math.floor(bonus_amount * bonus_mounths);
+    } else {
+      bonus_income_total = Math.floor(income * bonus_mounths);
+    }
+    var bonus_income_once;
+    if (bonus_amount && bonus_amount_number) {
+      bonus_income_once = bonus_amount;
+    } else {
+      bonus_income_once = Math.floor(income * bonus_mounths);
+    }Math.floor(bonus_income_total / bonus_number);
     //給料の元になる支給額の計算（時間外労働手当）
     var overwork_monthly_income = calcOverworkIncome(overwork_hours, income);
     //給料の元になる支給額の計算（月収と年収）
@@ -141,8 +157,8 @@ $(function () {
     var hi_bonus = { you: 0, company: 0, total: 0 };
 
     if (INSURANCE_MIN_INCOME <= income) { // 月の基本給が8万8千円以上なら
-      hi       = calcHealthInsurancePremium(company_pref, monthly_income);
-      hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number);
+      hi       = calcHealthInsurancePremium(company_pref, monthly_income, 0, false, hi_rate_self);
+      hi_bonus = calcHealthInsurancePremium(company_pref, bonus_income_total, bonus_number, false, hi_rate_self);
     }
 
     // 厚生年金保険料
@@ -413,7 +429,7 @@ $(function () {
       var ep_over = { you: 0, company: 0, total: 0 };
 
       if (INSURANCE_MIN_INCOME <= income) {
-        hi_over = calcHealthInsurancePremium(company_pref, monthly_income);
+        hi_over = calcHealthInsurancePremium(company_pref, monthly_income, 0, false, hi_rate_self);
         ep_over = calcEmployeePensionPremium(monthly_income);
       }
 
@@ -844,7 +860,7 @@ $(function () {
   /* --------------------------------------------------
    * 健康保険料
    * --------------------------------------------------*/
-  function calcHealthInsurancePremium (company_pref = 0, income = 0, bonus_number = 0, over_40_age = false) {
+  function calcHealthInsurancePremium (company_pref = 0, income = 0, bonus_number = 0, over_40_age = false, hi_rate_self = 0) {
     // 健康保険料を格納
     var premium = {
       you: 0,
@@ -855,8 +871,8 @@ $(function () {
     // 税率を掛ける収入額
     var target_income = 0;
 
-    // 健康保険料率を求める
-    var hi_rate = HI_GENERAL_RATE_LIST[company_pref];
+    // 健康保険料率を求める(自己入力保険率が0以下なら協会けんぽ)
+    var hi_rate = (hi_rate_self > 0)? hi_rate : HI_GENERAL_RATE_LIST[company_pref];
 
     // 介護保険料が必要かチェック
     if (over_40_age) {
