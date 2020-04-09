@@ -4,10 +4,10 @@ $(function () {
   'use strict';
 
   // グラフのインスタンス
-  var chart_detail_income;
-  var chart_detail_bonus;
-  var chart_detail_annual_income;
-  var chart_overwork_transition;
+  let chart_detail_income: Chart;
+  let chart_detail_bonus: Chart;
+  let chart_detail_annual_income: Chart;
+  let chart_overwork_transition: Chart;
 
 	// 画像を含めて読み込みが完了したら
 	$(window).on('load', function () {
@@ -29,27 +29,27 @@ $(function () {
   });
 
   $('a[href^="#"]').on('click', function () {
-    var speed = 400; // ミリ秒
-    var href = $(this).attr("href");
-    var target = $(href == "#" || href == "" ? 'html' : href);
-    var position = target.offset().top - 10; //ゆとりを持たせる
+    const speed: number = 400; // ミリ秒
+    const href = $(this).attr("href");
+    const target = $(href == "#" || href == "" ? 'html' : href);
+    const position = target.offset().top - 10; //ゆとりを持たせる
     $('body,html').animate({ scrollTop: position }, speed, 'swing');
   });
 
   // 都道府県選択の選択肢を用意
-  for (var i = 0; i < PREF_LIST.length; i++) {
-    var selected = (PREF_LIST[i] == '東京都')? 'selected' : '';
+  for (let i = 0; i < PREF_LIST.length; i++) {
+    const selected: string = (PREF_LIST[i] == '東京都')? 'selected' : '';
     $('#select-company-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
     $('#select-resident-pref').append('<option value="' + i + '" ' + selected + '>' + PREF_LIST[i] + '</option>');
   }
   // 自宅の都道府県を選択していない
-  var resident_pref_selected = false;
+  let resident_pref_selected: boolean = false;
 
   // 勤務先の都道府県を選択したら
   $('#select-company-pref').on('change', function () {
     // 初めての選択だったなら
     if (!resident_pref_selected) {
-      var company_pref  = Number($('#select-company-pref').val());
+      let company_pref: number = Number($('#select-company-pref').val());
       company_pref = (company_pref)? company_pref : 0;
 
       // 自宅の都道府県もそれに合わせる
@@ -60,7 +60,7 @@ $(function () {
 
   // 自宅の都道府県を選択したら
   $('#select-resident-pref').on('change', function () {
-    var resident_pref  = Number($('#select-resident-pref').val());
+    let resident_pref: number = Number($('#select-resident-pref').val());
     resident_pref = (resident_pref)? resident_pref : 0;
     toggleSelectResidentCity(resident_pref);
 
@@ -74,19 +74,19 @@ $(function () {
     $('#result').slideDown(400);
 
     // 結果画面へスクロール
-    var position = $('#result').offset().top - 10; //ゆとりを持たせる
+    const position: number = $('#result').offset().top - 10; //ゆとりを持たせる
     $('body,html').animate({ scrollTop: position }, 400, 'swing');
 
     /* --------------------------------------------------
      * 入力
      * --------------------------------------------------*/
-    var income         = Number($('#input-income').val());
-    var bonus_mounths  = Number($('#input-bonus-mounths').val());
-    var bonus_number   = Number($('#input-bonus-number').val());
-    var overwork_hours = Number($('#input-overwork-hours').val());
-    var company_pref   = Number($('#select-company-pref').val());
-    var resident_pref  = Number($('#select-resident-pref').val());
-    var resident_city  = Number($('#select-resident-city').val());
+    let income: number         = Number($('#input-income').val());
+    let bonus_mounths: number  = Number($('#input-bonus-mounths').val());
+    let bonus_number: number   = Number($('#input-bonus-number').val());
+    let overwork_hours: number = Number($('#input-overwork-hours').val());
+    let company_pref: number   = Number($('#select-company-pref').val());
+    let resident_pref: number  = Number($('#select-resident-pref').val());
+    let resident_city: number  = Number($('#select-resident-city').val());
 
     income         = (income)?         Math.abs(income) : 0;
     bonus_mounths  = (bonus_mounths)?  Math.abs(bonus_mounths) : 0;
@@ -96,7 +96,7 @@ $(function () {
     resident_pref  = (resident_pref)?  Math.abs(resident_pref) : 0;
     resident_city  = (resident_city)?  Math.abs(resident_city) : 0;
 
-    var industry_type = 0; // 事業
+    let industry_type: number = 0; // 事業
     if ($('input[name="industry"]:eq(0)').prop('checked')) {
       industry_type = 0;
     } else if ($('input[name="industry"]:eq(1)').prop('checked')) {
@@ -115,16 +115,16 @@ $(function () {
      * 額面給料計算
      * --------------------------------------------------*/
     //給料の元になる支給額の計算（ボーナス）
-    var bonus_income_total = Math.floor(income * bonus_mounths);
-    var bonus_income_once = Math.floor(bonus_income_total / bonus_number);
+    const bonus_income_total: number = Math.floor(income * bonus_mounths);
+    const bonus_income_once: number = Math.floor(bonus_income_total / bonus_number);
     //給料の元になる支給額の計算（時間外労働手当）
-    var overwork_monthly_income = calcOverworkIncome(overwork_hours, income);
+    const overwork_monthly_income: number = calcOverworkIncome(overwork_hours, income);
     //給料の元になる支給額の計算（月収と年収）
-    var monthly_income = income + overwork_monthly_income;
-    var annual_income = monthly_income * 12 + bonus_income_total;
+    const monthly_income: number = income + overwork_monthly_income;
+    const annual_income: number = monthly_income * 12 + bonus_income_total;
 
     // 結果を包むid要素を取得
-    var r = $('#result');
+    const r: JQuery<HTMLElement> = $('#result');
 
     // 結果を出力（給料）
     r.find('[basic-income]').text(add1000Separator(income));
@@ -137,8 +137,8 @@ $(function () {
      * 社会保険料計算
      * --------------------------------------------------*/
     // 健康保険料
-    var hi       = { you: 0, company: 0, total: 0 };
-    var hi_bonus = { you: 0, company: 0, total: 0 };
+    let hi       = { you: 0, company: 0, total: 0 };
+    let hi_bonus = { you: 0, company: 0, total: 0 };
 
     if (INSURANCE_MIN_INCOME <= income) { // 月の基本給が8万8千円以上なら
       hi       = calcHealthInsurancePremium(company_pref, monthly_income);
@@ -146,8 +146,8 @@ $(function () {
     }
 
     // 厚生年金保険料
-    var ep       = { you: 0, company: 0, total: 0 };
-    var ep_bonus = { you: 0, company: 0, total: 0 };
+    let ep       = { you: 0, company: 0, total: 0 };
+    let ep_bonus = { you: 0, company: 0, total: 0 };
 
     if (INSURANCE_MIN_INCOME <= income) { // 月の基本給が8万8千円以上なら
       ep       = calcEmployeePensionPremium(monthly_income);
@@ -155,25 +155,25 @@ $(function () {
     }
 
     // 雇用保険料
-    var ui       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
-    var ui_bonus = calcUnemplymentInsurancePremium(industry_type, bonus_income_once);
+    let ui       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
+    let ui_bonus = calcUnemplymentInsurancePremium(industry_type, bonus_income_once);
 
     // 社会保険料の天引き月額
-    var premium_monthly = {
+    const premium_monthly = {
       you:     hi.you + ep.you + ui.you,
       company: hi.company + ep.company + ui.company,
       total:   hi.total + ep.total + ui.total,
     }
 
     // 社会保険料の天引きボーナス額（1回あたり）
-    var premium_bonus = {
+    const premium_bonus = {
       you:     hi_bonus.you + ep_bonus.you + ui_bonus.you,
       company: hi_bonus.company + ep_bonus.company + ui_bonus.company,
       total:   hi_bonus.total + ep_bonus.total + ui_bonus.total,
     }
 
     // 社会保険料の天引き年額
-    var premium_annually = {
+    const premium_annually = {
       you:     premium_monthly.you * 12 + (hi_bonus.you + ep_bonus.you + ui_bonus.you) * bonus_number,
       company: premium_monthly.company * 12 + (hi_bonus.company + ep_bonus.company + ui_bonus.company) * bonus_number,
       total:   premium_monthly.total * 12 + (hi_bonus.total + ep_bonus.total + ui_bonus.total) * bonus_number,
@@ -199,40 +199,40 @@ $(function () {
      * 所得税計算
      * --------------------------------------------------*/
     // 給与収入から、給与所得を求める
-    var taxable_standard_income = calcTaxableIncome(annual_income);
+    const taxable_standard_income: number = calcTaxableIncome(annual_income);
     // 控除額を求める
-    var it_deduction = 380000 // 基礎控除
-                     + premium_annually.you; // 社会保険料控除
+    const it_deduction: number = 380000 // 基礎控除
+                               + premium_annually.you; // 社会保険料控除
     // 課税所得金額を求める
-    var it_taxable_income = round(Math.max(taxable_standard_income - it_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
+    const it_taxable_income: number = round(Math.max(taxable_standard_income - it_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
     // 所得税額を求める
-    var it = calcTaxValue(it_taxable_income);
+    const it: number = calcTaxValue(it_taxable_income);
 
     // 結果を出力
-    r.find('[total-deduction]').text(add1000Separator(total_deduction));
+    //r.find('[total-deduction]').text(add1000Separator(total_deduction));
     r.find('[taxiable-standard]').text(add1000Separator(taxable_standard_income));
-    r.find('[taxiable-income]').text(add1000Separator(taxable_income));
+    //r.find('[taxiable-income]').text(add1000Separator(taxable_income));
     r.find('[it]').text(add1000Separator(it));
 
     /* --------------------------------------------------
      * 住民税計算
      * --------------------------------------------------*/
     // 控除額を求める
-    var rt_deduction = 330000 // 基礎控除（所得税と多少異なるのに注意）
-                     + premium_annually.you; // 社会保険料控除
+    const rt_deduction: number = 330000 // 基礎控除（所得税と多少異なるのに注意）
+                               + premium_annually.you; // 社会保険料控除
     // 均等割
-    var pref_capitation = calcPrefCapitation(resident_pref);
-    var city_capitation = calcCityCapitation(resident_pref, resident_city);
+    const pref_capitation: number = calcPrefCapitation(resident_pref);
+    const city_capitation: number = calcCityCapitation(resident_pref, resident_city);
     //所得割
-    var rt_income = calcResidentTaxIncome(resident_pref, resident_city, taxable_standard_income, rt_deduction);
+    const rt_income = calcResidentTaxIncome(resident_pref, resident_city, taxable_standard_income, rt_deduction);
     // 住民税
-    var pref_tax = pref_capitation + rt_income.pref;
-    var city_tax = city_capitation + rt_income.city;
+    const pref_tax: number = pref_capitation + rt_income.pref;
+    const city_tax: number = city_capitation + rt_income.city;
     // 住民税総額
-    var rt = pref_tax + city_tax;
+    const rt: number = pref_tax + city_tax;
     // 月あたりの住民税額
-    var rt_monthly = round(rt / 12, 100, 'floor');
-    var rt_monthly_june = rt - 11 * rt_monthly; // 6月分は端数の切捨額を含むため少し多い
+    const rt_monthly: number = round(rt / 12, 100, 'floor');
+    const rt_monthly_june: number = rt - 11 * rt_monthly; // 6月分は端数の切捨額を含むため少し多い
 
     // 結果を出力
     r.find('[pref-tax]').text(add1000Separator(pref_tax));
@@ -249,24 +249,24 @@ $(function () {
      * 源泉徴収額
      * --------------------------------------------------*/
     // 月収：甲種
-    var it_taxable_income_withholding = monthly_income
-                                      - premium_monthly.you
-                                      - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
-                                      - calcBasicDeductionsWithholding()
-                                      - calcSpouseDeductionsWithholding (false)
-                                      - calcDependentsDeductionsWithholding(0);
+    let it_taxable_income_withholding: number = monthly_income
+                                              - premium_monthly.you
+                                              - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
+                                              - calcBasicDeductionsWithholding()
+                                              - calcSpouseDeductionsWithholding (false)
+                                              - calcDependentsDeductionsWithholding(0);
     it_taxable_income_withholding = Math.max(it_taxable_income_withholding, 0);
 
-    var it_withholding = calcTaxValueWithholding(it_taxable_income_withholding);
+    const it_withholding: number = calcTaxValueWithholding(it_taxable_income_withholding);
 
     // ボーナス
-    var it_rate_bonus_withholding = calcTaxRate(monthly_income - premium_monthly.you);
-    var it_taxiable_bonus_withholding = bonus_income_once
-                                      - hi_bonus.you
-                                      - ep_bonus.you
-                                      - ui_bonus.you;
+    const it_rate_bonus_withholding: number = calcTaxRate(monthly_income - premium_monthly.you);
+    let it_taxiable_bonus_withholding: number = bonus_income_once
+                                              - hi_bonus.you
+                                              - ep_bonus.you
+                                              - ui_bonus.you;
     it_taxiable_bonus_withholding = Math.max(it_taxiable_bonus_withholding, 0);
-    var it_bonus_withholding = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
+    const it_bonus_withholding: number = Math.floor(it_taxiable_bonus_withholding * it_rate_bonus_withholding / 100); // 1円未満の端数は切り捨て
 
     // 結果を出力
     r.find('[it-withholding]').text(add1000Separator(it_withholding));
@@ -276,20 +276,20 @@ $(function () {
      * 手取り給料
      * --------------------------------------------------*/
     // 実質の年収
-    var substantial_annual_income = annual_income
-                                  - premium_annually.you
-                                  - it;
-                                  // - residents_tax;は2年目以降
+    const substantial_annual_income: number = annual_income
+                                            - premium_annually.you
+                                            - it;
+                                            // - residents_tax;は2年目以降
 
     // 実質のボーナス（1回あたり）
-    var substantial_bonus = bonus_income_once
-                              - premium_bonus.you
-                              - it_bonus_withholding;
+    const substantial_bonus: number = bonus_income_once
+                                    - premium_bonus.you
+                                    - it_bonus_withholding;
 
     // 実質毎月振り込まれる月給
-    var substantial_income = monthly_income
-                           - premium_monthly.you
-                           - it_withholding;
+    const substantial_income: number = monthly_income
+                                     - premium_monthly.you
+                                     - it_withholding;
 
     // 結果を出力
     r.find('[substantial-income]').text(add1000Separator(substantial_income));
@@ -302,33 +302,33 @@ $(function () {
      * シェアリンク生成
      * --------------------------------------------------*/
     // Twitterとテキストボックス
-    var message_body = 'あなたの年収は「' + add1000Separator(annual_income) + '円」です。' + "\n"
-                     + 'が、社会保険料と所得税が引かれて「' + add1000Separator(substantial_annual_income) + '円」ぐらいになります。' + "\n"
-                     + '去年と同じ年収なら、住民税も引いた手取り年収は「' + add1000Separator(substantial_annual_income - rt) + '円」ぐらいです。';
-    var site_url = 'https://oguemon.com/tax-calc/'
-    var hashtag  = 'ザックリ手取り給料計算機';
-    var user_id  = 'oguemon_com';
-    var textarea_body = message_body + "\n" + site_url + " #" + hashtag;
-    var twitter_parms = 'url=' + encodeURI(site_url) + '&text=' + encodeURI(message_body) + '&hashtags=' + encodeURI(hashtag) + '&related=' + user_id;
+    const message_body: string = 'あなたの年収は「' + add1000Separator(annual_income) + '円」です。' + "\n"
+                               + 'が、社会保険料と所得税が引かれて「' + add1000Separator(substantial_annual_income) + '円」ぐらいになります。' + "\n"
+                               + '去年と同じ年収なら、住民税も引いた手取り年収は「' + add1000Separator(substantial_annual_income - rt) + '円」ぐらいです。';
+    const site_url: string = 'https://oguemon.com/tax-calc/'
+    const hashtag: string  = 'ザックリ手取り給料計算機';
+    const user_id: string  = 'oguemon_com';
+    const textarea_body: string = message_body + "\n" + site_url + " #" + hashtag;
+    const twitter_parms: string = 'url=' + encodeURI(site_url) + '&text=' + encodeURI(message_body) + '&hashtags=' + encodeURI(hashtag) + '&related=' + user_id;
 
     $('#copy-area-text').text(textarea_body);
     $('#share-twitter').attr('href', 'https://twitter.com/intent/tweet?' + twitter_parms);
 
     // メール
-    var mail_subject = '私の手取り年収がわかりました';
-    var mail_body = '親戚各位' + '%0D%0A' + '%0D%0A'
-                  + 'お世話になっております、〇〇です。' + '%0D%0A'
-                  + 'ところでなのですが、ついに私の年収がわかりました。' + '%0D%0A'
-                  + '額面年収が「' + add1000Separator(annual_income) + '円」なのに対して、'
-                  + '所得税や社会保険料を引かれた後に残る金額は「' + add1000Separator(substantial_annual_income) + '円」くらいだそうです。' + '%0D%0A'
-                  + 'さらに、この年収だと住民税が大体「' + add1000Separator(rt) + '円」くらい課されるので、'
-                  + '昨年度と年収が変わらなかったら、手取り年収はおおよそ「' + add1000Separator(substantial_annual_income - rt) + '円」になります。'+ '%0D%0A'
-                  + '質問などがございましたら、是非ともご返信願います。'
-                  + '取り急ぎご報告まで。' + '%0D%0A' + '%0D%0A'
-                  + '簡単！ザックリ手取り計算機' + '%0D%0A'
-                  + 'https://oguemon.com/tax-calc/';
+    const mail_subject: string = '私の手取り年収がわかりました';
+    const mail_body: string = '親戚各位' + '%0D%0A' + '%0D%0A'
+                            + 'お世話になっております、〇〇です。' + '%0D%0A'
+                            + 'ところでなのですが、ついに私の年収がわかりました。' + '%0D%0A'
+                            + '額面年収が「' + add1000Separator(annual_income) + '円」なのに対して、'
+                            + '所得税や社会保険料を引かれた後に残る金額は「' + add1000Separator(substantial_annual_income) + '円」くらいだそうです。' + '%0D%0A'
+                            + 'さらに、この年収だと住民税が大体「' + add1000Separator(rt) + '円」くらい課されるので、'
+                            + '昨年度と年収が変わらなかったら、手取り年収はおおよそ「' + add1000Separator(substantial_annual_income - rt) + '円」になります。'+ '%0D%0A'
+                            + '質問などがございましたら、是非ともご返信願います。'
+                            + '取り急ぎご報告まで。' + '%0D%0A' + '%0D%0A'
+                            + '簡単！ザックリ手取り計算機' + '%0D%0A'
+                            + 'https://oguemon.com/tax-calc/';
 
-                  $('#share-mail').attr('href', 'mailto:contact@oguemon.com?subject=' + mail_subject + '&body=' + mail_body);
+    $('#share-mail').attr('href', 'mailto:contact@oguemon.com?subject=' + mail_subject + '&body=' + mail_body);
 
     /* --------------------------------------------------
      * グラフ描画
@@ -340,7 +340,7 @@ $(function () {
     if (chart_overwork_transition) { chart_overwork_transition.destroy(); }
 
     // グラフ描画に用いる色を割り当て
-    var bar_color = {
+    const bar_color = {
       income: '#f9808f',
       hi: '#39b54a',
       ep: '#009245',
@@ -349,7 +349,7 @@ $(function () {
     }
 
     // グラフを描画（月収）
-    var datasets_income = {
+    const datasets_income = {
       datasets:[
         {label: '手取り月収', data: [substantial_income], backgroundColor: bar_color.income},
         {label: '健康保険料', data: [hi.you], backgroundColor: bar_color.hi},
@@ -358,13 +358,13 @@ $(function () {
         {label: '源泉徴収額', data: [it_withholding], backgroundColor: bar_color.it},
       ]
     };
-    const ctx_income_canvas = <HTMLCanvasElement> $('#graph-income-detail')[0];
-    const ctx_income = ctx_income_canvas.getContext('2d');
+    const ctx_income_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-income-detail')[0];
+    const ctx_income: CanvasRenderingContext2D = ctx_income_canvas.getContext('2d');
     ctx_income.canvas.height = 80;
     chart_detail_income = plotHorizontalBar(ctx_income, datasets_income);
 
     // グラフを描画（ボーナス）
-    var datasets_bonus_income = {
+    const datasets_bonus_income = {
       datasets:[
         {label: '1回の手取りボーナス', data: [substantial_bonus], backgroundColor: bar_color.income},
         {label: '健康保険料', data: [hi_bonus.you], backgroundColor: bar_color.hi},
@@ -373,13 +373,13 @@ $(function () {
         {label: '源泉徴収額', data: [it_bonus_withholding], backgroundColor: bar_color.it},
       ]
     };
-    const ctx_bonus_canvas = <HTMLCanvasElement> $('#graph-bonus-income-detail')[0];
-    const ctx_bonus = ctx_bonus_canvas.getContext('2d');
+    const ctx_bonus_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-bonus-income-detail')[0];
+    const ctx_bonus: CanvasRenderingContext2D = ctx_bonus_canvas.getContext('2d');
     ctx_bonus.canvas.height = 80;
     chart_detail_bonus = plotHorizontalBar(ctx_bonus, datasets_bonus_income);
 
     // グラフを描画（年収）
-    var datasets_annual_income = {
+    const datasets_annual_income = {
       datasets:[
         {label: '手取り年収', data: [substantial_annual_income], backgroundColor: bar_color.income},
         {label: '健康保険料', data: [hi.you * 12 + hi_bonus.you * bonus_number], backgroundColor: bar_color.hi},
@@ -388,50 +388,50 @@ $(function () {
         {label: '所得税額', data: [it] , backgroundColor: bar_color.it},
       ]
     };
-    const ctx_annual_canvas = <HTMLCanvasElement> $('#graph-annual-income-detail')[0];
-    const ctx_annual = ctx_annual_canvas.getContext('2d');
+    const ctx_annual_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-annual-income-detail')[0];
+    const ctx_annual: CanvasRenderingContext2D = ctx_annual_canvas.getContext('2d');
     ctx_annual.canvas.height = 80;
     chart_detail_annual_income = plotHorizontalBar(ctx_annual, datasets_annual_income);
 
     /*
      * 残業時間に対する変化
      */
-    var graph_overwork = {
+    const graph_overwork = {
       labels: [],
       total: [],
       substantial: []
     }
-    for (var i = 0; i <= 100; i += 20) {
+    for (let i = 0; i <= 100; i += 20) {
       graph_overwork.labels.push((i == 0)? '残業なし' : i + '時間');
       // 額面年収
-      var additional_income = calcOverworkIncome(i, income); // ひと月あたり8時間×20日間換算
-      var monthly_income  = income + additional_income;
-      var annual_income  = monthly_income * 12 + bonus_income_total;
+      const additional_income: number = calcOverworkIncome(i, income); // ひと月あたり8時間×20日間換算
+      const monthly_income: number = income + additional_income;
+      const annual_income: number = monthly_income * 12 + bonus_income_total;
       graph_overwork.total.push(annual_income);
       // 社会保険料
-      var hi_over = { you: 0, company: 0, total: 0 };
-      var ep_over = { you: 0, company: 0, total: 0 };
+      let hi_over = { you: 0, company: 0, total: 0 };
+      let ep_over = { you: 0, company: 0, total: 0 };
 
       if (INSURANCE_MIN_INCOME <= income) {
         hi_over = calcHealthInsurancePremium(company_pref, monthly_income);
         ep_over = calcEmployeePensionPremium(monthly_income);
       }
 
-      var ui_over       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
-      var total_premium = (hi_over.you + ep_over.you + ui_over.you) * 12 + premium_bonus.you * bonus_number;
+      const ui_over       = calcUnemplymentInsurancePremium(industry_type, monthly_income);
+      const total_premium: number = (hi_over.you + ep_over.you + ui_over.you) * 12 + premium_bonus.you * bonus_number;
       // 所得税
-      var taxable_standard_income = calcTaxableIncome(annual_income - total_premium);
-      var total_deduction = 380000 // 基礎控除
-                          + total_premium;
-      var taxable_income = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
-      var it = calcTaxValue(taxable_income);
+      const taxable_standard_income: number = calcTaxableIncome(annual_income - total_premium);
+      const total_deduction: number = 380000 // 基礎控除
+                                    + total_premium;
+      const taxable_income: number = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
+      const it: number = calcTaxValue(taxable_income);
 
       // 実質的な手取り
-      var substantial_income = annual_income - total_premium - it;
+      const substantial_income: number = annual_income - total_premium - it;
       graph_overwork.substantial.push(substantial_income);
     }
     // グラフを描画（残業時間）
-    const chart_overwork_transition_canvas = <HTMLCanvasElement> $('#graph-overwork-income-transition')[0];
+    const chart_overwork_transition_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-overwork-income-transition')[0];
     chart_overwork_transition = new Chart(chart_overwork_transition_canvas, {
       type: 'line',
       data: {
@@ -458,7 +458,7 @@ $(function () {
                 ticks: {
                     // Include a dollar sign in the ticks
                     callback: function(value, index, values) {
-                        return Math.floor(value / 10000) + '万円';
+                      return Math.floor(Number(value) / 10000) + '万円';
                     }
                 }
             }]
@@ -471,11 +471,11 @@ $(function () {
    * モーダル
    * --------------------------------------------------*/
   $('.detail-info').on('click', function () {
-    var name = $(this).attr('name');
+    const name: string = $(this).attr('name');
     showModal(name);
   });
   function showModal (id='') {
-    var msg = $('#modal-parts').find('[' + id + ']');
+    const msg = $('#modal-parts').find('[' + id + ']');
     const move_modal: any = $('#moveModal'); //自作プラグインを使うためany型で定義…
     move_modal.find('.title').text(msg.find('[title]').text());
     move_modal.find('.body').html(msg.find('[body]').html());
@@ -486,14 +486,14 @@ $(function () {
    * 整形
    * --------------------------------------------------*/
   // 数値にカンマを追加
-  function add1000Separator (value = 0)
+  function add1000Separator (value = 0) : string
   {
     // 3桁おきにカンマを置く
     return String(value).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   }
 
   // 指定した桁数を指定した形で丸める
-  function round (value = 0, width = 1, type = 'round')
+  function round (value = 0, width = 1, type = 'round') : number
   {
     if (width <= 0) {
       return value;
@@ -514,18 +514,19 @@ $(function () {
    * 入力
    * --------------------------------------------------*/
   // 市町村選択の表示非表示を判定して切り替える
-  function toggleSelectResidentCity (resident_pref = 0) {
+  function toggleSelectResidentCity (resident_pref = 0) : void
+  {
     // 市町村を選択する項目の行
-    var box = $('#line-box-select-city');
-    var select = $('#select-resident-city');
+    const box: JQuery<HTMLElement> = $('#line-box-select-city');
+    const select: JQuery<HTMLElement> = $('#select-resident-city');
     select.empty();
 
     // 都道府県名を格納
-    const pref_name = PREF_LIST[resident_pref];
+    const pref_name: string = PREF_LIST[resident_pref];
 
     // 指定された都道府県か否かをチェック
     if (pref_name in ORDINANCE_DESIGNATED_CITY_LIST) {
-      const oedinance_designated_sities_in_pref = ORDINANCE_DESIGNATED_CITY_LIST[pref_name];
+      const oedinance_designated_sities_in_pref: string[] = ORDINANCE_DESIGNATED_CITY_LIST[pref_name];
       for (let i = 0; i < oedinance_designated_sities_in_pref.length; i++) {
         select.append('<option value="' + (i + 1) + '">' + oedinance_designated_sities_in_pref[i] + '</option>');
       }
@@ -544,8 +545,9 @@ $(function () {
    * 時間外労働手当
    * --------------------------------------------------*/
   // 時間外労働手当を計算（ひと月あたり8時間×20日間換算）
-  function calcOverworkIncome(overwork_hours = 0, income = 0) {
-    var overwork_monthly_income = 0;
+  function calcOverworkIncome(overwork_hours = 0, income = 0) : number
+  {
+    let overwork_monthly_income: number = 0;
     if (overwork_hours < 60) {
       overwork_monthly_income = overwork_hours * 1.25 * income / (20 * 8);
     } else {
@@ -558,7 +560,7 @@ $(function () {
    * 所得税（給与所得）
    * --------------------------------------------------*/
   // 給与所得控除額を計算
-  function calcTaxableIncomeDeductions (income = 0)
+  function calcTaxableIncomeDeductions (income = 0): number
   {
     if (income <= 1800000) {
       // 最低でも65万は控除される
@@ -579,9 +581,9 @@ $(function () {
   }
 
   // 課税所得金額を求める（給与所得控除額の計算がいらない）
-  function calcTaxableIncome (income = 0)
+  function calcTaxableIncome (income = 0): number
   {
-    var taxable_income = 0;
+    let taxable_income: number = 0;
 
     if (income < 651000) {
       taxable_income = 0;
@@ -589,10 +591,10 @@ $(function () {
       taxable_income = income - 650000;
     } else if (income < 6600000) {
       // 怒涛の「別表第五」を参照
-      var arr = csvToArray('./csv/table5-2018.csv');
+      let arr: string[][] = csvToArray('./csv/table5-2018.csv');
 
       // 各行を走査
-      for (var i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         // 税額表の最下行以外のポジションで見つけた
         if (income < Number(arr[i][0])) {
           taxable_income = Number(arr[i][1]);
@@ -608,12 +610,11 @@ $(function () {
     return Math.floor(taxable_income);
   }
 
-
   // 課税所得金額から税額を計算（100円単位は切り捨て）
-  function calcTaxValue (taxable_income = 0)
+  function calcTaxValue (taxable_income = 0) : number
   {
     // 端数処理前の税額を格納
-    var tax_pre_round = 0;
+    let tax_pre_round: number = 0;
 
     if (taxable_income <= 195 * 10000) {
       tax_pre_round = taxable_income * 0.05;
@@ -632,7 +633,7 @@ $(function () {
     }
 
     // 100円以下の金額を切り捨て
-    var tax = round(tax_pre_round, 100, 'floor');
+    const tax: number = round(tax_pre_round, 100, 'floor');
 
     return tax;
   }
@@ -641,9 +642,10 @@ $(function () {
    * 源泉徴収（甲欄）
    * --------------------------------------------------*/
   // 源泉徴収における給与所得控除額を求める
-  function calcTaxableIncomeDeductionsWithholding (income = 0) {
+  function calcTaxableIncomeDeductionsWithholding (income = 0) : number
+  {
     // 端数処理前の給与控除額を格納
-    var taxable_income_deductions_pre_round = 0;
+    let taxable_income_deductions_pre_round: number = 0;
 
     // 給与控除額の計算
     if (income <= 135416) {
@@ -661,31 +663,35 @@ $(function () {
     }
 
     // 1円未満の端数を切り上げる
-    var taxable_income_deductions = Math.ceil(taxable_income_deductions_pre_round);
+    const taxable_income_deductions: number = Math.ceil(taxable_income_deductions_pre_round);
 
     return taxable_income_deductions;
   }
 
   // 源泉徴収における基本控除額を求める
-  function calcBasicDeductionsWithholding () {
+  function calcBasicDeductionsWithholding () : number
+  {
     return 31667;
   }
 
   // 源泉徴収における配偶者(特別)控除額を求める
-  function calcSpouseDeductionsWithholding (exist_partner = false) {
+  function calcSpouseDeductionsWithholding (exist_partner = false) : number
+  {
     return (exist_partner)? 31667 : 0;
   }
 
   // 源泉徴収における扶養控除額を求める
-  function calcDependentsDeductionsWithholding (dependents_count = 0) {
+  function calcDependentsDeductionsWithholding (dependents_count = 0) : number
+  {
     // 基礎控除に加えて扶養人数に応じた
     return 31667 * dependents_count;
   }
 
   // 源泉徴収額を求める
-  function calcTaxValueWithholding (taxable_income = 0) {
+  function calcTaxValueWithholding (taxable_income = 0) : number
+  {
     // 端数処理前の税額を格納
-    var tax_pre_round = 0;
+    let tax_pre_round: number = 0;
 
     if (taxable_income <= 162500) {
       tax_pre_round = taxable_income * 0.05105;
@@ -704,7 +710,7 @@ $(function () {
     }
 
     // 10円未満の金額を四捨五入
-    var tax = round(tax_pre_round, 10);
+    const tax: number = round(tax_pre_round, 10);
 
     return tax;
   }
@@ -712,13 +718,14 @@ $(function () {
   /* --------------------------------------------------
    * 源泉徴収（ボーナス）
    * --------------------------------------------------*/
-  function calcTaxRate (income = 0, kou = true, dependents_count = 0) {
-    var arr = csvToArray('./csv/withholding-bonus-2018.csv');
-    var tax_rate = 0;
+  function calcTaxRate (income = 0, kou = true, dependents_count = 0) : number
+  {
+    const arr: string[][] = csvToArray('./csv/withholding-bonus-2018.csv');
+    let tax_rate: number = 0;
 
     if (kou) { // 甲欄のとき
       // 税額表の各行を走査
-      for (var i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         // 税額表の最下行以外のポジションで見つけた
         if (income < Number(arr[i][Math.min(dependents_count, 7) + 1]) * 1000) {
           tax_rate = Number(arr[i][0]);
@@ -740,9 +747,10 @@ $(function () {
    * 住民税（均等割）
    * --------------------------------------------------*/
   // 道府県民税
-  function calcPrefCapitation (pref_code = 0) {
+  function calcPrefCapitation (pref_code = 0) : number
+  {
     // 均等割(2023年まで500円増し)
-    var capitation = 1500;
+    let capitation: number = 1500;
 
     // 都道府県により設定
     capitation = RT_RATE_LIST_PREF[pref_code][0];
@@ -751,9 +759,10 @@ $(function () {
   }
 
   // 市町村民税
-  function calcCityCapitation (pref_code = 0, city_code = 0) {
+  function calcCityCapitation (pref_code = 0, city_code = 0) : number
+  {
     // 均等割(2023年まで500円増し)
-    var capitation = 3500;
+    let capitation: number = 3500;
 
     // 特殊な市町村なら再設定
     if (pref_code == 13 && city_code == 1) { // 神奈川県横浜市
@@ -769,14 +778,15 @@ $(function () {
    * 住民税（所得割）
    * --------------------------------------------------*/
   // 道府県民税
-  function calcResidentTaxIncome (pref_code = 0, city_code = 0, taxable_standard_income = 0, rt_deduction = 0, dependents_count = 0) {
+  function calcResidentTaxIncome (pref_code = 0, city_code = 0, taxable_standard_income = 0, rt_deduction = 0, dependents_count = 0)
+  {
     // 所得割
-    var income_part = {
+    const income_part = {
       pref: 0,
       city: 0
     };
     // 所得割の課税基準額
-    var tax_criteria = 0;
+    let tax_criteria: number = 0;
 
     // 扶養者がいるか否かで課税基準が変わる
     if (dependents_count > 0) {
@@ -788,10 +798,10 @@ $(function () {
     // 基準より大きな所得合計額ならば所得割を課す
     if (taxable_standard_income > tax_criteria) {
       // 課税所得金額を求める（千円未満の端数切捨）
-      var rt_taxable_income = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');
+      const rt_taxable_income: number = round(Math.max(taxable_standard_income - rt_deduction, 0), 1000, 'floor');
       // 所得割（都道府県・市町村による違いを条件判定）
-      let rt_rate_pref = RT_RATE_LIST_PREF[pref_code][1];
-      let rt_rate_city = RT_RATE_LIST_CITY['一般市町村'][1];
+      let rt_rate_pref: number = RT_RATE_LIST_PREF[pref_code][1];
+      let rt_rate_city: number = RT_RATE_LIST_CITY['一般市町村'][1];
       if (city_code > 0) { // 普通の市町村でない
         if(pref_code == 22) { // 愛知県名古屋市
           rt_rate_city = RT_RATE_LIST_CITY['愛知県名古屋市'][1];
@@ -808,7 +818,7 @@ $(function () {
       income_part.city = rt_taxable_income * rt_rate_city;
 
       // 調整控除を行う
-      var rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income, rt_rate_pref, rt_rate_city);
+      const rt_adjust_deduction = calcAdjustDeduction(rt_taxable_income, rt_rate_pref, rt_rate_city);
       income_part.pref = Math.max(round(income_part.pref - rt_adjust_deduction.pref, 100, 'floor'), 0);
       income_part.city = Math.max(round(income_part.city - rt_adjust_deduction.city, 100, 'floor'), 0);
     }
@@ -821,9 +831,9 @@ $(function () {
    * --------------------------------------------------*/
   function calcAdjustDeduction (income = 0, rt_rate_pref = 0.04, rt_rate_city = 0.06) {
     // 調整控除額
-    var deduction = 0;
+    let deduction: number = 0;
     // 人的控除差の合計額
-    var diff_personal_deduction = 50000; // 基礎控除の人的控除差のみを比較
+    const diff_personal_deduction: number = 50000; // 基礎控除の人的控除差のみを比較
 
     if (income > 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
       // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税と県民税の％合計）を控除
@@ -844,19 +854,20 @@ $(function () {
   /* --------------------------------------------------
    * 健康保険料
    * --------------------------------------------------*/
-  function calcHealthInsurancePremium (company_pref = 0, income = 0, bonus_number = 0, over_40_age = false) {
+  function calcHealthInsurancePremium (company_pref = 0, income = 0, bonus_number = 0, over_40_age = false)
+  {
     // 健康保険料を格納
-    var premium = {
+    const premium = {
       you: 0,
       company: 0,
       total: 0,
     };
 
     // 税率を掛ける収入額
-    var target_income = 0;
+    let target_income: number = 0;
 
     // 健康保険料率を求める
-    var hi_rate = HI_GENERAL_RATE_LIST[company_pref];
+    let hi_rate: number = HI_GENERAL_RATE_LIST[company_pref];
 
     // 介護保険料が必要かチェック
     if (over_40_age) {
@@ -867,7 +878,7 @@ $(function () {
     if (bonus_number == 0) // ボーナスでない
     {
       // 等級情報を取得
-      var rank = getInsuranceRank(income);
+      const rank = getInsuranceRank(income);
 
       // 等級情報に基づく月額決定
       target_income = rank.monthly_price;
@@ -875,7 +886,7 @@ $(function () {
     else if (bonus_number > 0) // ボーナスである
     {
       // 標準賞与額の上限は、健康保険は年間573万円（毎年4月1日から翌年3月31日までの累計額）
-      var standard = Math.min(income, 5730000);
+      const standard: number = Math.min(income, 5730000);
 
       // 計算対象のボーナス額（1回あたりの対象額）を求める（千円未満の端数切捨）
       target_income = round(standard / bonus_number, 1000, 'floor');
@@ -886,7 +897,7 @@ $(function () {
     }
 
     // 健康保険料を求める
-    var premium_basic = target_income * hi_rate / 100;
+    const premium_basic: number = target_income * hi_rate / 100;
     premium.you     = round(premium_basic / 2, 1, 'roundhd');
     premium.company = round(premium_basic / 2);
     premium.total   = round(premium_basic);
@@ -898,22 +909,23 @@ $(function () {
   /* --------------------------------------------------
    * 厚生年金保険料
    * --------------------------------------------------*/
-  function calcEmployeePensionPremium (income = 0, bonus_number = 0) {
+  function calcEmployeePensionPremium (income = 0, bonus_number = 0)
+  {
     // 厚生年金保険料を格納
-    var premium = {
+    const premium = {
       you: 0,
       company: 0,
       total: 0,
     };
 
     // 税率を掛ける収入額
-    var target_income = 0;
+    let target_income: number = 0;
 
     // 月給かボーナスかチェック
     if (bonus_number == 0) // ボーナスでない
     {
       // 等級情報を取得
-      var rank = getInsuranceRank(income);
+      const rank = getInsuranceRank(income);
 
       // 等級情報に基づく月額決定
       target_income = rank.monthly_price;
@@ -921,7 +933,7 @@ $(function () {
     else if (bonus_number > 0) // ボーナスである
     {
       // 賞与標準は千円未満の端数切捨で月額150万円が上限
-      var standard = Math.min(income / bonus_number, 1500000);
+      const standard: number = Math.min(income / bonus_number, 1500000);
 
       // 計算対象のボーナス額を求める
       target_income = round(standard, 1000, 'floor')
@@ -932,7 +944,7 @@ $(function () {
     }
 
     // 厚生年金保険料を求める
-    var premium_basic = target_income * EP_RATE / 100;
+    const premium_basic: number = target_income * EP_RATE / 100;
     premium.you     = round(premium_basic / 2, 1, 'roundhd');
     premium.company = round(premium_basic / 2);
     premium.total   = round(premium_basic);
@@ -944,9 +956,10 @@ $(function () {
   /* --------------------------------------------------
    * 雇用保険料
    * --------------------------------------------------*/
-  function calcUnemplymentInsurancePremium (industry_type = 0, income = 0) {
+  function calcUnemplymentInsurancePremium (industry_type = 0, income = 0)
+  {
     // 保険料を格納する
-    var premium = {
+    const premium = {
       you: 0,
       company: 0,
       total: 0
@@ -1008,7 +1021,7 @@ $(function () {
   // 社会保険料の等級を求める
   function getInsuranceRank (income = 0) {
     // 等級などを格納する配列（順に健康保険等級・厚生年金等級・月額）
-    var rank = new Array();
+    let rank: number[] = new Array();
 
     // 怒涛の条件文
     if (income < 63000) { rank = [1, 1, 58000]; }
@@ -1063,7 +1076,7 @@ $(function () {
     else { rank = [50, 30, 1390000]; }
 
     // 要素番号では分からないのでDictionaryにする
-    var rank_dict = {
+    const rank_dict = {
       health_insurance: rank[0],
       employee_pension: rank[1],
       monthly_price: rank[2]
@@ -1074,15 +1087,19 @@ $(function () {
   }
 
   // CSVファイル読み込み
-  function csvToArray(path) {
-    var csvData = new Array();
-    var data = new XMLHttpRequest();
+  function csvToArray(path) : string[][]
+  {
+    const csvData: string[][] = new Array();
+
+    const data: XMLHttpRequest = new XMLHttpRequest();
     data.open("GET", path, false);
     data.send(null);
-    var LF = String.fromCharCode(10);
-    var lines = data.responseText.split(LF);
-    for (var i = 0; i < lines.length;++i) {
-      var cells = lines[i].split(",");
+
+    const LF: string = String.fromCharCode(10);
+    const lines: string[] = data.responseText.split(LF);
+
+    for (let i = 0; i < lines.length; ++i) {
+      const cells: string[] = lines[i].split(",");
       if(cells.length > 1) {
         csvData.push(cells);
       }
@@ -1091,7 +1108,8 @@ $(function () {
   }
 
   // 水平バーを作る
-  function plotHorizontalBar(plotarea , datasets) {
+  function plotHorizontalBar(plotarea , datasets): Chart
+  {
     return new Chart(plotarea, {
       type: "horizontalBar",
       data: datasets,

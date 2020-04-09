@@ -8,7 +8,7 @@ li: 介護保険（long-term care insurance）
 it: 所得税（income tax）
 */
 // 都道府県のJIS的並び
-const PREF_LIST = new Array(
+const PREF_LIST: string[] = new Array(
   '北海道', // 0
   '青森県', // 1
   '岩手県', // 2
@@ -78,10 +78,10 @@ const ORDINANCE_DESIGNATED_CITY_LIST = {
 };
 
 // 健康保険と厚生年金保険の加入下限となる月あたり基本給額
-var INSURANCE_MIN_INCOME = 88000;
+const INSURANCE_MIN_INCOME: number = 88000;
 
 // 健康保険料率（平成31年度）
-var HI_GENERAL_RATE_LIST = new Array(
+const HI_GENERAL_RATE_LIST: number[] = new Array(
   10.31, // 北海道
   9.87, // 青森県
   9.80, // 岩手県
@@ -132,7 +132,7 @@ var HI_GENERAL_RATE_LIST = new Array(
 );
 
 // 道府県民税率（平成31年度）政令市特例反映前
-var RT_RATE_LIST_PREF = new Array(
+const RT_RATE_LIST_PREF: number[][] = new Array(
   [1500, 0.04], // 北海道
   [1500, 0.04], // 青森県
   [2500, 0.04], // 岩手県｜いわての森林づくり県民税分
@@ -183,7 +183,7 @@ var RT_RATE_LIST_PREF = new Array(
 );
 
 // 市町村民税率（平成31年度）政令市特例反映前
-var RT_RATE_LIST_CITY = {
+const RT_RATE_LIST_CITY = {
   '一般市町村': [3500, 0.06],
   '神奈川県横浜市': [4400, 0.06],
   '愛知県名古屋市': [3300, 0.057],
@@ -191,10 +191,10 @@ var RT_RATE_LIST_CITY = {
 };
 
 // 介護保険料率（平成31年度）
-const LI_RATE = 1.73;
+const LI_RATE: number = 1.73;
 
 // 厚生年金保険料率（平成31年度）
-const EP_RATE = 18.3;
+const EP_RATE: number = 18.3;
 
 // 雇用保険料（平成31年度）
 const UI_RATE_LIST = new Array(
