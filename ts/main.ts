@@ -708,7 +708,7 @@ $(function () {
 
     if (taxable_income <= 162500) {
       tax_pre_round = taxable_income * 0.05105;
-    } else if (taxable_income <= 27500) {
+    } else if (taxable_income <= 275000) {
       tax_pre_round = taxable_income * 0.10210 - 8296;
     } else if (taxable_income <= 579166) {
       tax_pre_round = taxable_income * 0.20420 - 36374;
