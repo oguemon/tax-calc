@@ -649,17 +649,17 @@ $(function () {
 
     // 給与控除額の計算
     if (income <= 135416) {
-      taxable_income_deductions_pre_round = 54167;
+      taxable_income_deductions_pre_round = 45834;
     } else if (income <= 149999) {
-      taxable_income_deductions_pre_round = income * 0.4;
+      taxable_income_deductions_pre_round = income * 0.4 - 8333;
     } else if (income <= 299999) {
-      taxable_income_deductions_pre_round = income * 0.3 + 15000;
+      taxable_income_deductions_pre_round = income * 0.3 + 6667;
     } else if (income <= 549999) {
-      taxable_income_deductions_pre_round = income * 0.2 + 45000;
-    } else if (income <= 833333) {
-      taxable_income_deductions_pre_round = income * 0.1 + 100000;
-    } else { // 833334円以上
-      taxable_income_deductions_pre_round = 183334;
+      taxable_income_deductions_pre_round = income * 0.2 + 36667;
+    } else if (income <= 708330) {
+      taxable_income_deductions_pre_round = income * 0.1 + 91667;
+    } else { // 708331円以上
+      taxable_income_deductions_pre_round = 162500;
     }
 
     // 1円未満の端数を切り上げる
@@ -669,9 +669,22 @@ $(function () {
   }
 
   // 源泉徴収における基本控除額を求める
-  function calcBasicDeductionsWithholding () : number
+  function calcBasicDeductionsWithholding (income = 0) : number
   {
-    return 31667;
+    // 端数処理前の給与控除額を格納
+    let taxable_income_basic_deductions: number = 0;
+
+    if (income <= 2162499) {
+      taxable_income_basic_deductions = 40000;
+    } else if (income <= 2204166) {
+      taxable_income_basic_deductions = 26667;
+    } else if (income <= 2245833) {
+      taxable_income_basic_deductions = 13334;
+    } else { // 2245834円以上
+      taxable_income_basic_deductions = 0;
+    }
+
+    return taxable_income_basic_deductions;
   }
 
   // 源泉徴収における配偶者(特別)控除額を求める
