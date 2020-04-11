@@ -733,7 +733,7 @@ $(function () {
    * --------------------------------------------------*/
   function calcTaxRate (income = 0, kou = true, dependents_count = 0) : number
   {
-    const arr: string[][] = csvToArray('./csv/withholding-bonus-2018.csv');
+    const arr: string[][] = csvToArray('./csv/withholding-bonus-2020.csv');
     let tax_rate: number = 0;
 
     if (kou) { // 甲欄のとき
