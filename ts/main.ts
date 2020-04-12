@@ -968,7 +968,7 @@ $(function () {
     let target_income: number = 0;
 
     // 健康保険料率を求める
-    let hi_rate: number = HI_GENERAL_RATE_LIST[company_pref];
+    let hi_rate: number = HI_GENERAL_RATE_LIST[company_pref][0];
 
     // 介護保険料が必要かチェック
     if (over_40_age) {
