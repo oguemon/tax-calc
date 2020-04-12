@@ -717,6 +717,8 @@ $(function () {
    * 源泉徴収（甲欄）
    * --------------------------------------------------*/
   // 源泉徴収における給与所得控除額を求める
+  // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第一
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
   function calcTaxableIncomeDeductionsWithholding (income = 0) : number
   {
     // 端数処理前の給与控除額を格納
@@ -744,6 +746,8 @@ $(function () {
   }
 
   // 源泉徴収における基本控除額を求める
+  // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第三
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
   function calcBasicDeductionsWithholding (income = 0) : number
   {
     // 端数処理前の給与控除額を格納
@@ -763,12 +767,16 @@ $(function () {
   }
 
   // 源泉徴収における配偶者(特別)控除額を求める
+  // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第二
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
   function calcSpouseDeductionsWithholding (exist_partner = false) : number
   {
     return (exist_partner)? 31667 : 0;
   }
 
   // 源泉徴収における扶養控除額を求める
+  // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第二
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
   function calcDependentsDeductionsWithholding (dependents_count = 0) : number
   {
     // 基礎控除に加えて扶養人数に応じた
@@ -776,6 +784,8 @@ $(function () {
   }
 
   // 源泉徴収額を求める
+  // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第四
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
   function calcTaxValueWithholding (taxable_income = 0) : number
   {
     // 端数処理前の税額を格納
@@ -806,6 +816,9 @@ $(function () {
   /* --------------------------------------------------
    * 源泉徴収（ボーナス）
    * --------------------------------------------------*/
+  // 賞与に対する源泉徴収税額を求める
+  // 賞与に対する源泉徴収税額の算出率の表（令和2年分）
+  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/15-16.xls
   function calcTaxRate (income = 0, kou = true, dependents_count = 0) : number
   {
     const arr: string[][] = csvToArray('./csv/withholding-bonus-2020.csv');
