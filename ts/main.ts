@@ -201,7 +201,7 @@ $(function () {
     // 給与収入から、給与所得を求める
     const taxable_standard_income: number = calcTaxableIncome(annual_income);
     // 控除額を求める
-    const it_deduction: number = 380000 // 基礎控除
+    const it_deduction: number = calcBasicDeductionsIncomeTax(taxable_standard_income) // 基礎控除
                                + premium_annually.you; // 社会保険料控除
     // 課税所得金額を求める
     const it_taxable_income: number = round(Math.max(taxable_standard_income - it_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
@@ -252,7 +252,7 @@ $(function () {
     let it_taxable_income_withholding: number = monthly_income
                                               - premium_monthly.you
                                               - calcTaxableIncomeDeductionsWithholding(monthly_income - premium_monthly.you)
-                                              - calcBasicDeductionsWithholding()
+                                              - calcBasicDeductionsWithholding(monthly_income - premium_monthly.you)
                                               - calcSpouseDeductionsWithholding (false)
                                               - calcDependentsDeductionsWithholding(0);
     it_taxable_income_withholding = Math.max(it_taxable_income_withholding, 0);
@@ -421,7 +421,7 @@ $(function () {
       const total_premium: number = (hi_over.you + ep_over.you + ui_over.you) * 12 + premium_bonus.you * bonus_number;
       // 所得税
       const taxable_standard_income: number = calcTaxableIncome(annual_income - total_premium);
-      const total_deduction: number = 380000 // 基礎控除
+      const total_deduction: number = calcBasicDeductionsIncomeTax(taxable_standard_income) // 基礎控除
                                     + total_premium;
       const taxable_income: number = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
       const it: number = calcBasicIncomeTax(taxable_income);
@@ -652,6 +652,26 @@ $(function () {
     }
 
     return Math.floor(taxable_income);
+  }
+
+  // 所得税における基礎控除額を求める（令和2年分以降）
+  // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
+  function calcBasicDeductionsIncomeTax (income: number = 0) : number
+  {
+    // 基本控除額を格納
+    let basic_deductions: number = 0;
+
+    if (income <= 2400 * 10000) {
+      basic_deductions = 48 * 10000;
+    } else if (income <= 2450 * 10000) {
+      basic_deductions = 32 * 10000;
+    } else if (income <= 2500 * 10000) {
+      basic_deductions = 16 * 10000;
+    } else { // 2500万円超
+      basic_deductions = 0;
+    }
+
+    return basic_deductions;
   }
 
   // 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
