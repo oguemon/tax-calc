@@ -206,7 +206,7 @@ $(function () {
     // 課税所得金額を求める
     const it_taxable_income: number = round(Math.max(taxable_standard_income - it_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
     // 所得税額を求める
-    const it: number = calcTaxValue(it_taxable_income);
+    const it: number = calcBasicIncomeTax(it_taxable_income);
 
     // 結果を出力
     //r.find('[total-deduction]').text(add1000Separator(total_deduction));
@@ -424,7 +424,7 @@ $(function () {
       const total_deduction: number = 380000 // 基礎控除
                                     + total_premium;
       const taxable_income: number = round(Math.max(taxable_standard_income - total_deduction, 0), 1000, 'floor');　// 課税所得は千円未満の端数切捨
-      const it: number = calcTaxValue(taxable_income);
+      const it: number = calcBasicIncomeTax(taxable_income);
 
       // 実質的な手取り
       const substantial_income: number = annual_income - total_premium - it;
@@ -559,59 +559,104 @@ $(function () {
   /* --------------------------------------------------
    * 所得税（給与所得）
    * --------------------------------------------------*/
-  // 給与所得控除額を計算
+  // 給与所得控除額を計算（令和2年分以降）
+  // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
   function calcTaxableIncomeDeductions (income = 0): number
   {
+    // 給与所得控除額
+    let taxable_income_deductions: number = 0;
+
     if (income <= 1800000) {
-      // 最低でも65万は控除される
-      return Math.max(income * 0.4, 650000);
+      // 最低でも55万は控除される
+      taxable_income_deductions = Math.max(income * 0.4 - 100000, 550000);
     }
     if (income <= 3600000) {
-      return income * 0.3 + 180000;
+      taxable_income_deductions = income * 0.3 + 80000;
     }
     if (income <= 6600000) {
-      return income * 0.2 + 540000;
+      taxable_income_deductions = income * 0.2 + 440000;
     }
-    if (income <= 10000000) {
-      return income * 0.1 + 1200000;
+    if (income <= 8500000) {
+      taxable_income_deductions = income * 0.1 + 1100000;
+    } else {
+      taxable_income_deductions = 1950000;
     }
-    if (income > 10000000) {
-      return 2200000;
-    }
+
+    return taxable_income_deductions;
   }
 
   // 課税所得金額を求める（給与所得控除額の計算がいらない）
   function calcTaxableIncome (income = 0): number
   {
+    // 年調給与額
+    let yearend_tax_adj_income: number = 0;
+
+    // 給与所得控除後の給与等の金額
     let taxable_income: number = 0;
 
-    if (income < 651000) {
-      taxable_income = 0;
-    } else if (income < 1619000) {
-      taxable_income = income - 650000;
+    // (1) 年調給与額の算出（令和元年分より・令和2年分は変更なし）
+    // https://www.nta.go.jp/publication/pamph/gensen/nencho2019/pdf/82-83.pdf
+    if (income < 1619000) {
+      // 給与の総額をそのまま年調給与額とします
+      yearend_tax_adj_income = income;
     } else if (income < 6600000) {
-      // 怒涛の「別表第五」を参照
-      let arr: string[][] = csvToArray('./csv/table5-2018.csv');
+      // 階差と同一階差の最小値の設定
+      let rank_width: number = 0;
+      let rank_min: number = 0;
 
-      // 各行を走査
-      for (let i = 0; i < arr.length; i++) {
-        // 税額表の最下行以外のポジションで見つけた
-        if (income < Number(arr[i][0])) {
-          taxable_income = Number(arr[i][1]);
-          break;
-        }
+      if (income < 1620000) {
+        rank_width = 1000;
+        rank_min = 1619000;
+      } else if (income < 1624000) {
+        rank_width = 2000;
+        rank_min = 1620000;
+      } else { // 162万4000円以上
+        rank_width = 1000;
+        rank_min = 1624000;
       }
-    } else if (income < 10000000) {
-      taxable_income = income * 0.9 - 1200000;
-    } else { // 1千万円以上
-      taxable_income = income - 2200000;
+
+      // 算式1. 余りの計算
+      const remainder: number = (income - rank_min) % rank_width;
+
+      // 算式2. 年調給与額の計算
+      yearend_tax_adj_income = income - remainder;
+    } else { // 660万円以上
+      // 給与の総額をそのまま年調給与額とします
+      yearend_tax_adj_income = income;
+    }
+
+    // (2) 給与所得控除後の給与等の金額の計算（令和2年分事前の情報提供より）
+    // https://www.nta.go.jp/users/gensen/nenmatsu/denshikeisan.htm
+    if (yearend_tax_adj_income < 551000) {
+      taxable_income = 0;
+    } else if (yearend_tax_adj_income < 1619000) {
+      taxable_income = yearend_tax_adj_income  - 550000;
+    } else if (yearend_tax_adj_income < 1620000) {
+      taxable_income = yearend_tax_adj_income * 0.6 + 97600;
+    } else if (yearend_tax_adj_income < 1622000) {
+      taxable_income = yearend_tax_adj_income * 0.6 + 98000;
+    } else if (yearend_tax_adj_income < 1624000) {
+      taxable_income = yearend_tax_adj_income * 0.6 + 98800;
+    } else if (yearend_tax_adj_income < 1628000) {
+      taxable_income = yearend_tax_adj_income * 0.6 + 99600;
+    } else if (yearend_tax_adj_income < 1800000) {
+      taxable_income = yearend_tax_adj_income * 0.6 + 100000;
+    } else if (yearend_tax_adj_income < 3600000) {
+      taxable_income = yearend_tax_adj_income * 0.7 - 80000;
+    } else if (yearend_tax_adj_income < 6600000) {
+      taxable_income = yearend_tax_adj_income * 0.8 - 440000;
+    } else if (yearend_tax_adj_income < 8500000) {
+      taxable_income = yearend_tax_adj_income * 0.9 - 1100000;
+    } else { // 850万円以上
+      taxable_income = yearend_tax_adj_income - 1950000;
     }
 
     return Math.floor(taxable_income);
   }
 
-  // 課税所得金額から税額を計算（100円単位は切り捨て）
-  function calcTaxValue (taxable_income = 0) : number
+  // 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
+  // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
+  function calcBasicIncomeTax (taxable_income = 0) : number
   {
     // 端数処理前の税額を格納
     let tax_pre_round: number = 0;
@@ -628,14 +673,24 @@ $(function () {
       tax_pre_round = taxable_income * 0.33 - 1536000;
     } else if (taxable_income <= 4000 * 10000) {
       tax_pre_round = taxable_income * 0.4 - 2796000;
-    } else if (taxable_income > 4000 * 10000) {
+    } else { // 4000万円超
       tax_pre_round = taxable_income * 0.45 - 4796000;
     }
 
-    // 100円以下の金額を切り捨て
-    const tax: number = round(tax_pre_round, 100, 'floor');
+    // 1000円以下の金額を切り捨て
+    const tax: number = round(tax_pre_round, 1000, 'floor');
 
     return tax;
+  }
+
+  // 所得税額から復興特別所得税額を計算（平成25年分〜令和19年分が対象）
+  // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
+  function calcReconstructionSpecialIncomeTax (income_tax: number) : number
+  {
+    // 復興特別所得税額
+    const reconstruction_special_income_tax: number = 0.021 * income_tax;
+
+    return reconstruction_special_income_tax;
   }
 
   /* --------------------------------------------------
