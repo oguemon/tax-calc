@@ -227,7 +227,6 @@ $(function () {
          * 住民税計算
          * --------------------------------------------------*/
         const rt: ResidentTax = new ResidentTax(annual_income, premium_annually.you, resident_pref, resident_city);
-        console.log(rt);
         // 結果を出力
         r.find('[pref-tax]')       .text(add1000Separator(rt.tax.pref));
         r.find('[city-tax]')       .text(add1000Separator(rt.tax.city));
