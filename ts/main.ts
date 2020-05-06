@@ -1,4 +1,4 @@
-//import $ from 'jquery';
+import jQuery from 'jquery';
 import Chart from 'chart.js';
 import * as Data from './Data';
 import { add1000Separator } from './Util';
@@ -10,6 +10,14 @@ import { HealthInsurance } from "./HealthInsurance";
 import { IndustryType, UnemplymentInsurance } from "./UnemplymentInsurance";
 import { IncomeTax } from './IncomeTax';
 import { ResidentTax } from './ResidentTax';
+import { Modal, Plugin } from './modal';
+
+// JQuery変数のany型化（プラグイン対応のため）
+const $: any = jQuery;
+
+// モーダルプラグインの定義
+$.fn.modal             = Plugin;
+$.fn.modal.Constructor = Modal;
 
 $(function () {
     'use strict';
@@ -483,7 +491,7 @@ $(function () {
 
     function showModal (id='') {
         const msg = $('#modal-parts').find('[' + id + ']');
-        const move_modal: any = $('#moveModal'); //自作プラグインを使うためany型で定義…
+        const move_modal = $('#moveModal');
         move_modal.find('.title').text(msg.find('[title]').text());
         move_modal.find('.body').html(msg.find('[body]').html());
         move_modal.modal('show');
