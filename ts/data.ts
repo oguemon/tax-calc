@@ -8,7 +8,7 @@ li: 介護保険（long-term care insurance）
 it: 所得税（income tax）
 */
 // 都道府県のJIS的並び
-const PREF_LIST: string[] = new Array(
+export const PREF_LIST: string[] = new Array(
   '北海道', // 0
   '青森県', // 1
   '岩手県', // 2
@@ -59,7 +59,7 @@ const PREF_LIST: string[] = new Array(
 );
 
 // 政令指定都市の一覧
-const ORDINANCE_DESIGNATED_CITY_LIST = {
+export const ORDINANCE_DESIGNATED_CITY_LIST = {
   '北海道': ['札幌市'],
   '宮城県': ['仙台市'],
   '埼玉県': ['さいたま市'],
@@ -78,11 +78,11 @@ const ORDINANCE_DESIGNATED_CITY_LIST = {
 };
 
 // 健康保険と厚生年金保険の加入下限となる月あたり基本給額
-const INSURANCE_MIN_INCOME: number = 88000;
+export const INSURANCE_MIN_INCOME: number = 88000;
 
 // 健康保険料率（令和2年3月分以降）
 // https://www.kyoukaikenpo.or.jp/g3/cat330/1936-295/
-const HI_GENERAL_RATE_LIST: number[][] = new Array(
+export const HI_GENERAL_RATE_LIST: number[][] = new Array(
   // [一般保険料率, 特定保険料率, 基本保険料率],
   [10.41, 3.43, 6.98], // 北海道
   [ 9.88, 3.43, 6.45], // 青森県
@@ -134,7 +134,7 @@ const HI_GENERAL_RATE_LIST: number[][] = new Array(
 );
 
 // 道府県民税率（令和2年度）政令市特例反映前
-const RT_RATE_LIST_PREF: number[][] = new Array(
+export const RT_RATE_LIST_PREF: number[][] = new Array(
   // [均等割, 所得割],
   [1500, 0.04], // 北海道
   [1500, 0.04], // 青森県
@@ -186,7 +186,7 @@ const RT_RATE_LIST_PREF: number[][] = new Array(
 );
 
 // 市町村民税率（令和2年度）政令市特例反映前
-const RT_RATE_LIST_CITY = {
+export const RT_RATE_LIST_CITY = {
   // '都道府県名市町村名': [均等割, 所得割],
   '一般市町村': [3500, 0.06],
   '神奈川県横浜市': [4400, 0.06],
@@ -196,15 +196,15 @@ const RT_RATE_LIST_CITY = {
 
 // 介護保険料率（令和2年3月分以降）
 // https://www.kyoukaikenpo.or.jp/g3/cat330/1995-298/
-const LI_RATE: number = 1.79;
+export const LI_RATE: number = 1.79;
 
 // 厚生年金保険料率（平成29年9月を最後に引上げが終了）
 // https://www.nenkin.go.jp/service/kounen/hokenryo-gaku/gakuhyo/
-const EP_RATE: number = 18.3;
+export const EP_RATE: number = 18.3;
 
 // 雇用保険料（令和2年度）
 // https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000108634.html
-const UI_RATE_LIST = new Array(
+export const UI_RATE_LIST = new Array(
   { // 一般の事業
     you:     3 / 1000,
     company: 6 / 1000

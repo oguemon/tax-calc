@@ -2,8 +2,11 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 //const closureCompiler = require('google-closure-compiler').gulp();
-const typescript = require('gulp-typescript');
 const browsersync = require('browser-sync');
+
+const webpack = require('webpack');
+const webpackStream = require('webpack-stream');
+const webpackConfig = require('./webpack.config.js');
 
 gulp.task('sass', function() {
     return gulp.src('./sass/*.scss')
@@ -12,11 +15,7 @@ gulp.task('sass', function() {
 });
 gulp.task('compile-js', function() {
     return gulp.src('./ts/*.ts', {base: './'})
-            .pipe(typescript({
-                target: 'ES5',
-                removeComments: true,
-                out: 'output.min.js'
-            }))
+            .pipe(webpackStream(webpackConfig, webpack))
             /*
             .pipe(closureCompiler({
                 compilation_level: 'SIMPLE',

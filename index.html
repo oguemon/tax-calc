@@ -139,7 +139,15 @@
         </div>
         <div class="detail-box">
           <h3>内訳グラフ</h3>
-          <canvas id="graph-annual-income-detail"></canvas>
+          <div class="graph-wrapper">
+            <div class="graph-title">
+              <p class="graph-center-title">額面年収</p>
+              <p class="graph-center-amount">
+                <span class="graph-center-amount-value" annual-income></span>円
+              </p>
+            </div>
+            <canvas class="graph-center-canvas" id="graph-annual-income-detail"></canvas>
+          </div>
 
           <h3>内訳</h3>
           <div class="sub-value-line">
@@ -196,7 +204,15 @@
         </div>
         <div class="detail-box">
           <h3>内訳グラフ</h3>
-          <canvas id="graph-income-detail"></canvas>
+          <div class="graph-wrapper">
+            <div class="graph-title">
+              <p class="graph-center-title">額面月収</p>
+              <p class="graph-center-amount">
+                <span class="graph-center-amount-value" monthly-income></span>円
+              </p>
+            </div>
+            <canvas class="graph-center-canvas" id="graph-income-detail"></canvas>
+          </div>
 
           <h3>内訳詳細</h3>
           <div class="sub-value-line">
@@ -257,7 +273,15 @@
         </div>
         <div class="detail-box">
           <h3>内訳グラフ</h3>
-          <canvas id="graph-bonus-income-detail"></canvas>
+          <div class="graph-wrapper">
+            <div class="graph-title">
+              <p class="graph-center-title">額面ボーナス</p>
+              <p class="graph-center-amount">
+                <span class="graph-center-amount-value" bonus-income-once></span>円
+              </p>
+            </div>
+            <canvas class="graph-center-canvas" id="graph-bonus-income-detail"></canvas>
+          </div>
 
           <h3>内訳</h3>
           <div class="sub-value-line">
@@ -579,9 +603,7 @@
   </div>
 </div>
 <script src="./assets/js/jquery-3.3.1.min.js"></script>
-<script src="./assets/js/Chart.min.js"></script>
-<script src="./assets/js/plugin.js"></script>
 <script src="./assets/js/modal.js"></script>
-<script src="./assets/js/output.min.js?20181206v3"></script>
+<script data-main="./assets/js/output.js" src="./assets/js/require-2.3.6.js"></script>
 </body>
 </html>

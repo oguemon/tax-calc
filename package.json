@@ -7,20 +7,24 @@
     "build-sass": "node-sass -w --output-style compressed sass/main.scss assets/css/main.css; node-sass"
   },
   "dependencies": {
-    "gulp": "^4.0.0",
-    "gulp-less": "^4.0.1",
-    "gulp-sass": "^4.0.2",
-    "gulp-cli": "^2.0.1",
-    "gulp-typescript": "^5.0.1",
-    "google-closure-compiler": "^20190528.0.0",
-    "typescript": "3.5.1",
-    "browserify": "^16.2.3",
-    "vinyl-source-stream": "^2.0.0",
-    "vinyl-buffer": "1.0.1",
+    "@types/chart.js": "^2.9.19",
+    "@types/jquery": "^3.3.35",
     "browser-sync": "^2.26.7",
-    "jquery": "^3.4.1",
-    "@types/jquery": "^3.3.29",
-    "chart.js": "^2.8.0",
-    "@types/chart.js": "^2.7.54"
+    "browserify": "^16.2.3",
+    "chart.js": "^2.9.3",
+    "google-closure-compiler": "latest",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.0.1",
+    "gulp-less": "^4.0.1",
+    "gulp-sass": "^4.1.0",
+    "gulp-typescript": "^5.0.1",
+    "jquery": "^3.5.0",
+    "ts-loader": "^7.0.1",
+    "typescript": "3.8.3",
+    "vinyl-buffer": "1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-stream": "^5.2.1"
   }
 }
