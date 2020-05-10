@@ -31,4 +31,8 @@ module.exports = {
         '.ts', '.js',
       ],
     },
+    // バンドルを除外するライブラリ
+    externals: {
+        moment: 'moment'
+    },
 };
