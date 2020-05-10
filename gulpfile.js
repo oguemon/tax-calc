@@ -14,7 +14,7 @@ function compileSass () {
             .pipe(gulp.dest('./assets/css'))
 }
 
-function compileJS () {
+function compileTS () {
     return gulp.src('./ts/*.ts', {base: './'})
             .pipe(webpackStream(webpackConfig, webpack))
             .pipe(gulp.dest('./assets/js'));
@@ -23,13 +23,11 @@ function compileJS () {
 function optimizeJS () {
     return gulp.src('./assets/js/output.js', {base: './'})
             .pipe(closureCompiler({
-                compilation_level: 'SIMPLE',
+                compilation_level: 'ADVANCED',
                 warning_level: 'QUIET',
                 language_in: 'ECMASCRIPT_2015',
                 language_out: 'ECMASCRIPT_2015',
                 js_output_file: 'output.min.js'
-            }, {
-                platform: ['native', 'java', 'javascript']
             }))
             .pipe(gulp.dest('./assets/js'));
 }
@@ -51,8 +49,9 @@ function browserReload (done){
 function watch () {
     gulp.watch('./*.html', gulp.series(browserReload));
     gulp.watch('./sass/*.scss', gulp.series(compileSass, browserReload));
-    gulp.watch('./ts/*.ts', gulp.series(compileJS, browserReload));
+    gulp.watch('./ts/*.ts', gulp.series(compileTS, browserReload));
 }
 
-const defaultTasks = gulp.series(buildServer, watch);
-gulp.task('default', defaultTasks);
+exports.default = gulp.series(buildServer, watch);
+exports.compileTS = gulp.series(compileTS);
+exports.optimizeJS = gulp.series(optimizeJS);
