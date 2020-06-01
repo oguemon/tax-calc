@@ -38,31 +38,31 @@
     <div id="income-input">
       <div class="form-box">
         <div class="line-box">
-          <div class="line-label">月々の基本給<div class="detail-info" name="basic-income"></div></div>
+          <div class="line-label">月々の基本給<div class="q-btn" name="basic-income" detail-info></div></div>
           <div class="line-value"><input type="number" id="input-income" value="200000">円</div>
         </div>
         <div class="line-box">
-          <div class="line-label">ボーナス<div class="detail-info" name="bonus-income"></div></div>
+          <div class="line-label">ボーナス<div class="q-btn" name="bonus-income" detail-info></div></div>
           <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="4">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
         </div>
         <div class="line-box">
-          <div class="line-label">残業時間<div class="detail-info" name="overwork-hours"></div></div>
+          <div class="line-label">残業時間<div class="q-btn" name="overwork-hours" detail-info></div></div>
           <div class="line-value">月<input type="number" id="input-overwork-hours" value="10">時間</div>
         </div>
         <div class="line-box">
-          <div class="line-label">勤務先の都道府県<div class="detail-info" name="company-pref"></div></div>
+          <div class="line-label">勤務先の都道府県<div class="q-btn" name="company-pref" detail-info></div></div>
           <div class="line-value"><select class="select-area" id="select-company-pref"></select></div>
         </div>
         <div class="line-box">
-          <div class="line-label">自宅の都道府県<div class="detail-info" name="resident-pref"></div></div>
+          <div class="line-label">自宅の都道府県<div class="q-btn" name="resident-pref" detail-info></div></div>
           <div class="line-value"><select class="select-area" id="select-resident-pref"></select></div>
         </div>
         <div class="line-box" id="line-box-select-city" style="display: none;">
-          <div class="line-label">自宅の市町村<div class="detail-info" name="resident-city"></div></div>
+          <div class="line-label">自宅の市町村<div class="q-btn" name="resident-city" detail-info></div></div>
           <div class="line-value"><select class="select-area" id="select-resident-city"></select></div>
         </div>
         <div class="line-box">
-          <div class="line-label">事業<div class="detail-info" name="industry-type"></div></div>
+          <div class="line-label">事業<div class="q-btn" name="industry-type" detail-info></div></div>
           <div class="line-value" style="text-align: left;">
             <label><input type="radio" name="industry" value="0" checked><span>一般</span></label>
             <label><input type="radio" name="industry" value="1"><span>建設</span></label>
@@ -156,19 +156,19 @@
               <div class="line-value plus"><span annual-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
+              <div class="line-label">健康保険料<div class="q-btn" name="hi" detail-info></div></div>
               <div class="line-value minus"><span hi-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
+              <div class="line-label">厚生年金保険料<div class="q-btn" name="ep" detail-info></div></div>
               <div class="line-value minus"><span ep-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
+              <div class="line-label">雇用保険料<div class="q-btn" name="ui" detail-info></div></div>
               <div class="line-value minus"><span ui-annual></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">所得税額<div class="detail-info" name="it"></div></div>
+              <div class="line-label">所得税額<div class="q-btn" name="it" detail-info></div></div>
               <div class="line-value minus"><span it></span>円</div>
             </div>
             <div class="line-box sum">
@@ -176,11 +176,11 @@
               <div class="line-value"><span substantial-annual-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">住民税額<div class="detail-info" name="rt-annual"></div></div>
+              <div class="line-label">住民税額<div class="q-btn" name="rt-annual" detail-info></div></div>
               <div class="line-value minus"><span rt></span>円</div>
             </div>
             <div class="line-box sum">
-              <div class="line-label">住民税を引いた年収<div class="detail-info" name="rt-minus-annual"></div></div>
+              <div class="line-label">住民税を引いた年収<div class="q-btn" name="rt-minus-annual" detail-info></div></div>
               <div class="line-value"><span substantial-annual-income-minus-rt></span>円</div>
             </div>
           </div>
@@ -225,19 +225,19 @@
               <div class="line-value plus"><span overwork-monthly-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
+              <div class="line-label">健康保険料<div class="q-btn" name="hi" detail-info></div></div>
               <div class="line-value minus"><span hi-half></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
+              <div class="line-label">厚生年金保険料<div class="q-btn" name="ep" detail-info></div></div>
               <div class="line-value minus"><span ep-half></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
+              <div class="line-label">雇用保険料<div class="q-btn" name="ui" detail-info></div></div>
               <div class="line-value minus"><span ui-you></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">源泉徴収額<div class="detail-info" name="withholding"></div></div>
+              <div class="line-label">源泉徴収額<div class="q-btn" name="withholding" detail-info></div></div>
               <div class="line-value minus"><span it-withholding></span>円</div>
             </div>
             <div class="line-box sum">
@@ -245,11 +245,11 @@
               <div class="line-value"><span substantial-income></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">住民税額<div class="detail-info" name="rt-monthly"></div></div>
+              <div class="line-label">住民税額<div class="q-btn" name="rt-monthly" detail-info></div></div>
               <div class="line-value minus"><span rt-monthly></span>円</div>
             </div>
             <div class="line-box sum">
-              <div class="line-label">住民税を引いた月収<div class="detail-info" name="rt-minus-monthly"></div></div>
+              <div class="line-label">住民税を引いた月収<div class="q-btn" name="rt-minus-monthly" detail-info></div></div>
               <div class="line-value"><span substantial-income-minus-rt></span>円</div>
             </div>
           </div>
@@ -290,19 +290,19 @@
               <div class="line-value"><span bonus-income-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">健康保険料<div class="detail-info" name="hi"></div></div>
+              <div class="line-label">健康保険料<div class="q-btn" name="hi" detail-info></div></div>
               <div class="line-value minus"><span hi-half-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">厚生年金保険料<div class="detail-info" name="ep"></div></div>
+              <div class="line-label">厚生年金保険料<div class="q-btn" name="ep" detail-info></div></div>
               <div class="line-value minus"><span ep-half-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">雇用保険料<div class="detail-info" name="ui"></div></div>
+              <div class="line-label">雇用保険料<div class="q-btn" name="ui" detail-info></div></div>
               <div class="line-value minus"><span ui-you-bonus-once></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">源泉徴収額<div class="detail-info" name="withholding"></div></div>
+              <div class="line-label">源泉徴収額<div class="q-btn" name="withholding" detail-info></div></div>
               <div class="line-value minus"><span it-bonus-withholding></span>円</div>
             </div>
             <div class="line-box sum">
@@ -338,19 +338,19 @@
           <h3>内訳</h3>
           <div class="sub-value-line">
             <div class="line-box">
-              <div class="line-label">道府県民税（均等割）<div class="detail-info" name="rt-capitation"></div></div>
+              <div class="line-label">道府県民税（均等割）<div class="q-btn" name="rt-capitation" detail-info></div></div>
               <div class="line-value"><span pref-capitation></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">道府県民税（所得割）<div class="detail-info" name="rt-income"></div></div>
+              <div class="line-label">道府県民税（所得割）<div class="q-btn" name="rt-income" detail-info></div></div>
               <div class="line-value"><span pref-income-tax></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">市町村民税（均等割）<div class="detail-info" name="rt-capitation"></div></div>
+              <div class="line-label">市町村民税（均等割）<div class="q-btn" name="rt-capitation" detail-info></div></div>
               <div class="line-value"><span city-capitation></span>円</div>
             </div>
             <div class="line-box">
-              <div class="line-label">市町村民税（所得割）<div class="detail-info" name="rt-income"></div></div>
+              <div class="line-label">市町村民税（所得割）<div class="q-btn" name="rt-income" detail-info></div></div>
               <div class="line-value"><span city-income-tax></span>円</div>
             </div>
             <div class="line-box sum">
@@ -358,7 +358,7 @@
               <div class="line-value"><span rt></span>円</div>
             </div>
             <div class="line-box sum">
-              <div class="line-label">住民税月額<div class="detail-info" name="rt-monthly"></div></div>
+              <div class="line-label">住民税月額<div class="q-btn" name="rt-monthly" detail-info></div></div>
               <div class="line-value"><span rt-monthly></span>円</div>
             </div>
           </div>

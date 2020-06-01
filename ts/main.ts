@@ -481,7 +481,7 @@ $(function () {
     /* --------------------------------------------------
      * モーダル
      * --------------------------------------------------*/
-    $('.detail-info').on('click', function () {
+    $('[detail-info]').on('click', function () {
         const name: string = $(this).attr('name');
         showModal(name);
     });
