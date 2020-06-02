@@ -4,7 +4,6 @@
  */
  .modal-dialog{
 	.content{
-    min-height: 240px;
 		background: $white-color;
 		border-radius: 5px;
 		box-shadow: 1px 1px 1px rgba(85,85,85,0.1);
@@ -22,7 +21,7 @@
 			}
 		}
 		.body{
-			padding: 10px 20px 20px;
+			padding: 10px 20px;
       text-align: justify;
 
 			strong {
@@ -89,7 +88,38 @@
 					}
 				}
 			}
-    }
+	}
+		.footer {
+			padding-bottom: 20px;
+		}
+
+		.close-btn {
+			width: 160px;
+			margin: 0 auto;
+			padding: 10px;
+			color: $white-color;
+			font-size: 100%;
+			font-weight: bold;
+			text-align: center;
+			background-color: $theme-color;
+			display: block;
+			border-radius: 3px;
+			box-shadow: 1px 1px 1px rgba(51,51,51,0.1);
+			transition: background-color .2s linear;
+			cursor: pointer;
+
+			&:hover {
+				background: lighten($theme-color, 8%);
+			}
+
+			&:active {
+				box-shadow: none;
+			}
+
+			&:focus {
+				outline: none;
+			}
+		}
   }
 }
 
