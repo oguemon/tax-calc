@@ -3,104 +3,104 @@
  *  汎用フォーム
  */
  .form-box {
-  max-width: 480px;
-  margin: 0 auto;
-  border-bottom: 1px solid $border-sub-color;
+    max-width: 480px;
+    margin: 0 auto;
+    border-bottom: 1px solid $border-sub-color;
 
-  &:last-child {
-      border-bottom: none;
-  }
+    &:last-child {
+        border-bottom: none;
+    }
 
-  .item {
-      margin: 20px;
+    .item {
+        margin: 20px;
 
-      .name {
-          margin: 0 0 5px;
-          font-weight: bold;
+        .name {
+            margin: 0 0 5px;
+            font-weight: bold;
 
-          .detail {
-              margin: 0 0 0 10px;
-              color: $text-sub-color;
-              font-size: 80%;
-              display: inline-block;
+            .detail {
+                margin: 0 0 0 10px;
+                color: $text-sub-color;
+                font-size: 80%;
+                display: inline-block;
 
-              &:before {
-                  content: "(";
-              }
+                &:before {
+                    content: "(";
+                }
 
-              &:after {
-                  content: ")";
-              }
-          }
-          /*
-          &.required:after, &.optional:after {
-              margin: 0 0 0 10px;
-              padding: 5px 10px;
-              color: $white-color;
-              font-size: 80%;
-              font-weight: bold;
-              line-height: 1em;
-              display: inline-block;
-              border-radius: 3px;
-          }
+                &:after {
+                    content: ")";
+                }
+            }
+            /*
+            &.required:after, &.optional:after {
+                margin: 0 0 0 10px;
+                padding: 5px 10px;
+                color: $white-color;
+                font-size: 80%;
+                font-weight: bold;
+                line-height: 1em;
+                display: inline-block;
+                border-radius: 3px;
+            }
 
-          &.optional:after {
-              content: "任意";
-              background: $blue-color;
-          }
+            &.optional:after {
+                content: "任意";
+                background: $blue-color;
+            }
 
-          &.required:after {
-              content: "必須";
-              background: $red-color;
-          }
-          */
-      }
+            &.required:after {
+                content: "必須";
+                background: $red-color;
+            }
+            */
+        }
 
-      &.has-error {
-          input {
-              border-color: $attention-color;
-          }
+        &.has-error {
+            input {
+                border-color: $attention-color;
+            }
 
-          .help-message {
-              margin: 3px 0;
-              color: $attention-color;
-              font-weight: bold;
-          }
-      }
+            .help-message {
+                margin: 3px 0;
+                color: $attention-color;
+                font-weight: bold;
+            }
+        }
 
-      .value {
-          margin: 0 0 0 10px;
-      }
-  }
+        .value {
+            margin: 0 0 0 10px;
+        }
+    }
 }
 
 label {
-  margin: 5px 0 5px 10px;
-  display: inline-block;
+    margin: 5px 0 5px 10px;
+    display: inline-block;
 }
 
 input, select, textarea {
-  &:focus {
-      outline: none;
-  }
+    &:focus {
+        outline: none;
+    }
 }
 
 input[type=text], input[type=number], input[type=password], textarea {
-  margin: 1px 3px;
-  padding: 8px 10px;
-  font-size: 110%;
-  border: 1px solid $border-base-color;
-  border-radius: 3px;
-  resize: vertical;
+    margin: 1px 3px;
+    padding: 8px 10px;
+    font-size: 110%;
+    border: 1px solid $border-base-color;
+    border-radius: 3px;
+    resize: vertical;
 
-  &.wide {
+    &.wide {
     width: 100%;
-  }
+    }
 
-  &:focus {
-      margin: 0 3px;
-      border: 2px solid $theme-color;
-  }
+    &:focus {
+        margin: 0 3px;
+        border: 2px solid $theme-color;
+    }
 }
 
 input[type=number] {
@@ -118,75 +118,79 @@ input[type=number]::-webkit-inner-spin-button {
 */
 // キー操作ができるよう、生殺しに
 input[type=radio]{
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: none;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
 }
+
 input[type=radio] + span {
-  display: inline-block;
-  position: relative;
-  padding: 0 0 0 25px;
-  cursor: pointer;
+    display: inline-block;
+    position: relative;
+    padding: 0 0 0 25px;
+    cursor: pointer;
 
-  &:hover {
-      color: $theme-color;
+    &:hover {
+        color: $theme-color;
 
-      &:before {
-          border-color: $theme-color;
-      }
-  }
+        &:before {
+            border-color: $theme-color;
+        }
+    }
 
-  &:before{
-      position: absolute;
-      content: "";
-      top: 50%;
-      left: 0;
-      width: 14px;
-      height: 14px;
-      margin-top: -10px;
-      border: 2px solid $border-base-color;
-      border-radius: 50%;
-  }
+    &:before{
+        position: absolute;
+        content: "";
+        top: 50%;
+        left: 0;
+        width: 14px;
+        height: 14px;
+        margin-top: -10px;
+        border: 2px solid $border-base-color;
+        border-radius: 50%;
+    }
 }
+
 input[type=radio]:focus + span {
-  color: $theme-color;
+    color: $theme-color;
 
-  &:before {
-      border-color: $theme-color;
-  }
+    &:before {
+        border-color: $theme-color;
+    }
 }
+
 input[type=radio]:checked + span {
-  color: $theme-color;
+    color: $theme-color;
 
-  &:after {
-      position: absolute;
-      content: "";
-      top: 50%;
-      left: 5px;
-      width: 8px;
-      height: 8px;
-      margin-top: -5px;
-      border-radius: 50%;
-      background: $theme-color;
-  }
+    &:after {
+        position: absolute;
+        content: "";
+        top: 50%;
+        left: 5px;
+        width: 8px;
+        height: 8px;
+        margin-top: -5px;
+        border-radius: 50%;
+        background: $theme-color;
+    }
 
-  &:before {
-      border-color: $theme-color;
-  }
+    &:before {
+        border-color: $theme-color;
+    }
 }
-input[type=radio]:disabled + span {
-  color: $text-sub-color;
-  cursor: no-drop;
 
-  &:before {
-      border-color: $border-base-color;
-      background: $border-sub-color;
-  }
+input[type=radio]:disabled + span {
+    color: $text-sub-color;
+    cursor: no-drop;
+
+    &:before {
+        border-color: $border-base-color;
+        background: $border-sub-color;
+    }
 }
 
 /*
@@ -194,156 +198,160 @@ input[type=radio]:disabled + span {
 */
 // キー操作ができるよう、生殺しに
 input[type=checkbox] {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: none;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
 }
+
 input[type=checkbox] + span {
-  display: block;
-  position: relative;
-  padding: 0 0 0 25px;
-  cursor: pointer;
+    display: block;
+    position: relative;
+    padding: 0 0 0 25px;
+    cursor: pointer;
 
-  &:hover {
-      color: $theme-color;
+    &:hover {
+        color: $theme-color;
 
-      &:before {
-          border-color: $theme-color;
-      }
-  }
+        &:before {
+            border-color: $theme-color;
+        }
+    }
 
-  &:before, &:after{
-      position: absolute;
-      content: "";
-      display: block;
-      top: 50%;
-  }
+    &:before, &:after{
+        position: absolute;
+        content: "";
+        display: block;
+        top: 50%;
+    }
 
-  // チェックの枠
-  &:before {
-      left: 0;
-      margin-top: -11px;
-      width: 15px;
-      height: 15px;
-      border: 2px solid $border-base-color;
-      border-radius: 3px;
-  }
+    // チェックの枠
+    &:before {
+        left: 0;
+        margin-top: -11px;
+        width: 15px;
+        height: 15px;
+        border: 2px solid $border-base-color;
+        border-radius: 3px;
+    }
 
-  // チェックそのもの
-  &:after {
-      left: 6px;
-      margin-top: -9px;
-      width: 5px;
-      height: 10px;
-      border-right: 3px solid $white-color;
-      border-bottom: 3px solid $white-color;
-      transform: rotate(45deg);
-      opacity: 0;
-  }
+    // チェックそのもの
+    &:after {
+        left: 6px;
+        margin-top: -9px;
+        width: 5px;
+        height: 10px;
+        border-right: 3px solid $white-color;
+        border-bottom: 3px solid $white-color;
+        transform: rotate(45deg);
+        opacity: 0;
+    }
 }
+
 input[type=checkbox]:focus + span {
-  color: $theme-color;
+    color: $theme-color;
 
-  &:before {
-      border-color: $theme-color;
-  }
+    &:before {
+        border-color: $theme-color;
+    }
 }
+
 input[type=checkbox]:checked + span {
-  color: $theme-color;
+    color: $theme-color;
 
-  &:before {
-      background: $theme-color;
-      border-color: $theme-color;
-  }
+    &:before {
+        background: $theme-color;
+        border-color: $theme-color;
+    }
 
-  &:after {
-      opacity: 1;
-  }
+    &:after {
+        opacity: 1;
+    }
 }
-input[type=checkbox]:disabled + span {
-  color: $text-sub-color;
-  cursor: no-drop;
 
-  &:before {
-      border-color: $border-base-color;
-      background: $border-sub-color;
-  }
+input[type=checkbox]:disabled + span {
+    color: $text-sub-color;
+    cursor: no-drop;
+
+    &:before {
+        border-color: $border-base-color;
+        background: $border-sub-color;
+    }
 }
 
 select {
-  width: 100%;
-  height: 40px;
-  text-indent: 5px;
-  padding: 0 10px;
-  font-size: 100%;
-  background: $white-color;
-  border: 1px solid $border-base-color;
-  border-radius: 3px;
-  display: block;
+    width: 100%;
+    height: 40px;
+    text-indent: 5px;
+    padding: 0 10px;
+    font-size: 100%;
+    background: $white-color;
+    border: 1px solid $border-base-color;
+    border-radius: 3px;
+    display: block;
 
-  &:focus {
-      text-indent: 4px;
-      border: 2px solid $theme-color;
-  }
+    &:focus {
+        text-indent: 4px;
+        border: 2px solid $theme-color;
+    }
 }
 
 /*
 * スライダー(from JQuery UI)
 */
 .slider {
-  margin: 10px;
+    margin: 10px;
 }
 
 input[type=button], input[type=submit], button {
-  margin: 0 5px 0 0;
-  padding: 10px;
-  font-size: 100%;
-  background: #eee;
-  border: 1px solid $border-base-color;
-  display: inline-block;
-  border-radius: 3px;
-  box-shadow: 1px 1px 1px rgba(51,51,51,0.1);
-  cursor: pointer;
+    margin: 0 5px 0 0;
+    padding: 10px;
+    font-size: 100%;
+    background: #eee;
+    border: 1px solid $border-base-color;
+    display: inline-block;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(51,51,51,0.1);
+    cursor: pointer;
 
-  &:hover {
-      background: #eee + #333;
-  }
+    &:hover {
+        background: #eee + #333;
+    }
 
-  &:active {
-      box-shadow: none;
-  }
+    &:active {
+        box-shadow: none;
+    }
 
-  &:focus {
-      outline: none;
-  }
+    &:focus {
+        outline: none;
+    }
 
-  &.main {
-      color: $white-color;
-      font-weight: bold;
-      background: $accent-color;
-      border: none;
+    &.main {
+        color: $white-color;
+        font-weight: bold;
+        background: $accent-color;
+        border: none;
 
-      &:hover {
-          background: $accent-color + #111;
-      }
-  }
+        &:hover {
+            background: $accent-color + #111;
+        }
+    }
 
-  &.mini {
-      margin: 3px;
-      padding: 5px 10px;
-      font-size: 90%;
-      display: inline-block;
-  }
+    &.mini {
+        margin: 3px;
+        padding: 5px 10px;
+        font-size: 90%;
+        display: inline-block;
+    }
 
-  &.wide {
-      width: 100%;
-      margin: 0;
-      font-size: 140%;
-      display: block;
-  }
+    &.wide {
+        width: 100%;
+        margin: 0;
+        font-size: 140%;
+        display: block;
+    }
 }
