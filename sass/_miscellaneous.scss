@@ -133,4 +133,10 @@
 	background: url(../img/question.svg) no-repeat;
 	display: inline-block;
 	margin: 0 0 -4px 6px;
+	cursor: pointer;
+	transition: opacity .2s linear;
+
+	&:hover {
+		opacity: 0.8;
+	}
 }
