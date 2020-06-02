@@ -16,7 +16,7 @@ main {
 }
 
 #income-input {
-  padding: 10px 10px 20px ;
+  padding: 10px;
   border-bottom: 1px solid $border-base-color;
 
   #input-income { width: 200px; font-size: 240%; font-weight: bold; text-align: right; }
@@ -26,7 +26,6 @@ main {
   .select-area { width: 160px; text-align: center; }
 
   .line-box {
-    padding: 5px;
     border-bottom: 1px dashed $theme-color;
     display: flex;
     align-items: center;
@@ -46,45 +45,14 @@ main {
     }
   }
 
-  #input-attention {
-    margin: 10px 0;
-    padding: 10px;
-    background: #fff;
-    border: 3px solid $border-base-color;
-    border-radius: 5px;
+  .box {
+    padding: 5px;
+  }
 
-    #input-attention-header {
-      margin: 0 0 10px;
-      color: $attention-color;
-      font-weight: bold;
-      text-align: center;
-      display: block;
-    }
-
-    ul {
-      margin: 0 0 0 20px;
-      font-size: 80%;
-      text-align: justify;
-    }
-
-    li {
-      margin: 0 0 10px;
-      list-style-type: disc;
-
-      &:last-child {
-        margin: 0;
-      }
-    }
-
-    .detail-box {
-      display: none;
-    }
-
-    .btn-detail-toggle {
-      padding: 10px 0 0;
-      color: $theme-color;
-      text-align: center;
-    }
+  .attention {
+    margin: 5px auto 0;
+    text-align: center;
+    display: block;
   }
 }
 
