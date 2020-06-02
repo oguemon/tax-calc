@@ -333,11 +333,12 @@ input[type=button], input[type=submit], button {
     &.main {
         color: $white-color;
         font-weight: bold;
-        background: $accent-color;
+        background-color: $accent-color;
         border: none;
+        transition: background-color .2s linear;
 
         &:hover {
-            background: $accent-color + #111;
+            background-color: lighten($accent-color, 15%);
         }
     }
 
