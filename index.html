@@ -69,6 +69,27 @@
             <label><input type="radio" name="industry" value="2"><span>農林水産・清酒製造</span></label>
           </div>
         </div>
+        <div class="detail-box">
+          <div class="box line-box">
+            <div class="line-label">基本労働時間<div class="q-btn" name="basic-work-hours" detail-info></div></div>
+            <div class="line-value">月あたり<input type="number" id="input-basic-work-hours" step="1" value="160">時間</div>
+          </div>
+          <div class="box line-box">
+            <div class="line-label">割増賃金の倍率<div class="q-btn" name="overwork-rate" detail-info></div></div>
+            <div class="line-value">
+              残業60時間未満<input type="number" id="input-overwork-rate" step="0.01" min="1.25" max="1.5" value="1.25">倍<br>
+              残業60時間以上<input type="number" id="input-extreme-overwork-rate" step="0.01" min="1.5" value="1.5">倍
+            </div>
+          </div>
+          <div class="box line-box">
+            <div class="line-label">健康保険料率<div class="q-btn" name="input-hi-rate" detail-info></div></div>
+            <div class="line-value">
+              自己負担<input type="number" id="input-hi-rate-you">%<br>
+              会社負担<input type="number" id="input-hi-rate-company">%
+            </div>
+          </div>
+        </div>
+        <div class="btn-detail-toggle"><i class="setting-icon"></i>詳細設定を開閉する</div>
         <div class="box">
           <button type="submit" id="btn-calc-tax" class="main wide">手取り金額を計算</button>
         </div>
@@ -451,6 +472,27 @@
     </div>
   </div>
 
+  <!----------------------------------------------------
+  ----詳細設定
+  ---------------------------------------------------->
+  <div basic-work-hours>
+    <div title>基本労働時間</div>
+    <div body>
+      <p></p>
+    </div>
+  </div>
+  <div overwork-rate>
+    <div title>割増賃金の倍率</div>
+    <div body>
+      <p></p>
+    </div>
+  </div>
+  <div input-hi-rate>
+    <div title>健康保険料率</div>
+    <div body>
+      <p></p>
+    </div>
+  </div>
   <!----------------------------------------------------
   ----利用前の注意事項
   ---------------------------------------------------->

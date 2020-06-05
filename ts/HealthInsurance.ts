@@ -4,12 +4,12 @@
 
 import * as Data from './Data';
 import { round } from './Util';
-import { InsurancePremium } from './InsurancePremium';
+import { InsurancePremium, DataSetForInsurancePremium } from './InsurancePremium';
 
 export class HealthInsurance extends InsurancePremium
 {
     constructor (
-        company_pref: number = 0,
+        premium_rate: DataSetForInsurancePremium,
         basic_income: number = 0,
         get_income: number = 0,
         bonus_number: number = 0,
@@ -22,12 +22,14 @@ export class HealthInsurance extends InsurancePremium
         // 税率を掛ける収入額
         let target_income: number = 0;
 
-        // 健康保険料率を求める
-        let hi_rate: number = Data.HI_GENERAL_RATE_LIST[company_pref][0];
-
         // 介護保険料が必要かチェック
         if (over_40_age) {
-            hi_rate += Data.LI_RATE;
+            // 介護保険料率を加算
+            premium_rate = {
+                you:     premium_rate.you     + Data.LI_RATE / 2,
+                company: premium_rate.company + Data.LI_RATE / 2,
+                total:   premium_rate.total   + Data.LI_RATE,
+            };
         }
 
         // 健康保険の加入条件を満たすかチェック
@@ -55,12 +57,10 @@ export class HealthInsurance extends InsurancePremium
         }
 
         // 健康保険料を求める
-        const premium_basic: number = target_income * hi_rate / 100;
-
         this.premium = {
-            you:     round(premium_basic / 2, 1, 'roundhd'),
-            company: round(premium_basic / 2),
-            total:   round(premium_basic),
+            you:     round(target_income * premium_rate.you     / 100, 1, 'roundhd'),
+            company: round(target_income * premium_rate.company / 100),
+            total:   round(target_income * premium_rate.total   / 100),
         };
     }
 }

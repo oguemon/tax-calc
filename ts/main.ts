@@ -129,6 +129,64 @@ $(function () {
             bonus_number = 1;
         }
 
+        // 残業情報
+        let basic_work_hours: number = 160;
+        let overwork_rate: number = 1.25;
+        let extreme_overwork_rate: number = 1.5;
+
+        // 健康保険料率
+        let hi_rate: DataSetForInsurancePremium = {
+            you:     Data.HI_GENERAL_RATE_LIST[company_pref][0] / 2,
+            company: Data.HI_GENERAL_RATE_LIST[company_pref][0] / 2,
+            total:   Data.HI_GENERAL_RATE_LIST[company_pref][0],
+        };
+
+        // 詳細設定がオンならば
+        if ($('#income-input .detail-box').css('display') != 'none') {
+            const input_basic_work_hours      = Number($('#input-basic-work-hours').val());
+            const input_overwork_rate         = Number($('#input-overwork-rate').val());
+            const input_extreme_overwork_rate = Number($('#input-extreme-overwork-rate').val());
+            const input_hi_rate_you           = Number($('#input-hi-rate-you').val());
+            const input_hi_rate_company       = Number($('#input-hi-rate-company').val());
+
+            // 基本労働時間
+            if (input_basic_work_hours) {
+                basic_work_hours = input_basic_work_hours;
+            }
+
+            // 割増賃金の倍率（残業60時間未満）
+            if (input_overwork_rate) {
+                overwork_rate = input_overwork_rate;
+            }
+
+            // 割増賃金の倍率（残業60時間以上）
+            if (input_extreme_overwork_rate) {
+                extreme_overwork_rate = input_extreme_overwork_rate;
+            }
+
+            // 健康保険料率（自己負担）
+            if (input_hi_rate_you) {
+                hi_rate.you = input_hi_rate_you;
+            }
+
+            // 健康保険料率（会社負担）
+            if (input_hi_rate_company) {
+                hi_rate.company = input_hi_rate_company;
+            } else {
+                hi_rate.company = hi_rate.you; // 未設定なら折半（自己負担と同額）とする
+            }
+
+            // 健康保険料率（合計）
+            hi_rate.total = hi_rate.you + hi_rate.company;
+        }
+
+        console.log(basic_work_hours);
+        console.log(overwork_rate);
+        console.log(extreme_overwork_rate);
+        console.log(hi_rate.you);
+        console.log(hi_rate.company);
+        console.log(hi_rate.total);
+
         /* --------------------------------------------------
          * 額面給料計算
          * --------------------------------------------------*/
@@ -136,7 +194,7 @@ $(function () {
         const bonus_income_total: number = Math.floor(income * bonus_mounths);
         const bonus_income_once: number = Math.floor(bonus_income_total / bonus_number);
         //給料の元になる支給額の計算（時間外労働手当）
-        const overwork_monthly_income: number = calcOverworkIncome(overwork_hours, income);
+        const overwork_monthly_income: number = calcOverworkIncome(income, overwork_hours, basic_work_hours, overwork_rate, extreme_overwork_rate);
         //給料の元になる支給額の計算（月収と年収）
         const monthly_income: number = income + overwork_monthly_income;
         const annual_income: number = monthly_income * 12 + bonus_income_total;
@@ -155,8 +213,8 @@ $(function () {
          * 社会保険料計算
          * --------------------------------------------------*/
         // 健康保険料
-        let hi      : HealthInsurance = new HealthInsurance(company_pref, income, monthly_income);
-        let hi_bonus: HealthInsurance = new HealthInsurance(company_pref, income, bonus_income_total, bonus_number);
+        let hi      : HealthInsurance = new HealthInsurance(hi_rate, income, monthly_income);
+        let hi_bonus: HealthInsurance = new HealthInsurance(hi_rate, income, bonus_income_total, bonus_number);
         const hi_annually: DataSetForInsurancePremium = {
             you:     hi.premium.you     * 12 + hi_bonus.premium.you     * bonus_number,
             company: hi.premium.company * 12 + hi_bonus.premium.company * bonus_number,
@@ -421,13 +479,13 @@ $(function () {
         for (let i = 0; i <= 100; i += 20) {
             graph_overwork.labels.push((i == 0)? '残業なし' : i + '時間');
             // 額面年収
-            const additional_income: number = calcOverworkIncome(i, income); // ひと月あたり8時間×20日間換算
+            const additional_income: number = calcOverworkIncome(income, i, basic_work_hours, overwork_rate, extreme_overwork_rate);
             const monthly_income: number = income + additional_income;
             const annual_income: number = monthly_income * 12 + bonus_income_total;
             graph_overwork.total.push(annual_income);
 
             // 社会保険料
-            const hi_over: HealthInsurance = new HealthInsurance(company_pref, income, monthly_income);
+            const hi_over: HealthInsurance = new HealthInsurance(hi_rate, income, monthly_income);
             const ep_over: EmployeePension = new EmployeePension(income, monthly_income);
             const ui_over: UnemplymentInsurance = new UnemplymentInsurance(industry_type, monthly_income);
 
@@ -529,15 +587,25 @@ $(function () {
      * 時間外労働手当
      * --------------------------------------------------*/
     // 時間外労働手当を計算（ひと月あたり8時間×20日間換算）
-    function calcOverworkIncome(overwork_hours = 0, income = 0) : number
+    function calcOverworkIncome(
+        basic_income,
+        overwork_hours,
+        basic_work_hours,
+        overwork_rate,
+        extreme_overwork_rate
+    ) : number
     {
+        const basic_income_per_hour = Math.round(basic_income / basic_work_hours);
+
         let overwork_monthly_income: number = 0;
-        if (overwork_hours < 60) {
-            overwork_monthly_income = overwork_hours * 1.25 * income / (20 * 8);
+
+        if (overwork_hours <= 60) {
+            overwork_monthly_income = overwork_rate * overwork_hours * basic_income_per_hour;
         } else {
-            overwork_monthly_income = (60 * 1.25 + (overwork_hours - 60) * 1.5) * income / (20 * 8);
+            overwork_monthly_income = (60 * overwork_rate + (overwork_hours - 60) * extreme_overwork_rate) * basic_income_per_hour;
         }
-        return Math.floor(overwork_monthly_income);
+
+        return Math.round(overwork_monthly_income);
     }
 
     // 水平バーを作る

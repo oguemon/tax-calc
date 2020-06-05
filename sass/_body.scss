@@ -49,6 +49,26 @@ main {
         text-align: center;
     }
 
+    #input-basic-work-hours {
+        width: 60px;
+        font-size: 120%;
+        text-align: center;
+    }
+
+    #input-overwork-rate,
+    #input-extreme-overwork-rate {
+        width: 60px;
+        font-size: 120%;
+        text-align: center;
+    }
+
+    #input-hi-rate-you,
+    #input-hi-rate-company {
+        width: 80px;
+        font-size: 120%;
+        text-align: center;
+    }
+
     .line-box {
         border-bottom: 1px dashed $theme-color;
         display: flex;
@@ -71,6 +91,37 @@ main {
 
     .box {
         padding: 5px;
+    }
+
+    .detail-box {
+        display: none;
+    }
+
+    .btn-detail-toggle {
+        width: 200px;
+        margin: 15px auto 10px;
+        padding: 8px 0;
+        color: $white-color;
+        font-weight: bold;
+        line-height: 20px;
+        background-color: $theme-color;
+        border-radius: 18px;
+        text-align: center;
+        cursor: pointer;
+        opacity: 1;
+        transition: opacity .2s linear;
+
+        &:hover {
+            opacity: 0.7;
+        }
+
+        .setting-icon {
+            width: 25px;
+            height: 25px;
+            margin: 0 7px -9px 0;
+            background: url(../img/more-setting.svg) no-repeat;
+            display: inline-block;
+         }
     }
 
     .attention {
