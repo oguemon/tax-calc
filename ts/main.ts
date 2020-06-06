@@ -189,13 +189,6 @@ $(function () {
             hi_rate.total = hi_rate.you + hi_rate.company;
         }
 
-        console.log(basic_work_hours);
-        console.log(overwork_rate);
-        console.log(extreme_overwork_rate);
-        console.log(hi_rate.you);
-        console.log(hi_rate.company);
-        console.log(hi_rate.total);
-
         /* --------------------------------------------------
          * 額面給料計算
          * --------------------------------------------------*/
