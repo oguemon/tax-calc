@@ -123,11 +123,14 @@ $(function () {
             industry_type = 2;
         }
 
-        // ボーナスの回数がゼロ（ボーナスがない）なら、ボーナス総額ゼロで支給回数1回ってことにする
+        // ボーナスの回数がゼロ（ボーナスがない）なら、1回あたりのボーナスゼロで支給回数1回ってことにする
         if (bonus_number == 0) {
             bonus_mounths = 0;
             bonus_number = 1;
         }
+
+        //給料の元になる支給額の計算（ボーナス）
+        let bonus_income_once: number = Math.floor(income * bonus_mounths);
 
         // 残業情報
         let basic_work_hours: number = 160;
@@ -143,11 +146,17 @@ $(function () {
 
         // 詳細設定がオンならば
         if ($('#income-input .detail-box').css('display') != 'none') {
+            const input_bonus_income_once     = Number($('#input-bonus-income-once').val());
             const input_basic_work_hours      = Number($('#input-basic-work-hours').val());
             const input_overwork_rate         = Number($('#input-overwork-rate').val());
             const input_extreme_overwork_rate = Number($('#input-extreme-overwork-rate').val());
             const input_hi_rate_you           = Number($('#input-hi-rate-you').val());
             const input_hi_rate_company       = Number($('#input-hi-rate-company').val());
+
+            // ボーナス金額
+            if (input_bonus_income_once) {
+                bonus_income_once = input_bonus_income_once;
+            }
 
             // 基本労働時間
             if (input_basic_work_hours) {
@@ -191,8 +200,7 @@ $(function () {
          * 額面給料計算
          * --------------------------------------------------*/
         //給料の元になる支給額の計算（ボーナス）
-        const bonus_income_total: number = Math.floor(income * bonus_mounths);
-        const bonus_income_once: number = Math.floor(bonus_income_total / bonus_number);
+        const bonus_income_total: number = Math.floor(bonus_income_once * bonus_number);
         //給料の元になる支給額の計算（時間外労働手当）
         const overwork_monthly_income: number = calcOverworkIncome(income, overwork_hours, basic_work_hours, overwork_rate, extreme_overwork_rate);
         //給料の元になる支給額の計算（月収と年収）

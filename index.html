@@ -43,7 +43,7 @@
         </div>
         <div class="box line-box">
           <div class="line-label">ボーナス<div class="q-btn" name="bonus-income" detail-info></div></div>
-          <div class="line-value">年あたり<input type="number" id="input-bonus-mounths" step="0.01" value="4">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
+          <div class="line-value">1回あたり<input type="number" id="input-bonus-mounths" step="0.01" value="2">ヶ月分｜年<input type="number" id="input-bonus-number" value="2">回</div>
         </div>
         <div class="box line-box">
           <div class="line-label">残業時間<div class="q-btn" name="overwork-hours" detail-info></div></div>
@@ -70,6 +70,10 @@
           </div>
         </div>
         <div class="detail-box">
+          <div class="box line-box">
+            <div class="line-label">1回あたりボーナス<div class="q-btn" name="bonus-income-once" detail-info></div></div>
+            <div class="line-value"><input type="number" id="input-bonus-income-once">円</div>
+          </div>
           <div class="box line-box">
             <div class="line-label">基本労働時間<div class="q-btn" name="basic-work-hours" detail-info></div></div>
             <div class="line-value">月あたり<input type="number" id="input-basic-work-hours" step="1" value="160">時間</div>
@@ -475,6 +479,14 @@
   <!----------------------------------------------------
   ----詳細設定
   ---------------------------------------------------->
+  <div bonus-income-once>
+    <div title>1回あたりのボーナス額</div>
+    <div body>
+      <p>1回あたりのボーナス額として、月給◯ヶ月分でなく正確な金額を入力したい時にお使いください。</p>
+      <p>このフォームに金額を入力された場合、「ボーナス」欄の1回あたりのボーナス（◯ヶ月分）は無視されます。</p>
+      <p>「ボーナス」欄の、年あたりの支給回数はどちらにせよ使用するのできちんと入力してください。</p>
+    </div>
+  </div>
   <div basic-work-hours>
     <div title>基本労働時間</div>
     <div body>
