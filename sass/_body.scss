@@ -247,6 +247,21 @@ main {
         }
     }
 
+    .article-link {
+        margin: 10px 0 0;
+        padding: 10px;
+        color: #33abe2;
+        background-color: #f0faff;
+        border-radius: 5px;
+        display: block;
+        cursor: pointer;
+        transition: background-color .2s linear;
+
+        &:hover {
+            background-color: $white-color;
+        }
+    }
+
     .detail-box {
         display: none;
     }
