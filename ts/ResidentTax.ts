@@ -232,7 +232,7 @@ export class ResidentTax
         // 人的控除差の合計額
         const diff_personal_deduction: number = 50000; // 基礎控除の人的控除差のみを比較
 
-        if (income > 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
+        if (income <= 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
             // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税と県民税の％合計）を控除
             deduction_total = Math.min(income, diff_personal_deduction) * 0.05;
         } else { // 住民税の合計課税所得金額が200万円以下の場合
