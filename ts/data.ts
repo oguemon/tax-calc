@@ -218,3 +218,44 @@ export const UI_RATE_LIST = new Array(
     company: 8 / 1000
   }
 );
+
+// 所得税率
+export type RateAndDeduction = {
+    rate: number,
+    deduction: number
+};
+
+// 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
+// https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
+export function getIncomeTaxRate (taxable_income = 0): RateAndDeduction
+{
+  let tax: RateAndDeduction = {
+    rate: 0,
+    deduction: 0,
+  };
+
+  if (taxable_income <= 195 * 10000) {
+    tax.rate = 0.05;
+    tax.deduction = 0;
+  } else if (taxable_income <= 330 * 10000) {
+    tax.rate = 0.1;
+    tax.deduction = 97500;
+  } else if (taxable_income <= 695 * 10000) {
+    tax.rate = 0.2;
+    tax.deduction = 427500;
+  } else if (taxable_income <= 900 * 10000) {
+    tax.rate = 0.23;
+    tax.deduction = 636000;
+  } else if (taxable_income <= 1800 * 10000) {
+    tax.rate = 0.33;
+    tax.deduction = 1536000;
+  } else if (taxable_income <= 4000 * 10000) {
+    tax.rate = 0.4;
+    tax.deduction = 2796000;
+  } else { // 4000万円超
+    tax.rate = 0.45;
+    tax.deduction = 4796000;
+  }
+
+  return tax;
+}

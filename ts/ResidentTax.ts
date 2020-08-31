@@ -34,6 +34,9 @@ export class ResidentTax
     // 所得割税率
     public income_tax_rate: DataSetForResidentTax = {pref: 0, city: 0, total: 0};
 
+    // 人的控除差
+    public diff_personal_deduction: number = 0;
+
     // 所得割
     public income_tax: DataSetForResidentTax = {pref: 0, city: 0, total: 0};
 
@@ -78,8 +81,11 @@ export class ResidentTax
             // 所得割の税率を求める
             this.income_tax_rate = this.calcResidentTaxRate(resident_pref, resident_city);
 
+            // 人的控除差
+            this.diff_personal_deduction = 50000; // 今は基礎控除の5万円のみ
+
             // 調整控除
-            const adjust_deduction: DataSetForResidentTax = this.calcAdjustDeduction(this.taxable_income, this.income_tax_rate);
+            const adjust_deduction: DataSetForResidentTax = this.calcAdjustDeduction(this.taxable_income, this.diff_personal_deduction, this.income_tax_rate);
 
             // 調整控除済の最終的な所得割額
             this.income_tax = this.calcIncomeTax(this.taxable_income, this.income_tax_rate, adjust_deduction);
@@ -224,15 +230,12 @@ export class ResidentTax
     /* --------------------------------------------------
      * 住民税の調整控除を計算
      * --------------------------------------------------*/
-    private calcAdjustDeduction (income: number = 0, tax_rate: DataSetForResidentTax): DataSetForResidentTax
+    private calcAdjustDeduction (income: number = 0, diff_personal_deduction: number, tax_rate: DataSetForResidentTax): DataSetForResidentTax
     {
         // 調整控除額（合計）
         let deduction_total: number;
 
-        // 人的控除差の合計額
-        const diff_personal_deduction: number = 50000; // 基礎控除の人的控除差のみを比較
-
-        if (income > 2000000) { // 住民税の合計課税所得金額が200万円を超える場合
+        if (income <= 2000000) { // 住民税の合計課税所得金額が200万円以下の場合
             // 人的控除差の合計と住民税の合計課税所得金額のいずれか小さい額×5％（市民税と県民税の％合計）を控除
             deduction_total = Math.min(income, diff_personal_deduction) * 0.05;
         } else { // 住民税の合計課税所得金額が200万円以下の場合

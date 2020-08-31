@@ -535,6 +535,16 @@ $(function () {
                 }
             }
         });
+
+        /* --------------------------------------------------
+         * ふるさと納税（寄附金控除）
+         * --------------------------------------------------*/
+        // 課税所得金額 - 人的控除差調整額
+        const income_tax_rate: Data.RateAndDeduction = Data.getIncomeTaxRate(rt.taxable_income - rt.diff_personal_deduction);
+        // ふるさと納税の控除上限額を求める
+        const frst_max_tax: number = 2000 + (rt.income_tax.total * 0.2) / (0.9 - income_tax_rate.rate);
+        // 結果を出力
+        $('[frst-tax]').text(add1000Separator(Math.floor(frst_max_tax)));
     });
 
     /* --------------------------------------------------
