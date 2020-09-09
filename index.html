@@ -379,7 +379,7 @@
         <div class="main-value-line">
           <div class="box line-box">
             <div class="line-cell" style="width: 100%;">
-              <div class="line-label">控除上限額（目安）</div>
+              <div class="line-label">全額控除の限度額（目安）</div>
               <div class="line-value"><span frst-tax></span>円</div>
             </div>
           </div>
@@ -389,7 +389,7 @@
           <div class="sub-value-line">
             <div class="box line-box">
               <div class="line-label">ふるさと納税額</div>
-              <div class="line-value">実質負担額</div>
+              <div class="line-value">実質負担額（目安）</div>
             </div>
             <div class="box line-box">
               <div class="line-label"><span>0</span> 〜 <span frst-tax></span>円</div>
@@ -726,19 +726,19 @@
   ----ふるさと納税について
   ---------------------------------------------------->
   <div frst>
-    <div title>ふるさと納税の上限目安額</div>
+    <div title>ふるさと納税</div>
     <div body>
       <p>ふるさと納税とは、好きな自治体に寄付をすることです。</p>
-      <p>自治体に寄付をすると、寄付金額に応じて自分が選んだ品を返礼品としてもらえます。さらに、一定以下の金額なら(寄付金-2000)円が翌年の税金から割り引かれます。つまり、実質2000円でそれ以上の価値のものを手に入れられるのです！</p>
+      <p>自治体にふるさと納税をすると、その金額に応じて自分が選んだ品を返礼品としてもらえます。さらに、一定以下の金額なら(ふるさと納税額-2000)円が翌年の税金から割り引かれます。つまり、<strong>実質2000円でそれ以上の価値のものを手に入れられる</strong>のです！</p>
       <p>ふるさと納税の返礼品はかなり充実していて、自治体によりお肉や果物、生活用品など様々です。</p>
-      <p>(寄付金-2000)円が全て割り引かれるような寄付金の額には限度があり、次の式で求められます。</p>
+      <p>(ふるさと納税額-2000)円が全額割り引かれるような寄付金の額には限度があり、次の式で求められます。</p>
       <div class="box">
-        上限額 = 2000円 + (住民税の所得割 × 20%) / (90% - 所得税の税率)
+        限度額 = 2000円 + (住民税の所得割 × 20%) / (90% - 所得税の税率)
       </div>
       <p>出典：<a href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html" target="_blank">総務省｜ふるさと納税ポータルサイト｜ふるさと納税のしくみ｜税金の控除について</a></p>
       <h3>あなたの場合</h3>
       <div class="box">
-        上限額 ＝ 2000円 + (<span rt-income></span>円 × 20%) / (90% - <span it-rate-rt></span>%)<br>
+        限度額 ＝ 2000円 + (<span rt-income></span>円 × 20%) / (90% - <span it-rate-rt></span>%)<br>
         　　　 ≒ <span frst-tax></span>円
       </div>
     </div>
