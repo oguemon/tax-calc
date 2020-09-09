@@ -545,6 +545,25 @@ $(function () {
         const frst_max_tax: number = 2000 + (rt.income_tax.total * 0.2) / (0.9 - income_tax_rate.rate);
         // 結果を出力
         $('[frst-tax]').text(add1000Separator(Math.floor(frst_max_tax)));
+        $('[it-rate-rt]').text(income_tax_rate.rate * 100);
+        $('[rt-income]').text(add1000Separator(rt.income_tax.total));
+
+        // 上限超過値の実質負担金額を求めて表示
+        let interval = 5000; // 区切り金額
+        let frst_tax = Math.ceil(frst_max_tax / interval) * interval;
+        if (frst_tax - frst_max_tax < 1000) {
+            frst_tax += interval;
+        }
+        for (let i = 1; i <= 5; i++) {
+            const deduction_from_it = (frst_tax - 2000) * it.tax_rate;
+            const deduction_from_rt_normal = (frst_tax - 2000) * 0.1;
+            const deduction_from_rt_special = rt.income_tax.total * 0.2;
+            const deduction_total = deduction_from_it + deduction_from_rt_normal + deduction_from_rt_special;
+
+            $('[frst-tax-' + i + ']').text(add1000Separator(frst_tax));
+            $('[frst-substantial-tax-' + i + ']').text(add1000Separator(frst_tax - deduction_total));
+            frst_tax += interval;
+        }
     });
 
     /* --------------------------------------------------

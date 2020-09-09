@@ -375,16 +375,49 @@
       </div>
 
       <div class="result-box">
-        <div class="header">ふるさと納税</div>
+        <div class="header">ふるさと納税 <div class="q-btn" name="frst" detail-info></div></div>
         <div class="main-value-line">
           <div class="box line-box">
-            <div class="line-cell">
-              <div class="line-label">控除上限額</div>
-              <div class="line-value"></div>
+            <div class="line-cell" style="width: 100%;">
+              <div class="line-label">控除上限額（目安）</div>
               <div class="line-value"><span frst-tax></span>円</div>
             </div>
           </div>
         </div>
+        <div class="detail-box">
+          <h3>ふるさと納税額と実質負担額の比較</h3>
+          <div class="sub-value-line">
+            <div class="box line-box">
+              <div class="line-label">ふるさと納税額</div>
+              <div class="line-value">実質負担額</div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label">0 〜 <span frst-tax></span>円</div>
+              <div class="line-value"><span>2,000円</span></div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label"><span frst-tax-1></span>円</div>
+              <div class="line-value"><span frst-substantial-tax-1></span>円</div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label"><span frst-tax-2></span>円</div>
+              <div class="line-value"><span frst-substantial-tax-2></span>円</div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label"><span frst-tax-3></span>円</div>
+              <div class="line-value"><span frst-substantial-tax-3></span>円</div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label"><span frst-tax-4></span>円</div>
+              <div class="line-value"><span frst-substantial-tax-4></span>円</div>
+            </div>
+            <div class="box line-box">
+              <div class="line-label"><span frst-tax-5></span>円</div>
+              <div class="line-value"><span frst-substantial-tax-5></span>円</div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-detail-toggle">詳細を開閉する</div>
       </div>
 <!--
       課税標準額：<span taxiable-standard></span>円（うち控除額<span total-deduction></span>円）<br>
@@ -687,6 +720,27 @@
       <p>雇用保険料は、その月の賃金に対して雇用保険料率（2018年度は一般の事業において個人負担分が0.3%）を掛け合わせた金額です。ボーナスの場合も同様です。</p>
       <p>雇用保険料における「賃金」には、<strong>基本給や残業手当のみならず、会社が支給する定期券代なども含みます</strong>（定期券代は本計算機では非対応です…）。</p>
       <p>ちなみに、雇用保険料はこれとは別に会社がちょっと多めの額（2018年度は一般の事業において賃金の0.6%）を支払っています。</p>
+    </div>
+  </div>
+  <!----------------------------------------------------
+  ----ふるさと納税について
+  ---------------------------------------------------->
+  <div frst>
+    <div title>ふるさと納税の上限目安額</div>
+    <div body>
+      <p>ふるさと納税とは、好きな自治体に寄付をすることです。</p>
+      <p>自治体に寄付をすると、寄付金額に応じて自分が選んだ品を返礼品としてもらえます。さらに、一定以下の金額なら(寄付金-2000)円が翌年の税金から割り引かれます。つまり、実質2000円でそれ以上の価値のものを手に入れられるのです！</p>
+      <p>ふるさと納税の返礼品はかなり充実していて、自治体によりお肉や果物、生活用品など様々です。</p>
+      <p>(寄付金-2000)円が全て割り引かれるような寄付金の額には限度があり、次の式で求められます。</p>
+      <div class="box">
+        上限額 = 2000円 + (住民税の所得割 × 20%) / (90% - 所得税の税率)
+      </div>
+      <p>出典：<a href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html" target="_blank">総務省｜ふるさと納税ポータルサイト｜ふるさと納税のしくみ｜税金の控除について</a></p>
+      <h3>あなたの場合</h3>
+      <div class="box">
+        上限額 ＝ 2000円 + (<span rt-income></span>円 × 20%) / (90% - <span it-rate-rt></span>%)<br>
+        　　　 ≒ <span frst-tax></span>円
+      </div>
     </div>
   </div>
 </div>
