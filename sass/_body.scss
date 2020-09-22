@@ -311,11 +311,6 @@ main {
             }
 
             .line-value {
-                span {
-                    font-size: 110%;
-                    font-family: arial, sans-serif;
-                }
-
                 &.plus {
                     color: $theme-color;
                 }
@@ -327,6 +322,11 @@ main {
                         content: 'ー';
                     }
                 }
+            }
+
+            span {
+                font-size: 110%;
+                font-family: arial, sans-serif;
             }
         }
     }

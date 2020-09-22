@@ -3,6 +3,7 @@
  * --------------------------------------------------*/
 
 import { round } from './Util';
+import { RateAndDeduction, getIncomeTaxRate } from './Data';
 
 export class IncomeTax
 {
@@ -20,6 +21,9 @@ export class IncomeTax
 
     // 課税所得金額
     public taxable_income: number = 0;
+
+    // 所得税率
+    public tax_rate: number = 0;
 
     // 所得税額
     public tax: number = 0;
@@ -48,8 +52,12 @@ export class IncomeTax
         // 課税所得金額を求める（課税所得は千円未満の端数切捨）
         this.taxable_income = round(Math.max(this.taxable_standard_income - this.total_deduction, 0), 1000, 'floor');
 
+        // 所得税率を求める
+        const rad: RateAndDeduction = getIncomeTaxRate(this.taxable_income);
+        this.tax_rate = rad.rate;
+
         // 所得税額を求める
-        this.tax = this.calcBasicIncomeTax(this.taxable_income);
+        this.tax = this.calcBasicIncomeTax(this.taxable_income, rad);
 
         // 復興特別所得税額
         this.reconstruction_special = this.calcReconstructionSpecialIncomeTax(this.tax);
@@ -172,26 +180,10 @@ export class IncomeTax
 
     // 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
-    private calcBasicIncomeTax (taxable_income = 0) : number
+    private calcBasicIncomeTax (taxable_income = 0, rad: RateAndDeduction) : number
     {
         // 端数処理前の税額を格納
-        let tax_pre_round: number = 0;
-
-        if (taxable_income <= 195 * 10000) {
-            tax_pre_round = taxable_income * 0.05;
-        } else if (taxable_income <= 330 * 10000) {
-            tax_pre_round = taxable_income * 0.1 - 97500;
-        } else if (taxable_income <= 695 * 10000) {
-            tax_pre_round = taxable_income * 0.2 - 427500;
-        } else if (taxable_income <= 900 * 10000) {
-            tax_pre_round = taxable_income * 0.23 - 636000;
-        } else if (taxable_income <= 1800 * 10000) {
-            tax_pre_round = taxable_income * 0.33 - 1536000;
-        } else if (taxable_income <= 4000 * 10000) {
-            tax_pre_round = taxable_income * 0.4 - 2796000;
-        } else { // 4000万円超
-            tax_pre_round = taxable_income * 0.45 - 4796000;
-        }
+        const tax_pre_round: number = taxable_income * rad.rate - rad.deduction;
 
         // 1000円以下の金額を切り捨て
         const tax: number = round(tax_pre_round, 1000, 'floor');
