@@ -39,6 +39,7 @@ export class WithholdingSalary
 
     // 課税給与所得金額
     this.taxable_income = income_without_premium
+                        - this.deductions_pre_round
                         - this.basic_deductions
                         - this.spouse_deductions
                         - this.dependents_deductions;
