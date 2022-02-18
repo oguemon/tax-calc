@@ -414,7 +414,7 @@ $(function () {
         const ctx_income_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-income-detail')[0];
         const ctx_income: CanvasRenderingContext2D = ctx_income_canvas.getContext('2d');
         ctx_income.canvas.height = 150;
-        chart_detail_income = plotHorizontalBar(ctx_income, datasets_income);
+        chart_detail_income = plotDoughnutChart(ctx_income, datasets_income);
 
         // グラフを描画（ボーナス）
         const datasets_bonus_income = {
@@ -440,7 +440,7 @@ $(function () {
         const ctx_bonus_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-bonus-income-detail')[0];
         const ctx_bonus: CanvasRenderingContext2D = ctx_bonus_canvas.getContext('2d');
         ctx_bonus.canvas.height = 150;
-        chart_detail_bonus = plotHorizontalBar(ctx_bonus, datasets_bonus_income);
+        chart_detail_bonus = plotDoughnutChart(ctx_bonus, datasets_bonus_income);
 
         // グラフを描画（年収）
         const datasets_annual_income = {
@@ -466,7 +466,7 @@ $(function () {
         const ctx_annual_canvas: HTMLCanvasElement = <HTMLCanvasElement> $('#graph-annual-income-detail')[0];
         const ctx_annual: CanvasRenderingContext2D = ctx_annual_canvas.getContext('2d');
         ctx_annual.canvas.height = 150;
-        chart_detail_annual_income = plotHorizontalBar(ctx_annual, datasets_annual_income);
+        chart_detail_annual_income = plotDoughnutChart(ctx_annual, datasets_annual_income);
 
         /*
          * 残業時間に対する変化
@@ -644,8 +644,8 @@ $(function () {
         return Math.round(overwork_monthly_income);
     }
 
-    // 水平バーを作る
-    function plotHorizontalBar(plotarea: CanvasRenderingContext2D, datasets): Chart
+    // ドーナツチャートを作る
+    function plotDoughnutChart(plotarea: CanvasRenderingContext2D, datasets): Chart
     {
         const chart: Chart = new Chart(plotarea, {
             type: 'doughnut',
