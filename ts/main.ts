@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Chart from 'chart.js';
+import Chart from 'chart.js/auto';
 import * as Data from './Data';
 import { add1000Separator } from './Util';
 import { WithholdingSalary } from "./WithholdingSalary";
@@ -391,7 +391,7 @@ $(function () {
         }
 
         // グラフを描画（月収）
-        const datasets_income: Chart.ChartData = {
+        const datasets_income = {
             labels: ['手取り月収', '健康保険料', '厚生年金保険料', '雇用保険料', '源泉徴収額'],
             datasets:[{
                 backgroundColor: [
@@ -417,7 +417,7 @@ $(function () {
         chart_detail_income = plotHorizontalBar(ctx_income, datasets_income);
 
         // グラフを描画（ボーナス）
-        const datasets_bonus_income: Chart.ChartData = {
+        const datasets_bonus_income = {
             labels: ['1回の手取りボーナス', '健康保険料', '厚生年金保険料', '雇用保険料', '源泉徴収額'],
             datasets:[{
                 backgroundColor: [
@@ -443,7 +443,7 @@ $(function () {
         chart_detail_bonus = plotHorizontalBar(ctx_bonus, datasets_bonus_income);
 
         // グラフを描画（年収）
-        const datasets_annual_income: Chart.ChartData = {
+        const datasets_annual_income = {
             labels: ['手取り年収', '健康保険料', '厚生年金保険料', '雇用保険料', '所得税額'],
             datasets:[{
                 backgroundColor: [
@@ -510,28 +510,32 @@ $(function () {
                     label: '手取り年収',
                     data: graph_overwork.substantial,
                     backgroundColor: '#f9808f',
-                    lineTension: 0,
-                    borderWidth: 0,
-                    pointRadius: 0
                 }, {
                     label: '額面年収',
                     data: graph_overwork.total,
                     backgroundColor: '#29abe2',
-                    lineTension: 0,
-                    borderWidth: 0,
-                    pointRadius: 0
                 }]
             },
             options: {
+                elements: {
+                    line: {
+                        borderWidth: 0,
+                        fill: true,
+                        tension: 0,
+                    },
+                    point: {
+                        radius: 0,
+                    },
+                },
                 scales: {
-                    yAxes: [{
+                    yAxes: {
                         ticks: {
                             // Include a dollar sign in the ticks
                             callback: function(value, index, values) {
                                 return Math.floor(Number(value) / 10000) + '万円';
                             }
                         }
-                    }]
+                    }
                 }
             }
         });
@@ -641,23 +645,23 @@ $(function () {
     }
 
     // 水平バーを作る
-    function plotHorizontalBar(plotarea: CanvasRenderingContext2D, datasets: Chart.ChartData): Chart
+    function plotHorizontalBar(plotarea: CanvasRenderingContext2D, datasets): Chart
     {
-        const option: Chart.ChartConfiguration = {
+        const chart: Chart = new Chart(plotarea, {
             type: 'doughnut',
             data: datasets,
             options: {
                 animation: {
                     animateRotate: false,
                 },
-                cutoutPercentage: 75,  //　円の中心からどのくらい切り取るか
-                legend: {
-                    display: false,
+                cutout: '75%',  //　円の中心からどのくらい切り取るか
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
                 },
-            }
-        };
-
-        const chart = new Chart(plotarea, option);
+            },
+        });
 
         return chart;
     }

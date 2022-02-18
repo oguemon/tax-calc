@@ -1,15 +1,27 @@
+const sass = require('sass');
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
     // モード値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
     mode: 'development',
 
     // メインとなるJavaScriptファイル（エントリーポイント）
-    entry: './ts/main.ts',
+    entry: {
+      index: './sass/main.scss',
+      index_ts: './ts/main.ts',
+    },
+    // IE11対応のためES5準拠のコードを出力
+    target: ['web', 'es5'],
     output: {
-        //  出力ファイルのディレクトリ名
-        path: __dirname + '/assets/js',
-        // 出力ファイル名
-        filename: "output.js"
+      //  出力ファイルのディレクトリ名
+        path: __dirname + '/assets',
+      // 出力ファイル名
+      filename: (pathData) => {
+        // tsファイルならjsフォルダ内に出力
+        return pathData.chunk.name === 'index_ts' ? 'js/output.js' : '[name].js';
+      },
     },
     module: {
       rules: [
@@ -19,8 +31,40 @@ module.exports = {
           // TypeScript をコンパイルする
           use: 'ts-loader',
         },
+        {
+          test: /\.scss$/,
+          use: [
+            // 別ファイルで出力
+            MiniCssExtractPlugin.loader,
+            // CSSをバンドルするための機能
+            {
+              loader: 'css-loader',
+              options: {
+                url: false,
+              },
+            },
+            // SassからCSSへ変換
+            {
+              loader: 'sass-loader',
+              options: {
+                // dart-sassを使う
+                implementation: sass,
+              },
+            },
+          ],
+        },
       ],
     },
+    plugins: [
+      // /js/css.js を出力しない
+      new RemoveEmptyScriptsPlugin(),
+      // cssファイルを別ファイルで出力
+      new MiniCssExtractPlugin({
+        filename: './css/main.css',
+      }),
+    ],
+    // ソースマップを出力
+    devtool: "source-map",
     // import 文で .ts ファイルを解決するため
     // これを定義しないと import 文で拡張子を書く必要が生まれる。
     // フロントエンドの開発では拡張子を省略することが多いので、
@@ -30,6 +74,13 @@ module.exports = {
       extensions: [
         '.ts', '.js',
       ],
+    },
+    devServer: {
+      static: {
+        directory: __dirname,
+      },
+      host: '0.0.0.0',
+      compress: true,
     },
     // バンドルを除外するライブラリ
     externals: {
