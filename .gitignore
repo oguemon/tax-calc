@@ -1,5 +1,6 @@
 /.vscode
 /assets/css
 /assets/js
+/coverage
 /node_modules
 .DS_Store
