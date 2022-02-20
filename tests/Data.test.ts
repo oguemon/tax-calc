@@ -1,6 +1,12 @@
 import { getIncomeTaxRate } from "../ts/Data";
 
 describe('income tax rate', () => {
+    test('Initial Arguments', () => {
+        const res = getIncomeTaxRate()
+        expect(res.rate).toBe(0.05)
+        expect(res.deduction).toBe(0)
+    })
+
     test('0 yen', () => {
         const res = getIncomeTaxRate(0)
         expect(res.rate).toBe(0.05)
