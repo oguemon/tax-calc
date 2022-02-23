@@ -167,6 +167,8 @@ export class ResidentTax
             capitation_city = Data.RT_RATE_LIST_CITY['神奈川県横浜市'][0];
         } else if (pref_code == 22 && city_code == 1) { // 愛知県名古屋市
             capitation_city = Data.RT_RATE_LIST_CITY['愛知県名古屋市'][0];
+        } else if (pref_code == 27 && city_code == 1) { // 兵庫県神戸市
+            capitation_city = Data.RT_RATE_LIST_CITY['兵庫県神戸市'][0];
         }
 
         const capitation: DataSetForResidentTax = {
