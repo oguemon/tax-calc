@@ -94,6 +94,13 @@ describe('Resident Tax', () => {
         expect(res.income_tax.total).toBeCloseTo(301000)
     })
 
+    test('Kobe City', () => {
+        const res = new ResidentTax(5000000, 0, 27, 1)
+        expect(res.income_tax.pref ).toBeCloseTo(62100)
+        expect(res.income_tax.city ).toBeCloseTo(248400)
+        expect(res.income_tax.total).toBeCloseTo(310500)
+    })
+
     test('Toyooka City', () => {
         const res = new ResidentTax(5000000, 0, 27, 2)
         expect(res.income_tax.pref ).toBeCloseTo(124200)
