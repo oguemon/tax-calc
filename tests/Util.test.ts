@@ -1,6 +1,12 @@
 import { csvToArray, add1000Separator, round } from '../ts/Util';
 
 describe('Add 1,000 Separator', () => {
+    // Initial
+    test('Initial Arguments', () => {
+        const res = add1000Separator()
+        expect(res).toBe('0')
+    })
+
     test('0', () => {
         const res = add1000Separator(0)
         expect(res).toBe('0')
