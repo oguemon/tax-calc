@@ -34,7 +34,7 @@ export class WithholdingBonus
   // 賞与に対する源泉徴収税額の導出にあたっての賞与の金額に乗ずべき率を求める（甲）
   // 賞与に対する源泉徴収税額の算出率の表（令和2年分）
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/15-16.xls
-  public calcTaxRateKou (last_salary_without_premium: number = 0, dependents_count: number) : number
+  public calcTaxRateKou (last_salary_without_premium: number, dependents_count: number) : number
   {
     let tax_rate: number = 0;
 
@@ -60,7 +60,7 @@ export class WithholdingBonus
   // 賞与に対する源泉徴収税額の導出にあたっての賞与の金額に乗ずべき率を求める（乙）
   // 賞与に対する源泉徴収税額の算出率の表（令和2年分）
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/15-16.xls
-  public calcTaxRateOtsu (last_salary_without_premium: number = 0) : number
+  public calcTaxRateOtsu (last_salary_without_premium: number) : number
   {
     let tax_rate: number = 0;
 

@@ -76,7 +76,7 @@ export class ResidentTax
         this.capitation = this.calcCapitation(resident_pref, resident_city);
 
         //所得割
-        const is_taxable: boolean = this.isTaxable(this.taxable_standard_income);
+        const is_taxable: boolean = this.isTaxable(this.taxable_standard_income, 0);
         if (is_taxable) {
             // 所得割の税率を求める
             this.income_tax_rate = this.calcResidentTaxRate(resident_pref, resident_city);
@@ -102,7 +102,7 @@ export class ResidentTax
     }
 
     // 給与所得金額を求める（給与所得控除額の計算がいらない）
-    private calcTaxableIncome (income = 0): number
+    private calcTaxableIncome (income: number): number
     {
         if (income < 651000) {
             return 0;
@@ -153,7 +153,7 @@ export class ResidentTax
     /* --------------------------------------------------
      * 住民税（均等割）
      * --------------------------------------------------*/
-    private calcCapitation (pref_code = 0, city_code = 0) : DataSetForResidentTax
+    private calcCapitation (pref_code: number, city_code: number): DataSetForResidentTax
     {
 
         // 都道府県税（2023年まで500円増し）
@@ -182,7 +182,7 @@ export class ResidentTax
      * 住民税（所得割）
      * --------------------------------------------------*/
     // 課税有無の判定
-    private isTaxable (taxable_standard_income: number = 0, dependents_count: number = 0): boolean
+    private isTaxable (taxable_standard_income: number, dependents_count: number): boolean
     {
         // 所得割の課税基準額（初期値は扶養者が0人の場合の額）
         let tax_criteria: number = 350000;
@@ -196,7 +196,7 @@ export class ResidentTax
     }
 
     // 所得割の税率
-    private calcResidentTaxRate (pref_code: number = 0, city_code: number = 0): DataSetForResidentTax
+    private calcResidentTaxRate (pref_code: number, city_code: number): DataSetForResidentTax
     {
         // 都道府県税（デフォルト値）
         let rate_pref: number = Data.RT_RATE_LIST_PREF[pref_code][1];
@@ -230,7 +230,7 @@ export class ResidentTax
     /* --------------------------------------------------
      * 住民税の調整控除を計算
      * --------------------------------------------------*/
-    private calcAdjustDeduction (income: number = 0, diff_personal_deduction: number, tax_rate: DataSetForResidentTax): DataSetForResidentTax
+    private calcAdjustDeduction (income: number, diff_personal_deduction: number, tax_rate: DataSetForResidentTax): DataSetForResidentTax
     {
         // 調整控除額（合計）
         let deduction_total: number;

@@ -52,7 +52,7 @@ export class WithholdingSalary
   // 源泉徴収における給与所得控除額を求める
   // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第一
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
-  private calcTaxableIncomeDeductions (income = 0) : number
+  private calcTaxableIncomeDeductions (income: number) : number
   {
     // 端数処理前の給与控除額を格納
     let taxable_income_deductions_pre_round: number = 0;
@@ -81,7 +81,7 @@ export class WithholdingSalary
   // 源泉徴収における基本控除額を求める
   // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第三
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
-  private calcBasicDeductions (income = 0) : number
+  private calcBasicDeductions (income: number) : number
   {
     // 端数処理前の給与控除額を格納
     let taxable_income_basic_deductions: number = 0;
@@ -102,7 +102,7 @@ export class WithholdingSalary
   // 源泉徴収における配偶者(特別)控除額を求める
   // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第二
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
-  private calcSpouseDeductions (exist_partner = false) : number
+  private calcSpouseDeductions (exist_partner: boolean) : number
   {
     return (exist_partner)? 31667 : 0;
   }
@@ -110,7 +110,7 @@ export class WithholdingSalary
   // 源泉徴収における扶養控除額を求める
   // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第二
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
-  private calcDependentsDeductions (dependents_count = 0) : number
+  private calcDependentsDeductions (dependents_count: number) : number
   {
     // 基礎控除に加えて扶養人数に応じた
     return 31667 * dependents_count;
@@ -119,7 +119,7 @@ export class WithholdingSalary
   // 源泉徴収額を求める
   // 電子計算機等を使用して源泉徴収税額を計算する方法（令和2年分）別表第四
   // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/18.pdf
-  private calcTaxValue (taxable_income = 0) : number
+  private calcTaxValue (taxable_income: number) : number
   {
     // 端数処理前の税額を格納
     let tax_pre_round: number = 0;

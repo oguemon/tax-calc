@@ -35,7 +35,7 @@ export class InsurancePremium
     public premium: DataSetForInsurancePremium = {you: 0, company: 0, total: 0};
 
     // 社会保険料の等級を求める
-    protected getInsuranceRank (income = 0) {
+    protected getInsuranceRank (income: number) {
         // 等級などを格納する配列（順に健康保険等級・厚生年金等級・月額）
         let rank: number[] = new Array();
 

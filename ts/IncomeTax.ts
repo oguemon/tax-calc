@@ -65,6 +65,7 @@ export class IncomeTax
 
     // 給与所得控除額を計算（令和2年分以降）
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
+    /*
     private calcTaxableIncomeDeductions (income = 0): number
     {
         // 給与所得控除額
@@ -88,9 +89,10 @@ export class IncomeTax
 
         return taxable_income_deductions;
     }
+    */
 
     // 課税所得金額を求める（給与所得控除額の計算がいらない）
-    private calcTaxableIncome (income = 0): number
+    private calcTaxableIncome (income: number): number
     {
         // 年調給与額
         let yearend_tax_adj_income: number = 0;
@@ -160,7 +162,7 @@ export class IncomeTax
 
     // 所得税における基礎控除額を求める（令和2年分以降）
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
-    private calcBasicDeductionsIncomeTax (income: number = 0) : number
+    private calcBasicDeductionsIncomeTax (income: number) : number
     {
         // 基本控除額を格納
         let basic_deductions: number = 0;
@@ -180,7 +182,7 @@ export class IncomeTax
 
     // 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
-    private calcBasicIncomeTax (taxable_income = 0, rad: RateAndDeduction) : number
+    private calcBasicIncomeTax (taxable_income: number, rad: RateAndDeduction) : number
     {
         // 端数処理前の税額を格納
         const tax_pre_round: number = taxable_income * rad.rate - rad.deduction;
