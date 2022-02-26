@@ -1,17 +1,41 @@
 import { WithholdingBonus } from '../ts/WithholdingBonus';
 
 describe('Withholding Bonus', () => {
-    // test('Initial Arguments', () => {
-    //     const res = new WithholdingBonus(0, 0)
-    //     expect(res.tax_rate ).toBeCloseTo(0)
-    //     expect(res.tax_value).toBeCloseTo(0)
-    // })
+    test('Initial Arguments', () => {
+        const res = new WithholdingBonus(0, 0)
+        expect(res.tax_rate ).toBeCloseTo(0)
+        expect(res.tax_value).toBeCloseTo(0)
+    })
 
-    // test('Kou', () => {
-    //     const res = new WithholdingBonus(1000000, 299999, true, 0)
-    //     expect(res.tax_rate ).toBeCloseTo(0)
-    //     expect(res.tax_value).toBeCloseTo(0)
-    // })
+    test('Kou - Rank 10 No Dependents', () => {
+        const res = new WithholdingBonus(1000000, 600999, true, 0)
+        expect(res.tax_rate ).toBeCloseTo(18.378)
+        expect(res.tax_value).toBeCloseTo(183780)
+    })
+
+    test('Kou - Rank 11 No Dependents', () => {
+        const res = new WithholdingBonus(1000000, 601000, true, 0)
+        expect(res.tax_rate ).toBeCloseTo(20.420)
+        expect(res.tax_value).toBeCloseTo(204200)
+    })
+
+    test('Kou - Rank 10 8 Dependents', () => {
+        const res = new WithholdingBonus(1000000, 707999, true, 8)
+        expect(res.tax_rate ).toBeCloseTo(18.378)
+        expect(res.tax_value).toBeCloseTo(183780)
+    })
+
+    test('Kou - Rank 11 8 Dependents', () => {
+        const res = new WithholdingBonus(1000000, 708000, true, 8)
+        expect(res.tax_rate ).toBeCloseTo(20.420)
+        expect(res.tax_value).toBeCloseTo(204200)
+    })
+
+    test('Kou - Rank 21', () => {
+        const res = new WithholdingBonus(1000000, 3590000, true, 3)
+        expect(res.tax_rate ).toBeCloseTo(45.945)
+        expect(res.tax_value).toBeCloseTo(459450)
+    })
 
     test('Otsu - Rank 1', () => {
         const res = new WithholdingBonus(1000000, 221999, false, 0)

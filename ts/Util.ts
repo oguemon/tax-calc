@@ -1,26 +1,5 @@
 'use strict';
 
-  // CSVファイル読み込み
-  export function csvToArray(path) : string[][]
-  {
-    const csvData: string[][] = new Array();
-
-    const data: XMLHttpRequest = new XMLHttpRequest();
-    data.open("GET", path, false);
-    data.send(null);
-
-    const LF: string = String.fromCharCode(10);
-    const lines: string[] = data.responseText.split(LF);
-
-    for (let i = 0; i < lines.length; ++i) {
-      const cells: string[] = lines[i].split(",");
-      if(cells.length > 1) {
-        csvData.push(cells);
-      }
-    }
-    return csvData;
-  }
-
   /* --------------------------------------------------
    * 整形
    * --------------------------------------------------*/

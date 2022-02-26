@@ -2,7 +2,7 @@
  * 源泉徴収（ボーナス）
  * --------------------------------------------------*/
 
-import { csvToArray } from './Util';
+import { WITHHOLDING_BONUS_TABLE_KOU, WITHHOLDING_BONUS_TABLE_OTSU } from './Data';
 
 export class WithholdingBonus
 {
@@ -32,24 +32,22 @@ export class WithholdingBonus
   }
 
   // 賞与に対する源泉徴収税額の導出にあたっての賞与の金額に乗ずべき率を求める（甲）
-  // 賞与に対する源泉徴収税額の算出率の表（令和2年分）
-  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/15-16.xls
   public calcTaxRateKou (last_salary_without_premium: number, dependents_count: number) : number
   {
     let tax_rate: number = 0;
 
-    const arr: string[][] = csvToArray('./csv/withholding-bonus-2020.csv');
+    const arr: number[][] = WITHHOLDING_BONUS_TABLE_KOU;
 
     // 税額表の各行を走査
     for (let i = 0; i < arr.length; i++) {
       // 税額表の最下行以外のポジションで見つけた
-      if (last_salary_without_premium < Number(arr[i][Math.min(dependents_count, 7) + 1]) * 1000) {
+      if (last_salary_without_premium < arr[i][Math.min(dependents_count, 7) + 1] * 1000) {
         tax_rate = Number(arr[i][0]);
         break;
       }
       // 税額表の最下行まできたのに上の条件にヒットしなかった
       if (i == arr.length - 1) {
-        tax_rate = Number(arr[arr.length - 1][0]);
+        tax_rate = arr[arr.length - 1][0];
         break;
       }
     }
@@ -58,22 +56,24 @@ export class WithholdingBonus
   }
 
   // 賞与に対する源泉徴収税額の導出にあたっての賞与の金額に乗ずべき率を求める（乙）
-  // 賞与に対する源泉徴収税額の算出率の表（令和2年分）
-  // https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2019/data/15-16.xls
   public calcTaxRateOtsu (last_salary_without_premium: number) : number
   {
     let tax_rate: number = 0;
 
-    if (last_salary_without_premium < 222 * 1000) {
-      tax_rate = 10.210;
-    } else if (last_salary_without_premium < 293 * 1000) {
-      tax_rate = 20.420;
-    } else if (last_salary_without_premium < 524 * 1000) {
-      tax_rate = 30.630;
-    } else if (last_salary_without_premium < 1118 * 1000) {
-      tax_rate = 38.798;
-    } else { // 1118千円以上
-      tax_rate = 45.945;
+    const arr: number[][] = WITHHOLDING_BONUS_TABLE_OTSU;
+
+    // 税額表の各行を走査
+    for (let i = 0; i < arr.length; i++) {
+      // 税額表の最下行以外のポジションで見つけた
+      if (last_salary_without_premium < arr[i][1] * 1000) {
+        tax_rate = Number(arr[i][0]);
+        break;
+      }
+      // 税額表の最下行まできたのに上の条件にヒットしなかった
+      if (i == arr.length - 1) {
+        tax_rate = arr[arr.length - 1][0];
+        break;
+      }
     }
 
     return tax_rate;
