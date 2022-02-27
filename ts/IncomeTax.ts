@@ -100,8 +100,8 @@ export class IncomeTax
         // 給与所得控除後の給与等の金額
         let taxable_income: number = 0;
 
-        // (1) 年調給与額の算出（令和元年分より・令和2年分は変更なし）
-        // https://www.nta.go.jp/publication/pamph/gensen/nencho2019/pdf/82-83.pdf
+        // (1) 年調給与額の算出（令和3年分）令和4年分は未確定
+        // https://www.nta.go.jp/publication/pamph/gensen/nencho2021/pdf/74-75.pdf
         if (income < 1619000) {
             // 給与の総額をそのまま年調給与額とします
             yearend_tax_adj_income = income;
@@ -111,14 +111,14 @@ export class IncomeTax
             let rank_min: number = 0;
 
             if (income < 1620000) {
-            rank_width = 1000;
-            rank_min = 1619000;
+                rank_width = 1000;
+                rank_min = 1619000;
             } else if (income < 1624000) {
-            rank_width = 2000;
-            rank_min = 1620000;
+                rank_width = 2000;
+                rank_min = 1620000;
             } else { // 162万4000円以上
-            rank_width = 1000;
-            rank_min = 1624000;
+                rank_width = 4000;
+                rank_min = 1624000;
             }
 
             // 算式1. 余りの計算
@@ -131,8 +131,11 @@ export class IncomeTax
             yearend_tax_adj_income = income;
         }
 
-        // (2) 給与所得控除後の給与等の金額の計算（令和2年分事前の情報提供より）
-        // https://www.nta.go.jp/users/gensen/nenmatsu/denshikeisan.htm
+        // (2) 給与所得控除後の給与等の金額の計算（令和3年分）令和4年分は未確定
+        // https://www.nta.go.jp/publication/pamph/gensen/nencho2021/pdf/74-75.pdf
+        // 給与総額が2000万円を超えると上記資料の範囲外となるが、
+        // 次の資料より、2000万円を境に控除金額が変わらないことが判る
+        // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
         if (yearend_tax_adj_income < 551000) {
             taxable_income = 0;
         } else if (yearend_tax_adj_income < 1619000) {
@@ -180,7 +183,7 @@ export class IncomeTax
         return basic_deductions;
     }
 
-    // 課税所得金額から税額を計算（平成27年分以降・令和2年分は変更なし）
+    // 課税所得金額から税額を計算（平成27年分以降）
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
     private calcBasicIncomeTax (taxable_income: number, rad: RateAndDeduction) : number
     {
