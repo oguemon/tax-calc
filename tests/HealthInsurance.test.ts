@@ -299,4 +299,9 @@ describe('Insurance Rank', () => {
         const res = new HealthInsurance(premium_rate, 88000, 1355000)
         expect(res.premium.total).toBeCloseTo(139000)
     })
+
+    test('Max Amount Income', () => {
+        const res = new HealthInsurance(premium_rate, 88000, Number.MAX_SAFE_INTEGER)
+        expect(res.premium.total).toBeCloseTo(139000)
+    })
 })

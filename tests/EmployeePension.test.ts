@@ -17,9 +17,9 @@ describe('Employee Pension', () => {
 
     test('Not Bonus', () => {
         const res = new EmployeePension(88000, 0, 0)
-        expect(res.premium.you    ).toBeCloseTo(5307)
-        expect(res.premium.company).toBeCloseTo(5307)
-        expect(res.premium.total  ).toBeCloseTo(10614)
+        expect(res.premium.you    ).toBeCloseTo(8052)
+        expect(res.premium.company).toBeCloseTo(8052)
+        expect(res.premium.total  ).toBeCloseTo(16104)
     })
 
     test('Is Bonus', () => {

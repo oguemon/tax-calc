@@ -42,10 +42,10 @@ export class HealthInsurance extends InsurancePremium
         if (bonus_number == 0) // ボーナスでない
         {
             // 等級情報を取得
-            const rank = this.getInsuranceRank(get_income);
+            const rank = this.getInsuranceRank(get_income, true);
 
             // 等級情報に基づく月額決定
-            target_income = rank.monthly_price;
+            target_income = rank.monthly_income;
         }
         else if (bonus_number > 0) // ボーナスである
         {

@@ -80,6 +80,103 @@ export const ORDINANCE_DESIGNATED_CITY_LIST = {
 // 健康保険と厚生年金保険の加入下限となる月あたり基本給額
 export const INSURANCE_MIN_INCOME: number = 88000;
 
+// 健康保険の標準報酬等級と月額
+// https://www.kyoukaikenpo.or.jp/g3/cat320/sb3160/sbb3165/1962-231/
+export const HI_STANDARD_INCOME = [
+  // 等級, 標準報酬月額, 報酬月額（未満）
+  // 報酬がNumber.MAX_SAFE_INTEGERである時の挙動を想定する必要あり
+  {rank:  1, monthly_income:   58000, less_than_income:   63000},
+  {rank:  2, monthly_income:   68000, less_than_income:   73000},
+  {rank:  3, monthly_income:   78000, less_than_income:   83000},
+  {rank:  4, monthly_income:   88000, less_than_income:   93000},
+  {rank:  5, monthly_income:   98000, less_than_income:  101000},
+  {rank:  6, monthly_income:  104000, less_than_income:  107000},
+  {rank:  7, monthly_income:  110000, less_than_income:  114000},
+  {rank:  8, monthly_income:  118000, less_than_income:  122000},
+  {rank:  9, monthly_income:  126000, less_than_income:  130000},
+  {rank: 10, monthly_income:  134000, less_than_income:  138000},
+  {rank: 11, monthly_income:  142000, less_than_income:  146000},
+  {rank: 12, monthly_income:  150000, less_than_income:  155000},
+  {rank: 13, monthly_income:  160000, less_than_income:  165000},
+  {rank: 14, monthly_income:  170000, less_than_income:  175000},
+  {rank: 15, monthly_income:  180000, less_than_income:  185000},
+  {rank: 16, monthly_income:  190000, less_than_income:  195000},
+  {rank: 17, monthly_income:  200000, less_than_income:  210000},
+  {rank: 18, monthly_income:  220000, less_than_income:  230000},
+  {rank: 19, monthly_income:  240000, less_than_income:  250000},
+  {rank: 20, monthly_income:  260000, less_than_income:  270000},
+  {rank: 21, monthly_income:  280000, less_than_income:  290000},
+  {rank: 22, monthly_income:  300000, less_than_income:  310000},
+  {rank: 23, monthly_income:  320000, less_than_income:  330000},
+  {rank: 24, monthly_income:  340000, less_than_income:  350000},
+  {rank: 25, monthly_income:  360000, less_than_income:  370000},
+  {rank: 26, monthly_income:  380000, less_than_income:  395000},
+  {rank: 27, monthly_income:  410000, less_than_income:  425000},
+  {rank: 28, monthly_income:  440000, less_than_income:  455000},
+  {rank: 29, monthly_income:  470000, less_than_income:  485000},
+  {rank: 30, monthly_income:  500000, less_than_income:  515000},
+  {rank: 31, monthly_income:  530000, less_than_income:  545000},
+  {rank: 32, monthly_income:  560000, less_than_income:  575000},
+  {rank: 33, monthly_income:  590000, less_than_income:  605000},
+  {rank: 34, monthly_income:  620000, less_than_income:  635000},
+  {rank: 35, monthly_income:  650000, less_than_income:  665000},
+  {rank: 36, monthly_income:  680000, less_than_income:  695000},
+  {rank: 37, monthly_income:  710000, less_than_income:  730000},
+  {rank: 38, monthly_income:  750000, less_than_income:  770000},
+  {rank: 39, monthly_income:  790000, less_than_income:  810000},
+  {rank: 40, monthly_income:  830000, less_than_income:  855000},
+  {rank: 41, monthly_income:  880000, less_than_income:  905000},
+  {rank: 42, monthly_income:  930000, less_than_income:  955000},
+  {rank: 43, monthly_income:  980000, less_than_income: 1005000},
+  {rank: 44, monthly_income: 1030000, less_than_income: 1055000},
+  {rank: 45, monthly_income: 1090000, less_than_income: 1115000},
+  {rank: 46, monthly_income: 1150000, less_than_income: 1175000},
+  {rank: 47, monthly_income: 1210000, less_than_income: 1235000},
+  {rank: 48, monthly_income: 1270000, less_than_income: 1295000},
+  {rank: 49, monthly_income: 1330000, less_than_income: 1355000},
+  {rank: 50, monthly_income: 1390000, less_than_income: Number.MAX_SAFE_INTEGER},
+]
+
+// 健康保険の標準報酬等級と月額
+// https://www.nenkin.go.jp/service/kounen/hokenryo-gaku/gakuhyo/
+export const EP_STANDARD_INCOME = [
+  // 等級, 標準報酬月額, 報酬月額（未満）
+  // 最高等級のless_than_incomeは仮値
+  // 報酬がNumber.MAX_SAFE_INTEGERである時の挙動を想定する必要あり
+  {rank:  1, monthly_income:   88000, less_than_income:   93000},
+  {rank:  2, monthly_income:   98000, less_than_income:  101000},
+  {rank:  3, monthly_income:  104000, less_than_income:  107000},
+  {rank:  4, monthly_income:  110000, less_than_income:  114000},
+  {rank:  5, monthly_income:  118000, less_than_income:  122000},
+  {rank:  6, monthly_income:  126000, less_than_income:  130000},
+  {rank:  7, monthly_income:  134000, less_than_income:  138000},
+  {rank:  8, monthly_income:  142000, less_than_income:  146000},
+  {rank:  9, monthly_income:  150000, less_than_income:  155000},
+  {rank: 10, monthly_income:  160000, less_than_income:  165000},
+  {rank: 11, monthly_income:  170000, less_than_income:  175000},
+  {rank: 12, monthly_income:  180000, less_than_income:  185000},
+  {rank: 13, monthly_income:  190000, less_than_income:  195000},
+  {rank: 14, monthly_income:  200000, less_than_income:  210000},
+  {rank: 15, monthly_income:  220000, less_than_income:  230000},
+  {rank: 16, monthly_income:  240000, less_than_income:  250000},
+  {rank: 17, monthly_income:  260000, less_than_income:  270000},
+  {rank: 18, monthly_income:  280000, less_than_income:  290000},
+  {rank: 19, monthly_income:  300000, less_than_income:  310000},
+  {rank: 20, monthly_income:  320000, less_than_income:  330000},
+  {rank: 21, monthly_income:  340000, less_than_income:  350000},
+  {rank: 22, monthly_income:  360000, less_than_income:  370000},
+  {rank: 23, monthly_income:  380000, less_than_income:  395000},
+  {rank: 24, monthly_income:  410000, less_than_income:  425000},
+  {rank: 25, monthly_income:  440000, less_than_income:  455000},
+  {rank: 26, monthly_income:  470000, less_than_income:  485000},
+  {rank: 27, monthly_income:  500000, less_than_income:  515000},
+  {rank: 28, monthly_income:  530000, less_than_income:  545000},
+  {rank: 29, monthly_income:  560000, less_than_income:  575000},
+  {rank: 30, monthly_income:  590000, less_than_income:  605000},
+  {rank: 31, monthly_income:  620000, less_than_income:  635000},
+  {rank: 32, monthly_income:  650000, less_than_income:  Number.MAX_SAFE_INTEGER},
+]
+
 // 健康保険料率（令和4年3月分以降）
 // https://www.kyoukaikenpo.or.jp/g3/cat330/1936-295/
 export const HI_GENERAL_RATE_LIST: number[][] = new Array(
