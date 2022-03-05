@@ -1,3 +1,5 @@
+'use strict'
+
 /*
 用語解説
 hi: 国民健康保険（health insurance）

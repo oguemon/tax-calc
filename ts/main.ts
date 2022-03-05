@@ -1,3 +1,5 @@
+'use strict'
+
 import $ from 'jquery';
 import Chart from 'chart.js/auto';
 import * as Data from './Data';
@@ -13,8 +15,6 @@ import { ResidentTax } from './ResidentTax';
 import ModalPlugin from './modal';
 
 $(function () {
-    'use strict';
-
     // モーダルプラグインの定義
     $.fn.extend({
         modal: ModalPlugin,
