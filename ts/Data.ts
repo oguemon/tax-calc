@@ -8,7 +8,7 @@ li: 介護保険（long-term care insurance）
 it: 所得税（income tax）
 */
 // 都道府県のJIS的並び
-export const PREF_LIST: string[] = new Array(
+export const PREF_LIST: string[] = [
   '北海道', // 0
   '青森県', // 1
   '岩手県', // 2
@@ -56,7 +56,7 @@ export const PREF_LIST: string[] = new Array(
   '宮崎県', // 44
   '鹿児島県', // 45
   '沖縄県'  // 46
-);
+];
 
 // 政令指定都市の一覧
 export const ORDINANCE_DESIGNATED_CITY_LIST = {
@@ -179,7 +179,7 @@ export const EP_STANDARD_INCOME = [
 
 // 健康保険料率（令和4年3月分以降）
 // https://www.kyoukaikenpo.or.jp/g3/cat330/1936-295/
-export const HI_GENERAL_RATE_LIST: number[][] = new Array(
+export const HI_GENERAL_RATE_LIST: number[][] = [
   // [一般保険料率, 特定保険料率, 基本保険料率],
   [10.39, 3.43, 6.96], // 北海道
   [10.03, 3.43, 6.60], // 青森県
@@ -228,10 +228,10 @@ export const HI_GENERAL_RATE_LIST: number[][] = new Array(
   [10.14, 3.43, 6.71], // 宮崎県
   [10.65, 3.43, 7.22], // 鹿児島県
   [10.09, 3.43, 6.66], // 沖縄県
-);
+];
 
 // 道府県民税率（令和4年度）政令市特例反映前
-export const RT_RATE_LIST_PREF: number[][] = new Array(
+export const RT_RATE_LIST_PREF: number[][] = [
   // [均等割, 所得割],
   [1500, 0.04], // 北海道
   [1500, 0.04], // 青森県
@@ -280,7 +280,7 @@ export const RT_RATE_LIST_PREF: number[][] = new Array(
   [2000, 0.04], // 宮崎県｜森林環境税
   [2000, 0.04], // 鹿児島県｜森林環境税
   [1500, 0.04]  // 沖縄県
-);
+];
 
 // 市町村民税率（令和4年度）政令市特例反映前
 export const RT_RATE_LIST_CITY = {
@@ -304,7 +304,7 @@ export const EP_RATE: number = 18.3;
 // https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000108634.html
 // 令和4年10月以降も変更（雇用保険料率が上がる）見込み
 // https://www.mhlw.go.jp/stf/topics/bukyoku/soumu/houritu/208.html
-export const UI_RATE_LIST = new Array(
+export const UI_RATE_LIST = [
   { // 一般の事業
     you:     3 / 1000,
     company: 6.5 / 1000,
@@ -317,7 +317,7 @@ export const UI_RATE_LIST = new Array(
     you:     4 / 1000,
     company: 8.5 / 1000,
   }
-);
+];
 
 // 所得税率
 export type RateAndDeduction = {
