@@ -169,20 +169,12 @@ export class IncomeTax
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
     private calcBasicDeductionsIncomeTax (income: number) : number
     {
-        // 基本控除額を格納
-        let basic_deductions: number = 0;
+        if (income <= 2400_0000) return 48_0000
+        if (income <= 2450_0000) return 32_0000
+        if (income <= 2500_0000) return 16_0000
 
-        if (income <= 2400 * 10000) {
-            basic_deductions = 48 * 10000;
-        } else if (income <= 2450 * 10000) {
-            basic_deductions = 32 * 10000;
-        } else if (income <= 2500 * 10000) {
-            basic_deductions = 16 * 10000;
-        } else { // 2500万円超
-            basic_deductions = 0;
-        }
-
-        return basic_deductions;
+        // 2500万円超
+        return 0;
     }
 
     // 課税所得金額から税額を計算（平成27年分以降）

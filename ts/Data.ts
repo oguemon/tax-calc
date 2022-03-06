@@ -331,35 +331,15 @@ export type RateAndDeduction = {
 // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
 export function getIncomeTaxRate (taxable_income = 0): RateAndDeduction
 {
-  let tax: RateAndDeduction = {
-    rate: 0,
-    deduction: 0,
-  };
+  if (taxable_income <=  195_0000) return {rate: 0.05, deduction:       0}
+  if (taxable_income <=  330_0000) return {rate: 0.10, deduction:   97500}
+  if (taxable_income <=  695_0000) return {rate: 0.20, deduction:  427500}
+  if (taxable_income <=  900_0000) return {rate: 0.23, deduction:  636000}
+  if (taxable_income <= 1800_0000) return {rate: 0.33, deduction: 1536000}
+  if (taxable_income <= 4000_0000) return {rate: 0.40, deduction: 2796000}
 
-  if (taxable_income <= 195 * 10000) {
-    tax.rate = 0.05;
-    tax.deduction = 0;
-  } else if (taxable_income <= 330 * 10000) {
-    tax.rate = 0.1;
-    tax.deduction = 97500;
-  } else if (taxable_income <= 695 * 10000) {
-    tax.rate = 0.2;
-    tax.deduction = 427500;
-  } else if (taxable_income <= 900 * 10000) {
-    tax.rate = 0.23;
-    tax.deduction = 636000;
-  } else if (taxable_income <= 1800 * 10000) {
-    tax.rate = 0.33;
-    tax.deduction = 1536000;
-  } else if (taxable_income <= 4000 * 10000) {
-    tax.rate = 0.4;
-    tax.deduction = 2796000;
-  } else { // 4000万円超
-    tax.rate = 0.45;
-    tax.deduction = 4796000;
-  }
-
-  return tax;
+  // 4000万円超
+  return {rate: 0.45, deduction: 4796000}
 }
 
 // 賞与に対する源泉徴収税額の算出率の表（令和4年分）
