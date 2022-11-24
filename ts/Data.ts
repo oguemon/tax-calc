@@ -302,22 +302,20 @@ export const LI_RATE: number = 1.80;
 // https://www.nenkin.go.jp/service/kounen/hokenryo-gaku/gakuhyo/
 export const EP_RATE: number = 18.3;
 
-// 雇用保険料（令和4年度・9月まで）
+// 雇用保険料（令和4年度・10月から令和5年3月31日）
 // https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000108634.html
-// 令和4年10月以降も変更（雇用保険料率が上がる）見込み
-// https://www.mhlw.go.jp/stf/topics/bukyoku/soumu/houritu/208.html
 export const UI_RATE_LIST = [
   { // 一般の事業
-    you:     3 / 1000,
-    company: 6.5 / 1000,
+    you:     5 / 1000,
+    company: 8.5 / 1000,
   },
   { // 農林水産・清酒製造の事業
-    you:     4 / 1000,
-    company: 7.5 / 1000,
+    you:     6 / 1000,
+    company: 9.5 / 1000,
   },
   { // 建設の事業
-    you:     4 / 1000,
-    company: 8.5 / 1000,
+    you:     6 / 1000,
+    company: 10.5 / 1000,
   }
 ];
 

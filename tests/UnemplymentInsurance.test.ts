@@ -11,22 +11,22 @@ describe('Unemplyment Insurance', () => {
 
     test('IndustryType = 一般の事業', () => {
         const res = new UnemplymentInsurance(0, 100000)
-        expect(res.premium.you    ).toBeCloseTo(300)
-        expect(res.premium.company).toBeCloseTo(650)
-        expect(res.premium.total  ).toBeCloseTo(950)
+        expect(res.premium.you    ).toBeCloseTo(500)
+        expect(res.premium.company).toBeCloseTo(850)
+        expect(res.premium.total  ).toBeCloseTo(1350)
     })
 
     test('IndustryType = 農林水産・清酒製造の事業', () => {
         const res = new UnemplymentInsurance(1, 100000)
-        expect(res.premium.you    ).toBeCloseTo(400)
-        expect(res.premium.company).toBeCloseTo(750)
-        expect(res.premium.total  ).toBeCloseTo(1150)
+        expect(res.premium.you    ).toBeCloseTo(600)
+        expect(res.premium.company).toBeCloseTo(950)
+        expect(res.premium.total  ).toBeCloseTo(1550)
     })
 
     test('IndustryType = 建設の事業', () => {
         const res = new UnemplymentInsurance(2, 100000)
-        expect(res.premium.you    ).toBeCloseTo(400)
-        expect(res.premium.company).toBeCloseTo(850)
-        expect(res.premium.total  ).toBeCloseTo(1250)
+        expect(res.premium.you    ).toBeCloseTo(600)
+        expect(res.premium.company).toBeCloseTo(1050)
+        expect(res.premium.total  ).toBeCloseTo(1650)
     })
 })
