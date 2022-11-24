@@ -4,7 +4,9 @@
   "description": "SASSとjsのコンパイル。",
   "private": true,
   "scripts": {
-    "test": "npx jest --coverage"
+    "develop": "webpack",
+    "build": "webpack --mode=production",
+    "test": "jest --coverage"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
