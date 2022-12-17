@@ -2,7 +2,7 @@
 module.exports = {
   moduleFileExtensions: ["js", "ts"],
   transform: {
-    "^.+\\.ts$": ["ts-jest"]
+    "^.+\\.ts$": ["@swc/jest"]
   },
   testMatch: ["**/tests/**/*.test.ts"]
 }
