@@ -608,6 +608,9 @@ $(function () {
             for (let i = 0; i < oedinance_designated_sities_in_pref.length; i++) {
             select.append('<option value="' + (i + 1) + '">' + oedinance_designated_sities_in_pref[i] + '</option>');
             }
+            if (pref_name　== '大阪府') {
+            select.append('<option value="' + (oedinance_designated_sities_in_pref.length + 1) + '">田尻町</option>');
+            }
             if (pref_name　== '兵庫県') {
             select.append('<option value="' + (oedinance_designated_sities_in_pref.length + 1) + '">豊岡市</option>');
             }

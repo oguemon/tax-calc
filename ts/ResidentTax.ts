@@ -169,6 +169,8 @@ export class ResidentTax
             capitation_city = Data.RT_RATE_LIST_CITY['神奈川県横浜市'][0];
         } else if (pref_code == 22 && city_code == 1) { // 愛知県名古屋市
             capitation_city = Data.RT_RATE_LIST_CITY['愛知県名古屋市'][0];
+        } else if (pref_code == 26 && city_code == 3) { // 大阪府田尻町
+            capitation_city = Data.RT_RATE_LIST_CITY['大阪府田尻町'][0];
         } else if (pref_code == 27 && city_code == 1) { // 兵庫県神戸市
             capitation_city = Data.RT_RATE_LIST_CITY['兵庫県神戸市'][0];
         }
@@ -214,6 +216,8 @@ export class ResidentTax
                 rate_pref -= 0.02;
                 rate_city = Data.RT_RATE_LIST_CITY['愛知県名古屋市'][1];
                 rate_city += 0.02;
+            } else if (pref_code == 26 && city_code == 3) { // 大阪府田尻町
+                rate_city = Data.RT_RATE_LIST_CITY['大阪府田尻町'][1];
             } else if (pref_code == 27 && city_code == 2) { // 兵庫県豊岡市
                 rate_city = Data.RT_RATE_LIST_CITY['兵庫県豊岡市'][1];
             } else { // ただの政令指定都市たち
