@@ -21,10 +21,10 @@ $(function () {
     });
 
     // グラフのインスタンス
-    let chart_detail_income: Chart;
-    let chart_detail_bonus: Chart;
-    let chart_detail_annual_income: Chart;
-    let chart_overwork_transition: Chart;
+    let chart_detail_income: Chart<'doughnut'>;
+    let chart_detail_bonus: Chart<'doughnut'>;
+    let chart_detail_annual_income: Chart<'doughnut'>;
+    let chart_overwork_transition: Chart<'line'>;
 
     // 画像を含めて読み込みが完了したら
     $(window).on('load', function () {
@@ -645,9 +645,9 @@ $(function () {
     }
 
     // ドーナツチャートを作る
-    function plotDoughnutChart(plotarea: CanvasRenderingContext2D, datasets): Chart
+    function plotDoughnutChart(plotarea: CanvasRenderingContext2D, datasets)
     {
-        const chart: Chart = new Chart(plotarea, {
+        const chart = new Chart<'doughnut'>(plotarea, {
             type: 'doughnut',
             data: datasets,
             options: {
