@@ -37,9 +37,9 @@ describe('Health Insurance', () => {
 
     test('Over 40 Age', () => {
         const res = new HealthInsurance(premium_rate, 500000, 0, 0, true)
-        expect(res.premium.you    ).toBeCloseTo(3422)
-        expect(res.premium.company).toBeCloseTo(4002)
-        expect(res.premium.total  ).toBeCloseTo(7424)
+        expect(res.premium.you    ).toBeCloseTo(3428)
+        expect(res.premium.company).toBeCloseTo(4008)
+        expect(res.premium.total  ).toBeCloseTo(7436)
     })
 })
 
