@@ -2,7 +2,8 @@ const sass = require('sass');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
+/** @type {import('webpack').Configuration} */
+const config = {
     // モード値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
     mode: 'development',
@@ -85,4 +86,13 @@ module.exports = {
     externals: {
         moment: 'moment'
     },
+};
+
+module.exports = (env, argv) => {
+  // 本番ビルドならソースマップを出力しない
+  if (argv.mode === 'production') {
+    config.devtool = false;
+  }
+
+  return config;
 };
