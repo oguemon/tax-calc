@@ -12,8 +12,7 @@ module.exports = {
       index: './sass/main.scss',
       index_ts: './ts/main.ts',
     },
-    // IE11対応のためES5準拠のコードを出力
-    target: ['web', 'es5'],
+    target: ['web'],
     output: {
       //  出力ファイルのディレクトリ名
         path: __dirname + '/assets',
