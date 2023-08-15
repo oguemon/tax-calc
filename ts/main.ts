@@ -760,7 +760,7 @@ $(() => {
     // 結果を出力
     $("[frst-tax]").text(add1000Separator(Math.floor(frst_max_tax)));
     $("[it-rate-rt]").text(income_tax_rate.rate * 100);
-    $("[rt-income]").text(add1000Separator(rt.income_tax.total));
+    $("[rt-total-income]").text(add1000Separator(rt.income_tax.total));
 
     // 上限超過値の実質負担金額を求めて表示
     let interval = 5000; // 区切り金額
