@@ -1,7 +1,19 @@
 "use strict";
 
 import $ from "jquery";
-import Chart from "chart.js/auto";
+import {
+  Chart,
+  DoughnutController,
+  ArcElement,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Filler,
+  Legend,
+  Tooltip,
+} from "chart.js";
 import * as Data from "./Data";
 import { add1000Separator } from "./Util";
 import { WithholdingSalary } from "./WithholdingSalary";
@@ -13,6 +25,19 @@ import { IndustryType, UnemplymentInsurance } from "./UnemplymentInsurance";
 import { IncomeTax } from "./IncomeTax";
 import { ResidentTax } from "./ResidentTax";
 import ModalPlugin from "./modal";
+
+Chart.register(
+  DoughnutController,
+  ArcElement,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Filler,
+  Legend,
+  Tooltip
+);
 
 $(function () {
   // モーダルプラグインの定義
@@ -734,9 +759,8 @@ $(function () {
           },
         },
         scales: {
-          yAxes: {
+          y: {
             ticks: {
-              // Include a dollar sign in the ticks
               callback: function (value, index, values) {
                 return Math.floor(Number(value) / 10000) + "万円";
               },
