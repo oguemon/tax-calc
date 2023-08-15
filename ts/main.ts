@@ -39,7 +39,7 @@ Chart.register(
   Tooltip
 );
 
-$(function () {
+$(() => {
   // モーダルプラグインの定義
   $.fn.extend({
     modal: ModalPlugin,
@@ -51,26 +51,20 @@ $(function () {
   let chart_detail_annual_income: Chart<"doughnut">;
   let chart_overwork_transition: Chart<"line">;
 
-  // 画像を含めて読み込みが完了したら
-  $(window).on("load", function () {});
-
-  // スクロールしたら
-  $(window).on("scroll", function () {});
-
   // 詳細ボタンを押すと
-  $(".btn-detail-toggle").on("click", function () {
-    $(this).parent().children(".detail-box").slideToggle(300);
+  $(".btn-detail-toggle").on("click", (e) => {
+    $(e.currentTarget).parent().children(".detail-box").slideToggle(300);
   });
 
   // リトライボタンを押すと
-  $("#retry").on("click", function () {
+  $("#retry").on("click", () => {
     // トップへスクロール
     $("body,html").animate({ scrollTop: 0 }, 400, "swing");
   });
 
-  $('a[href^="#"]').on("click", function () {
+  $('a[href^="#"]').on("click", (e) => {
     const speed: number = 400; // ミリ秒
-    const href = $(this).attr("href");
+    const href = $(e.currentTarget).attr("href");
     const target = $(href == "#" || href == "" ? "html" : href);
     const position = target.offset().top - 10; //ゆとりを持たせる
     $("body,html").animate({ scrollTop: position }, speed, "swing");
@@ -80,22 +74,10 @@ $(function () {
   for (let i = 0; i < Data.PREF_LIST.length; i++) {
     const selected: string = Data.PREF_LIST[i] == "東京都" ? "selected" : "";
     $("#select-company-pref").append(
-      '<option value="' +
-        i +
-        '" ' +
-        selected +
-        ">" +
-        Data.PREF_LIST[i] +
-        "</option>"
+      `<option value="${i}" ${selected}>${Data.PREF_LIST[i]}</option>`
     );
     $("#select-resident-pref").append(
-      '<option value="' +
-        i +
-        '" ' +
-        selected +
-        ">" +
-        Data.PREF_LIST[i] +
-        "</option>"
+      `<option value="${i}" ${selected}>${Data.PREF_LIST[i]}</option>`
     );
   }
 
@@ -103,7 +85,7 @@ $(function () {
   let resident_pref_selected: boolean = false;
 
   // 勤務先の都道府県を選択したら
-  $("#select-company-pref").on("change", function () {
+  $("#select-company-pref").on("change", () => {
     // 初めての選択だったなら
     if (!resident_pref_selected) {
       let company_pref: number = Number($("#select-company-pref").val());
@@ -116,7 +98,7 @@ $(function () {
   });
 
   // 自宅の都道府県を選択したら
-  $("#select-resident-pref").on("change", function () {
+  $("#select-resident-pref").on("change", () => {
     let resident_pref: number = Number($("#select-resident-pref").val());
     resident_pref = resident_pref ? resident_pref : 0;
     toggleSelectResidentCity(resident_pref);
@@ -126,7 +108,7 @@ $(function () {
   });
 
   // 計算ボタンをクリックしたら
-  $("#btn-calc-tax").on("click", function () {
+  $("#btn-calc-tax").on("click", () => {
     // 結果画面を表示
     $("#result").slideDown(400);
 
@@ -493,7 +475,7 @@ $(function () {
     $("#copy-area-text").text(textarea_body);
     $("#share-twitter").attr(
       "href",
-      "https://twitter.com/intent/tweet?" + twitter_parms
+      `https://twitter.com/intent/tweet?${twitter_parms}`
     );
 
     // メール
@@ -530,10 +512,7 @@ $(function () {
 
     $("#share-mail").attr(
       "href",
-      "mailto:contact@oguemon.com?subject=" +
-        mail_subject +
-        "&body=" +
-        mail_body
+      `mailto:contact@oguemon.com?subject=${mail_subject}&body=${mail_body}`
     );
 
     /* --------------------------------------------------
@@ -761,9 +740,7 @@ $(function () {
         scales: {
           y: {
             ticks: {
-              callback: function (value, index, values) {
-                return Math.floor(Number(value) / 10000) + "万円";
-              },
+              callback: (value) => Math.floor(Number(value) / 10000) + "万円",
             },
           },
         },
@@ -802,8 +779,8 @@ $(function () {
         deduction_from_rt_normal +
         deduction_from_rt_special;
 
-      $("[frst-tax-" + i + "]").text(add1000Separator(frst_tax));
-      $("[frst-substantial-tax-" + i + "]").text(
+      $(`[frst-tax-${i}]`).text(add1000Separator(frst_tax));
+      $(`[frst-substantial-tax-${i}]`).text(
         add1000Separator(frst_tax - deduction_total)
       );
       frst_tax += interval;
@@ -813,24 +790,24 @@ $(function () {
   /* --------------------------------------------------
    * モーダル
    * --------------------------------------------------*/
-  $("[detail-info]").on("click", function () {
-    const name: string = $(this).attr("name");
+  $("[detail-info]").on("click", (e) => {
+    const name = $(e.currentTarget).attr("name");
     showModal(name);
   });
 
-  function showModal(id = "") {
-    const msg = $("#modal-parts").find("[" + id + "]");
+  const showModal = (id = "") => {
+    const msg = $("#modal-parts").find(`[${id}]`);
     const move_modal: any = $("#moveModal"); // modalプラグインを使うための苦肉の策
     move_modal.find(".title").text(msg.find("[title]").text());
     move_modal.find(".body").html(msg.find("[body]").html());
     move_modal.modal("show");
-  }
+  };
 
   /* --------------------------------------------------
    * 入力
    * --------------------------------------------------*/
   // 市町村選択の表示非表示を判定して切り替える
-  function toggleSelectResidentCity(resident_pref = 0): void {
+  const toggleSelectResidentCity = (resident_pref = 0): void => {
     // 市町村を選択する項目の行
     const box: JQuery<HTMLElement> = $("#line-box-select-city");
     const select: JQuery<HTMLElement> = $("#select-resident-city");
@@ -841,30 +818,15 @@ $(function () {
 
     // 指定された都道府県か否かをチェック
     if (pref_name in Data.ORDINANCE_DESIGNATED_CITY_LIST) {
-      const oedinance_designated_sities_in_pref: string[] =
-        Data.ORDINANCE_DESIGNATED_CITY_LIST[pref_name];
-      for (let i = 0; i < oedinance_designated_sities_in_pref.length; i++) {
-        select.append(
-          '<option value="' +
-            (i + 1) +
-            '">' +
-            oedinance_designated_sities_in_pref[i] +
-            "</option>"
-        );
+      const cities = Data.ORDINANCE_DESIGNATED_CITY_LIST[pref_name];
+      for (let i = 0; i < cities.length; i++) {
+        select.append(`<option value="${i + 1}">${cities[i]}</option>`);
       }
       if (pref_name == "大阪府") {
-        select.append(
-          '<option value="' +
-            (oedinance_designated_sities_in_pref.length + 1) +
-            '">田尻町</option>'
-        );
+        select.append(`<option value="${cities.length + 1}">田尻町</option>`);
       }
       if (pref_name == "兵庫県") {
-        select.append(
-          '<option value="' +
-            (oedinance_designated_sities_in_pref.length + 1) +
-            '">豊岡市</option>'
-        );
+        select.append(`<option value="${cities.length + 1}">豊岡市</option>`);
       }
       select.append('<option value="0">それ以外の市町村</option>');
       box.slideDown(300);
@@ -872,19 +834,19 @@ $(function () {
       select.append('<option value="0">全ての市町村</option>');
       box.slideUp(300);
     }
-  }
+  };
 
   /* --------------------------------------------------
    * 時間外労働手当
    * --------------------------------------------------*/
   // 時間外労働手当を計算（ひと月あたり8時間×20日間換算）
-  function calcOverworkIncome(
+  const calcOverworkIncome = (
     basic_income,
     overwork_hours,
     basic_work_hours,
     overwork_rate,
     extreme_overwork_rate
-  ): number {
+  ): number => {
     const basic_income_per_hour = Math.round(basic_income / basic_work_hours);
 
     let overwork_monthly_income: number = 0;
@@ -899,10 +861,10 @@ $(function () {
     }
 
     return Math.round(overwork_monthly_income);
-  }
+  };
 
   // ドーナツチャートを作る
-  function plotDoughnutChart(plotarea: CanvasRenderingContext2D, datasets) {
+  const plotDoughnutChart = (plotarea: CanvasRenderingContext2D, datasets) => {
     const chart = new Chart<"doughnut">(plotarea, {
       type: "doughnut",
       data: datasets,
@@ -920,5 +882,5 @@ $(function () {
     });
 
     return chart;
-  }
+  };
 });
