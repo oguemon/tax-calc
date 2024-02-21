@@ -13,7 +13,7 @@
     "@swc/jest": "0.2.29",
     "@types/jest": "29.5.12",
     "@types/jquery": "3.5.29",
-    "chart.js": "4.4.0",
+    "chart.js": "4.4.1",
     "css-loader": "6.8.1",
     "jest": "29.7.0",
     "jquery": "3.7.1",
