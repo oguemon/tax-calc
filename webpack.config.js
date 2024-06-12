@@ -75,13 +75,6 @@ const config = {
         '.ts', '.js',
       ],
     },
-    devServer: {
-      static: {
-        directory: __dirname,
-      },
-      host: '0.0.0.0',
-      compress: true,
-    },
     // バンドルを除外するライブラリ
     externals: {
         moment: 'moment'
