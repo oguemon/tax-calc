@@ -9,7 +9,7 @@
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "@swc/core": "1.9.2",
+    "@swc/core": "1.10.1",
     "@swc/jest": "0.2.37",
     "@types/jest": "29.5.14",
     "@types/jquery": "3.5.32",
@@ -18,12 +18,12 @@
     "jest": "29.7.0",
     "jquery": "3.7.1",
     "mini-css-extract-plugin": "2.9.2",
-    "sass": "1.80.7",
+    "sass": "1.83.0",
     "sass-loader": "16.0.3",
     "style-loader": "4.0.0",
     "ts-loader": "9.5.1",
-    "typescript": "5.6.3",
-    "webpack": "5.96.1",
+    "typescript": "5.7.2",
+    "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
     "webpack-remove-empty-scripts": "1.0.4"
   }
