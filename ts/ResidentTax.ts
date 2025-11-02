@@ -68,8 +68,8 @@ export class ResidentTax
         // 給与収入から、給与所得を求める
         this.taxable_standard_income = this.calcTaxableIncome(annual_income);
 
-        // 基礎控除
-        this.basic_deduction = this.calcTaxableIncomeDeductions() // 基礎控除（所得税と多少異なるのに注意）
+        // 基礎控除（所得税と多少異なるのに注意）
+        this.basic_deduction = this.calcTaxableIncomeDeductions(this.taxable_standard_income);
 
         // 社会保険料控除
         this.premium_deduction = annual_premium;
@@ -112,52 +112,36 @@ export class ResidentTax
     }
 
     // 給与所得金額を求める（給与所得控除額の計算がいらない）
+    // https://www.city.tokyo-nakano.lg.jp/kurashi/zeikin/zeisei/jyuminzei-kaisei/r3henkoten.html
     private calcTaxableIncome (income: number): number
     {
-        if (income < 651000) {
-            return 0;
-        }
-        else if (income < 1619000) {
-            return (income - 650000);
-        }
-        else if (income < 1620000) {
-            return 969000;
-        }
-        else if (income < 1622000) {
-            return 970000;
-        }
-        else if (income < 1624000) {
-            return 972000;
-        }
-        else if (income < 1628000) {
-            return 974000
-        }
-        else if (income < 6600000) {
+        if (income < 55_1000) return 0;
+        if (income < 161_9000) return (income - 55_0000);
+        if (income < 162_0000) return 106_9000;
+        if (income < 162_2000) return 107_0000;
+        if (income < 162_4000) return 107_2000;
+        if (income < 162_8000) return 107_4000;
+        if (income < 660_0000) {
             // これを給与収入とみなす調整後金額
             const income_adjusted: number = Math.floor(income / 4000) * 4000
 
-            if (income < 1800000) {
-                return (income_adjusted * 0.6);
-            }
-            else if (income < 3600000) {
-                return (income_adjusted * 0.7 - 180000);
-            }
-            else if (income < 6600000) {
-                return (income_adjusted * 0.8 - 540000);
-            }
+            if (income < 180_0000) return (income_adjusted * 0.6 + 10_0000);
+            if (income < 360_0000) return (income_adjusted * 0.7 - 8_0000);
+            if (income < 660_0000) return (income_adjusted * 0.8 - 44_0000);
         }
-        else if (income < 10000000) {
-            return (income * 0.9 - 1200000);
-        }
-        else { // 1000万円以上
-            return (income - 2200000);
-        }
+        if (income < 850_0000) return (income * 0.9 - 110_0000);
+        // 850万円以上
+        return (income - 195_0000);
     }
 
-    // 給与所得控除額を計算（令和2年分以降）
-    private calcTaxableIncomeDeductions (): number
+    // 給与所得控除額を計算（令和3年分以降）
+    // https://www.city.tokyo-nakano.lg.jp/kurashi/zeikin/zeisei/jyuminzei-kaisei/r3henkoten.html
+    private calcTaxableIncomeDeductions (income: number): number
     {
-        return 330000;
+        if (income <= 2400_0000) return 43_0000;
+        if (income <= 2450_0000) return 29_0000;
+        if (income <= 2500_0000) return 15_0000;
+        return 0;
     }
 
     /* --------------------------------------------------

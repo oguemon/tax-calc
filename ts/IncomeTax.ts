@@ -65,34 +65,6 @@ export class IncomeTax
         this.reconstruction_special = this.calcReconstructionSpecialIncomeTax(this.tax);
     }
 
-    // 給与所得控除額を計算（令和2年分以降）
-    // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
-    /*
-    private calcTaxableIncomeDeductions (income = 0): number
-    {
-        // 給与所得控除額
-        let taxable_income_deductions: number = 0;
-
-        if (income <= 1800000) {
-            // 最低でも55万は控除される
-            taxable_income_deductions = Math.max(income * 0.4 - 100000, 550000);
-        }
-        if (income <= 3600000) {
-            taxable_income_deductions = income * 0.3 + 80000;
-        }
-        if (income <= 6600000) {
-            taxable_income_deductions = income * 0.2 + 440000;
-        }
-        if (income <= 8500000) {
-            taxable_income_deductions = income * 0.1 + 1100000;
-        } else {
-            taxable_income_deductions = 1950000;
-        }
-
-        return taxable_income_deductions;
-    }
-    */
-
     // 課税所得金額を求める（給与所得控除額の計算がいらない）
     private calcTaxableIncome (income: number): number
     {
@@ -102,30 +74,14 @@ export class IncomeTax
         // 給与所得控除後の給与等の金額
         let taxable_income: number = 0;
 
-        // (1) 年調給与額の算出（令和3年分）令和4年分は未確定
-        // https://www.nta.go.jp/publication/pamph/gensen/nencho2021/pdf/74-75.pdf
-        if (income < 1619000) {
+        // (1) 年調給与額の算出（令和7年分）
+        // https://www.nta.go.jp/publication/pamph/gensen/nencho2025/pdf/204.pdf
+        if (income < 190_0000) {
             // 給与の総額をそのまま年調給与額とします
             yearend_tax_adj_income = income;
-        } else if (income < 6600000) {
-            // 階差と同一階差の最小値の設定
-            let rank_width: number = 0;
-            let rank_min: number = 0;
-
-            if (income < 1620000) {
-                rank_width = 1000;
-                rank_min = 1619000;
-            } else if (income < 1624000) {
-                rank_width = 2000;
-                rank_min = 1620000;
-            } else { // 162万4000円以上
-                rank_width = 4000;
-                rank_min = 1624000;
-            }
-
+        } else if (income < 660_0000) {
             // 算式1. 余りの計算
-            const remainder: number = (income - rank_min) % rank_width;
-
+            const remainder = (income - 109_0000) % 4000;
             // 算式2. 年調給与額の計算
             yearend_tax_adj_income = income - remainder;
         } else { // 660万円以上
@@ -133,31 +89,21 @@ export class IncomeTax
             yearend_tax_adj_income = income;
         }
 
-        // (2) 給与所得控除後の給与等の金額の計算（令和3年分）令和4年分は未確定
-        // https://www.nta.go.jp/publication/pamph/gensen/nencho2021/pdf/74-75.pdf
+        // (2) 給与所得控除後の給与等の金額の計算（令和7年分）
+        // https://www.nta.go.jp/publication/pamph/gensen/nencho2025/pdf/204.pdf
         // 給与総額が2000万円を超えると上記資料の範囲外となるが、
         // 次の資料より、2000万円を境に控除金額が変わらないことが判る
         // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
-        if (yearend_tax_adj_income < 551000) {
+        if (yearend_tax_adj_income < 65_1000) {
             taxable_income = 0;
-        } else if (yearend_tax_adj_income < 1619000) {
-            taxable_income = yearend_tax_adj_income  - 550000;
-        } else if (yearend_tax_adj_income < 1620000) {
-            taxable_income = yearend_tax_adj_income * 0.6 + 97600;
-        } else if (yearend_tax_adj_income < 1622000) {
-            taxable_income = yearend_tax_adj_income * 0.6 + 98000;
-        } else if (yearend_tax_adj_income < 1624000) {
-            taxable_income = yearend_tax_adj_income * 0.6 + 98800;
-        } else if (yearend_tax_adj_income < 1628000) {
-            taxable_income = yearend_tax_adj_income * 0.6 + 99600;
-        } else if (yearend_tax_adj_income < 1800000) {
-            taxable_income = yearend_tax_adj_income * 0.6 + 100000;
-        } else if (yearend_tax_adj_income < 3600000) {
-            taxable_income = yearend_tax_adj_income * 0.7 - 80000;
-        } else if (yearend_tax_adj_income < 6600000) {
-            taxable_income = yearend_tax_adj_income * 0.8 - 440000;
-        } else if (yearend_tax_adj_income < 8500000) {
-            taxable_income = yearend_tax_adj_income * 0.9 - 1100000;
+        } else if (yearend_tax_adj_income < 190_0000) {
+            taxable_income = yearend_tax_adj_income  - 650000;
+        } else if (yearend_tax_adj_income < 360_0000) {
+            taxable_income = yearend_tax_adj_income * 0.7 + 8_0000;
+        } else if (yearend_tax_adj_income < 660_0000) {
+            taxable_income = yearend_tax_adj_income * 0.8 + 44_0000;
+        } else if (yearend_tax_adj_income < 850_0000) {
+            taxable_income = yearend_tax_adj_income * 0.9 + 110_0000;
         } else { // 850万円以上
             taxable_income = yearend_tax_adj_income - 1950000;
         }
@@ -165,10 +111,15 @@ export class IncomeTax
         return Math.floor(taxable_income);
     }
 
-    // 所得税における基礎控除額を求める（令和2年分以降）
+    // 所得税における基礎控除額を求める（令和7、8年分）※令和9年分から変わる
     // https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
     private calcBasicDeductionsIncomeTax (income: number) : number
     {
+        if (income <= 132_0000) return 95_0000
+        if (income <= 336_0000) return 88_0000
+        if (income <= 489_0000) return 68_0000
+        if (income <= 655_0000) return 63_0000
+        if (income <= 2350_0000) return 58_0000
         if (income <= 2400_0000) return 48_0000
         if (income <= 2450_0000) return 32_0000
         if (income <= 2500_0000) return 16_0000
