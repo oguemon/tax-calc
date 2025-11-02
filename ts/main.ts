@@ -370,6 +370,7 @@ $(() => {
     r.find("[pref-income-tax]").text(add1000Separator(rt.income_tax.pref));
     r.find("[city-capitation]").text(add1000Separator(rt.capitation.city));
     r.find("[city-income-tax]").text(add1000Separator(rt.income_tax.city));
+    r.find("[forest-tax]").text(add1000Separator(rt.tax.forest));
     r.find("[rt]").text(add1000Separator(rt.tax.total));
     r.find("[rt-monthly]").text(add1000Separator(rt.tax_monthly));
     r.find("[rt-monthly-june]").text(add1000Separator(rt.tax_monthly_june));

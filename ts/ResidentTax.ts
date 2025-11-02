@@ -13,6 +13,13 @@ export interface DataSetForResidentTax {
     total: number,
 }
 
+interface DataSetForResidentTaxWithForestTax {
+    pref: number,
+    city: number,
+    forest: number,
+    total: number,
+}
+
 export class ResidentTax
 {
     // 給与所得
@@ -43,7 +50,7 @@ export class ResidentTax
     public income_tax: DataSetForResidentTax = {pref: 0, city: 0, total: 0};
 
     // 住民税合計
-    public tax: DataSetForResidentTax = {pref: 0, city: 0, total: 0};
+    public tax: DataSetForResidentTaxWithForestTax = {pref: 0, city: 0, forest: 0, total: 0};
 
     // 住民税月額（7月〜翌5月）
     public tax_monthly: number = 0;
@@ -96,7 +103,8 @@ export class ResidentTax
         // 住民税
         this.tax.pref = this.capitation.pref + this.income_tax.pref;
         this.tax.city = this.capitation.city + this.income_tax.city;
-        this.tax.total = this.tax.pref + this.tax.city;
+        this.tax.forest = Data.RT_FOREST_TAX;
+        this.tax.total = this.tax.pref + this.tax.city + this.tax.forest;
 
         // 月あたりの住民税額
         this.tax_monthly = round(this.tax.total / 12, 100, 'floor');
